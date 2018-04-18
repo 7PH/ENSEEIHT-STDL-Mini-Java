@@ -31,7 +31,6 @@ import fr.n7.stl.util.*;
 
 /* Variables partagées dans les actions de l'analyseur syntaxique. */
 parser code {:
-
     protected Lexer lexer;
 
     public String name;
@@ -129,116 +128,141 @@ precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 
 
 
-InterfaceDeclaration ::=  UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
-							{: :}
-						| UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant InterfaceBody:interfaceBody UL_Crochet_Fermant
-							{: :};
+InterfaceDeclaration ::=
+    UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
+        {: :}
+    | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant InterfaceBody:interfaceBody UL_Crochet_Fermant
+        {: :};
 
-MethodSignatures ::= 
-					| MethodSignature:methodeSignature
-						{: :}
-					| MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
-							{: :}
-					|
-							{: :};
-MethodSignature ::= NullableType:nullable UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
-							{: :};
-NullableType ::= UL_Type_Vide | Type:type
-							{: :};
+MethodSignatures ::=
+    MethodSignature:methodeSignature
+        {: :}
+    | MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
+        {: :}
+    |
+        {: :};
+
+MethodSignature ::=
+    NullableType:nullable UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
+        {: :};
+
+NullableType ::=
+    UL_Type_Vide
+        {: :}
+    | Type:type
+        {: :};
 							
-Parameters ::= Parameter:parameter
-					{: :}
-				| Parameter:parameter UL_Virgule Parameters:parameters
-					{: :}
-				|
-					{: :};
+Parameters ::=
+    Parameter:parameter
+        {: :}
+    | Parameter:parameter UL_Virgule Parameters:parameters
+        {: :}
+    |
+        {: :};
 
 
-Parameter ::= Type:type UL_Identificateur
-				{: :};
+Parameter ::=
+    Type:type UL_Identificateur
+        {: :};
 				
-Instantiations ::= Instantiation:instantiation
-					{: :} 
-				| Instantiation:instantiation UL_Virgule Instantiations:instantiations
-					{: :};
-Instantiation ::= UL_Identificateur
-					{: :}
-				| UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
-					{: :};
+Instantiations ::=
+    Instantiation:instantiation
+        {: :}
+    | Instantiation:instantiation UL_Virgule Instantiations:instantiations
+        {: :};
+
+Instantiation ::=
+    UL_Identificateur
+        {: :}
+    | UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
+        {: :};
 				
-Class ::= UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-			| UL_Final UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant		
-			| UL_Final UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant	
-			| UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-			    {: :};
+Class ::=
+    UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    | UL_Final UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    | UL_Final UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    | UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+        {: :};
 
 
-Declaration ::= UL_Identificateur
-					{: :}
-				| UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
-					{: :};
-					
-GenericTypes ::= GenericType
-					{: :}
-				| GenericType:generic UL_Virgule GenericTypes:generics
-					{: :};
-					
-GenericType ::= UL_Identificateur
-					{: :}
-				| UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
-					{: :};
-					
-GenericInstantiations ::= Instantiation
-							{: :}
-						| Instantiation:instantiation UL_Esperluette GenericInstantiations:genericInstantiations
-							{: :};
-							
+Declaration ::=
+    UL_Identificateur
+        {: :}
+    | UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
+        {: :};
 
-Extension ::= UL_Extends Instantiation:instantiation 
-				{: :}
-			| UL_Extends Instantiation:instantiation UL_Implements Instantiations:instantiations
-				{: :}
-			| UL_Implements Instantiations:instantiations
-				{: :}
-			|
-				{: :};
+GenericTypes ::=
+    GenericType
+        {: :}
+    | GenericType:generic UL_Virgule GenericTypes:generics
+        {: :};
+
+GenericType ::=
+    UL_Identificateur
+        {: :}
+    | UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
+        {: :};
+
+GenericInstantiations ::=
+    Instantiation
+        {: :}
+    | Instantiation:instantiation UL_Esperluette GenericInstantiations:genericInstantiations
+        {: :};
+
+
+Extension ::=
+    UL_Extends Instantiation:instantiation
+        {: :}
+    | UL_Extends Instantiation:instantiation UL_Implements Instantiations:instantiations
+        {: :}
+    | UL_Implements Instantiations:instantiations
+        {: :}
+    |
+        {: :};
 				
 				
 
-Definitions ::= Definition:definition
-					{: :}
-				| Definition:definition Definitions:definitions
-					{: :}
-				|
-					{: :};
+Definitions ::=
+    Definition:definition
+        {: :}
+    | Definition:definition Definitions:definitions
+        {: :}
+    |
+        {: :};
 					
-Definition ::= Permission:permission Attribute:attribute
-			| Permission:permission UL_Static
-					{: :};
+Definition ::=
+    Permission:permission Attribute:attribute
+        {: :}
+    | Permission:permission UL_Static
+        {: :};
 
-Permission ::= UL_Public
-					{: :}
-			| UL_Private
-					{: :};
-					
-Attribut ::= Type:type UL_Identificateur UL_Point_Virgule
-				{: :};
+Permission ::=
+    UL_Public
+        {: :}
+    | UL_Private
+        {: :};
 
-Method ::= MethodSignature:methodSignature Bloc:bloc
-				{: :}
-			| UL_Abstract MethodSignature:methodSignature Bloc:bloc
-				{: :};
+Attribut ::=
+    Type:type UL_Identificateur UL_Point_Virgule
+        {: :};
 
-Atomique ::= UL_Type_Booleen
-				{: :}
-			| UL_Type_Caractere
-				{: :}
-			| UL_Type_Chaine
-				{: :}
-			| UL_Type_Entier
-				{: :}
-			| Insantiation:instation
-				{: :};
+Method ::=
+    MethodSignature:methodSignature Bloc:bloc
+        {: :}
+    | UL_Abstract MethodSignature:methodSignature Bloc:bloc
+        {: :};
+
+Atomique ::=
+    UL_Type_Booleen
+        {: :}
+    | UL_Type_Caractere
+        {: :}
+    | UL_Type_Chaine
+        {: :}
+    | UL_Type_Entier
+        {: :}
+    | Insantiation:instation
+        {: :};
 
 
 
