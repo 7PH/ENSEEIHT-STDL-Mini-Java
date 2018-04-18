@@ -129,6 +129,18 @@ precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante
 
 
 
+// Program
+//  - ($InterfaceDeclaration|$ClassDeclaration)+
+Program ::=
+    Program:program InterfaceDeclaration:interfaceDeclaration
+        {: :}
+    | Program:program ClassDeclaration:classDeclaration
+        {: :}
+    | InterfaceDeclaration:interfaceDeclaration
+        {: :}
+    | ClassDeclaration:classDeclaration
+        {: :};
+
 // InterfaceDeclaration
 //  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
 InterfaceDeclaration ::=
@@ -339,52 +351,6 @@ Bloc ::=
 
 
 
-/* Opérateur le plus prioritaire */
-
-/* Règles de grammaire attribuée pour la construction de l'arbre abstrait */
-/* Program et Bloc sont des non terminaux */
-/* UL_Identificateur est un terminal (Unité lexicale) */
-/* bloc est la variable utilisable dans l'action sémantique qui contient la valeur renvoyé par l'analyse du Bloc */
-Program ::= UL_Identificateur:nom UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
-			{:
-			    RootBlock inputBlock = new RootBlock(instructions);
-                block = inputBlock;
-
-				SymbolTable tds = new SymbolTable();
-		        double t1 = System.currentTimeMillis();
-		        try {
-				    resolve = inputBlock.resolve(tds);
-		        } catch (Exception e) {
-		            resolve = false;
-		        }
-		        resolveTimeMs = System.currentTimeMillis() - t1;
-
-                if (resolve) {
-                    t1 = System.currentTimeMillis();
-                    try {
-                        checkType = inputBlock.checkType();
-                    } catch (Exception e) {
-                        checkType = false;
-                    }
-                    checkTypeTimeMs = System.currentTimeMillis() - t1;
-                } else {
-                    checkType = false;
-                    checkTypeTimeMs = 0;
-                }
-
-                if (resolve && checkType) {
-                    t1 = System.currentTimeMillis();
-                    inputBlock.allocateMemory(Register.SB, 0);
-                    allocateMemoryTimeMs = System.currentTimeMillis() - t1;
-                    t1 = System.currentTimeMillis();
-                    fragment = inputBlock.getCode(new TAMFactoryImpl());
-                    getCodeTimeMs = System.currentTimeMillis() - t1;
-                } else {
-                    allocateMemoryTimeMs = 0;
-                    getCodeTimeMs = 0;
-                }
-			:}
-		;
 
 
 Champ ::= Type:type Identifiant:identifiant UL_Point_Virgule
