@@ -32,5 +32,6 @@ class TheC<T extends A & B> {
 class MiniJava {
     public static void main(String args[]) {
         TheC<TheB> myC = new TheC<>();
+        myC.doC(new TheB());
     }
 }
