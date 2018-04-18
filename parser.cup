@@ -127,6 +127,8 @@ precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 /* Opératuer le plus prioritaire */
 
+
+
 // InterfaceDeclaration
 //  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
 InterfaceDeclaration ::=
@@ -256,11 +258,33 @@ Definitions ::=
         {: :};
 
 // Definition - definition of one method/attribute
-//  @TODO
+//  ("public"|"private") ($ClassConstructor|($DefinitionModifier ($Attribute|$Method)))
 Definition ::=
-    Permission:permission Attribute:attribute
+    AccessModifier:access ClassConstructor:constructor
         {: :}
-    | AccessModifier:permission UL_Static
+    | AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
+        {: :}
+    | AccessModifier:access DefinitionModifier:modifier MethodDefinition:methodDefinition
+        {: :};
+
+// DefinitionModifier
+//  - "static"? "final"?
+DefinitionModifier ::=
+    UL_Static
+        {: :}
+    | UL_Final
+        {: :}
+    | UL_Static UL_Final
+        {: :}
+    |
+        {: :};
+
+// ClassConstructor
+// - $UL_Identificateur "(" $Parameters ")"
+ClassConstructor ::=
+    UL_Identificateur UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
+        {: :}
+    | UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
         {: :};
 
 // AccessModifier
@@ -271,19 +295,18 @@ AccessModifier ::=
     | UL_Private
         {: :};
 
-// Attribute
-//  @TODO
+// AttributeDefinition
 //  - $Type $UL_Identificateur ";"
-Attribute ::=
+AttributeDefinition ::=
     Type:type UL_Identificateur UL_Point_Virgule
         {: :};
 
-// Method
-//  @TODO
-Method ::=
-    MethodSignature:methodSignature Bloc:bloc
+// MethodDefinition
+//  - "abstract"? $MethodSignature $Bloc
+MethodDefinition ::=
+    MethodSignature:methodSignature Bloc:body
         {: :}
-    | UL_Abstract MethodSignature:methodSignature Bloc:bloc
+    | UL_Abstract MethodSignature:methodSignature Bloc:body
         {: :};
 
 // Type
