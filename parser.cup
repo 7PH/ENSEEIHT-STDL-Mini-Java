@@ -1,5 +1,5 @@
 /*
-   Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Block
+    Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Mini-Java
 */
 
 package fr.n7.stl.block;
@@ -93,39 +93,39 @@ terminal 				UL_Interface, UL_Extends, UL_Class, UL_Implements;
 terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
-non terminal Block						Program;
-non terminal Block						Bloc;
-non terminal List<Instruction>			Instructions;
+non terminal Block						    Program;
+non terminal Block						    Bloc;
+non terminal List<Instruction>			    Instructions;
 non terminal Instruction					Instruction;
 non terminal Instruction					Declaration;
-non terminal List<Expression>			Expressions;
-non terminal List<FieldDeclaration>		Champs;
-non terminal FieldDeclaration			Champ;
-non terminal List<LabelDeclaration>		Etiquettes;
-non terminal LabelDeclaration			Etiquette;
-non terminal List<ParameterDeclaration>	Parameters;
-non terminal Pair<String,PartialType>	Identifiant;
-non terminal Type						Type, Atomique;
+non terminal List<Expression>			    Expressions;
+non terminal List<FieldDeclaration>		    Champs;
+non terminal FieldDeclaration			    Champ;
+non terminal List<LabelDeclaration>		    Etiquettes;
+non terminal LabelDeclaration			    Etiquette;
+non terminal List<ParameterDeclaration>	    Parameters;
+non terminal Pair<String,PartialType>	    Identifiant;
+non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
-non terminal AssignableExpression		Affectable;
+non terminal AssignableExpression		    Affectable;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
-precedence nonassoc UL_Parenthese_Fermante;	// Résolution du conflit décaler/réduire sur conversion de type
-precedence right UL_Egal;
-precedence nonassoc UL_Point_Interrogation, UL_Deux_Points;
-precedence left UL_Double_Barre;
-precedence left UL_Double_Esperluette;
-precedence nonassoc UL_Double_Egal, UL_Exclamation_Egal;
-precedence nonassoc UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Superieur_Egal;
-precedence left UL_Plus, UL_Moins;
-precedence left UL_Asterisque, UL_Oblique, UL_Pour_Cent;
-precedence right UL_Nouveau;
-precedence left UL_Premier, UL_Second;
-precedence left UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
-precedence nonassoc UL_Double_Plus, UL_Double_Moins;
-precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-
+precedence nonassoc         UL_Parenthese_Fermante;	// Résolution du conflit décaler/réduire sur conversion de type
+precedence right            UL_Egal;
+precedence nonassoc         UL_Point_Interrogation, UL_Deux_Points;
+precedence left             UL_Double_Barre;
+precedence left             UL_Double_Esperluette;
+precedence nonassoc         UL_Double_Egal, UL_Exclamation_Egal;
+precedence nonassoc         UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Superieur_Egal;
+precedence left             UL_Plus, UL_Moins;
+precedence left             UL_Asterisque, UL_Oblique, UL_Pour_Cent;
+precedence right            UL_Nouveau;
+precedence left             UL_Premier, UL_Second;
+precedence left             UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
+precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
+precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
+/* Opératuer le plus prioritaire */
 
 // InterfaceDeclaration
 //  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
@@ -286,18 +286,32 @@ Method ::=
     | UL_Abstract MethodSignature:methodSignature Bloc:bloc
         {: :};
 
-// Atomique
+// Type
+//  - $NonArrayType ("[]")?
+Type ::=
+    NonArrayType:type
+        {: :}
+    | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant
+        {: :};
+
+// NonArrayType
 //  - (bool|character|String|int|$Instanciation)
-Atomique ::=
-    UL_Type_Booleen
+NonArrayType ::=
+    UL_Type_Entier
+        {: :}
+    | UL_Type_Booleen
         {: :}
     | UL_Type_Caractere
         {: :}
     | UL_Type_Chaine
         {: :}
-    | UL_Type_Entier
-        {: :}
     | Insantiation:instation
+        {: :};
+
+// Bloc
+//  - "{" $Instructions* "}"
+Bloc ::=
+    UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
         {: :};
 
 
@@ -349,11 +363,6 @@ Program ::= UL_Identificateur:nom UL_Accolade_Ouvrante Instructions:instructions
 			:}
 		;
 
-Bloc ::= UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
-			{:
-				RESULT = new Block( instructions );
-			:}
-		;
 
 Champ ::= Type:type Identifiant:identifiant UL_Point_Virgule
 			{:
