@@ -128,7 +128,7 @@ precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 
 
 // InterfaceDeclaration
-//  - interface $Declaration (extends $Instantiations)? { $MethodSignatures }
+//  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
 InterfaceDeclaration ::=
     UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {: :}
@@ -136,7 +136,7 @@ InterfaceDeclaration ::=
         {: :};
 
 // MethodSignatures
-//  - ($MethodSignature ;)*
+//  - ($MethodSignature ";")*
 MethodSignatures ::=
     MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
         {: :}
@@ -144,9 +144,11 @@ MethodSignatures ::=
         {: :};
 
 // MethodSignature
-//  - (void|$Type) $Identificateur ($Parameters)
+//  - $NullableType $Identificateur "(" $Parameters? ")"
 MethodSignature ::=
-    NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
+    NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+        {: :}
+    | NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
         {: :};
 
 // NullableType
@@ -158,64 +160,83 @@ NullableType ::=
         {: :};
 
 // Parameters
+//  - ($Parameter ",")* $Parameter
 Parameters ::=
     Parameter:parameter
         {: :}
-    | Parameter:parameter UL_Virgule Parameters:parameters
-        {: :}
-    |
+    | Parameters:parameters UL_Virgule Parameter:parameter
         {: :};
 
-
+// Parameter
+//  - $Type $UL_Identificateur
 Parameter ::=
     Type:type UL_Identificateur
         {: :};
-				
+
+// Instantiations
+//  - ($Instantiation ",")* $Instantiation
 Instantiations ::=
     Instantiation:instantiation
         {: :}
-    | Instantiation:instantiation UL_Virgule Instantiations:instantiations
+    | Instantiations:instantiations UL_Virgule Instantiation:instantiation
         {: :};
 
+// Instantiation
+//  - $UL_Identificateur ("<" $Instanciations ">")?
 Instantiation ::=
     UL_Identificateur
         {: :}
     | UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
         {: :};
-				
-Class ::=
-    UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-    | UL_Final UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-    | UL_Final UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-    | UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+
+// ClassDeclaration
+//  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
+ClassDeclaration ::=
+    ClassModifier:modifier Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
         {: :};
 
+// ClassModifier
+//  - (final|abstract)?
+ClassModifier ::=
+    UL_Final
+    | UL_Abstract
+    |
+        {: :};
 
+// Declaration
+//  - $UL_Identificateur ("<" GenericTypes ">")?
 Declaration ::=
     UL_Identificateur
         {: :}
     | UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
         {: :};
 
+// GenericTypes
+//  - ($GenericType ",")* $GenericType
 GenericTypes ::=
     GenericType
         {: :}
-    | GenericType:generic UL_Virgule GenericTypes:generics
+    | GenericTypes:generics UL_Virgule GenericType:generic
         {: :};
 
+// GenericType
+//  - $UL_Identificateur ("extends" $GenericInstantiations)?
 GenericType ::=
     UL_Identificateur
         {: :}
     | UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
         {: :};
 
+// GenericInstantiations
+//  - ($Instantiation ",")* $Instantiation
 GenericInstantiations ::=
     Instantiation
         {: :}
-    | Instantiation:instantiation UL_Esperluette GenericInstantiations:genericInstantiations
+    | GenericInstantiations:genericInstantiations UL_Esperluette Instantiation:instantiation
         {: :};
 
-
+// Extension
+//  - ("extends" $Instantiations)? ("implements" $Instantiations)?
 Extension ::=
     UL_Extends Instantiation:instantiation
         {: :}
@@ -225,39 +246,48 @@ Extension ::=
         {: :}
     |
         {: :};
-				
-				
 
+// Definitions - methods and attributes definition inside a class
+//  - ($Definition)*
 Definitions ::=
-    Definition:definition
-        {: :}
-    | Definition:definition Definitions:definitions
+    | Definitions:definitions Definition:definition
         {: :}
     |
         {: :};
-					
+
+// Definition - definition of one method/attribute
+//  @TODO
 Definition ::=
     Permission:permission Attribute:attribute
         {: :}
-    | Permission:permission UL_Static
+    | AccessModifier:permission UL_Static
         {: :};
 
-Permission ::=
+// AccessModifier
+//  - (public|private)
+AccessModifier ::=
     UL_Public
         {: :}
     | UL_Private
         {: :};
 
-Attribut ::=
+// Attribute
+//  @TODO
+//  - $Type $UL_Identificateur ";"
+Attribute ::=
     Type:type UL_Identificateur UL_Point_Virgule
         {: :};
 
+// Method
+//  @TODO
 Method ::=
     MethodSignature:methodSignature Bloc:bloc
         {: :}
     | UL_Abstract MethodSignature:methodSignature Bloc:bloc
         {: :};
 
+// Atomique
+//  - (bool|character|String|int|$Instanciation)
 Atomique ::=
     UL_Type_Booleen
         {: :}
