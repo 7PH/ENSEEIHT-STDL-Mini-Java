@@ -127,31 +127,37 @@ precedence nonassoc UL_Double_Plus, UL_Double_Moins;
 precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 
 
-
+// InterfaceDeclaration
+//  - interface $Declaration (extends $Instantiations)? { $MethodSignatures }
 InterfaceDeclaration ::=
     UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {: :}
-    | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant InterfaceBody:interfaceBody UL_Crochet_Fermant
+    | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {: :};
 
+// MethodSignatures
+//  - ($MethodSignature ;)*
 MethodSignatures ::=
-    MethodSignature:methodeSignature
-        {: :}
-    | MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
+    MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
         {: :}
     |
         {: :};
 
+// MethodSignature
+//  - (void|$Type) $Identificateur ($Parameters)
 MethodSignature ::=
-    NullableType:nullable UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
+    NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
         {: :};
 
+// NullableType
+//  - (void|$Type)
 NullableType ::=
     UL_Type_Vide
         {: :}
     | Type:type
         {: :};
-							
+
+// Parameters
 Parameters ::=
     Parameter:parameter
         {: :}
