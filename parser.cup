@@ -50,6 +50,7 @@ parser code {:
 
     public Parser(String _name) {
         this();
+
         this.name = _name;
     }
 :}
@@ -151,7 +152,8 @@ Parameters ::= Parameter:parameter
 					{: :}
 				|
 					{: :};
-					
+
+
 Parameter ::= Type:type UL_Identificateur
 				{: :};
 				
@@ -159,7 +161,7 @@ Instantiations ::= Instantiation:instantiation
 					{: :} 
 				| Instantiation:instantiation UL_Virgule Instantiations:instantiations
 					{: :};
-Instantiation :: UL_Identificateur
+Instantiation ::= UL_Identificateur
 					{: :}
 				| UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
 					{: :};
@@ -167,10 +169,11 @@ Instantiation :: UL_Identificateur
 Class ::= UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
 			| UL_Final UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant		
 			| UL_Final UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant	
-			| UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant	
+			| UL_Abstract UL_Class Declaration:declaration	Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+			    {: :};
 
 
-Declaration ::= UL_Identificateur 
+Declaration ::= UL_Identificateur
 					{: :}
 				| UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
 					{: :};
@@ -210,8 +213,8 @@ Definitions ::= Definition:definition
 					{: :};
 					
 Definition ::= Permission:permission Attribute:attribute
-					{: :}
-			| Permission:permission UL_Static 
+			| Permission:permission UL_Static
+					{: :};
 
 Permission ::= UL_Public
 					{: :}
@@ -234,7 +237,8 @@ Atomique ::= UL_Type_Booleen
 				{: :}
 			| UL_Type_Entier
 				{: :}
-			| Insantiation:instation 
+			| Insantiation:instation
+				{: :};
 
 
 
