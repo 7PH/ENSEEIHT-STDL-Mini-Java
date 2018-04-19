@@ -1,0 +1,26 @@
+{
+  "name": "enseeiht-mini-java",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "sh test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7PH/ENSEEIHT-STDL-Mini-Java.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/7PH/ENSEEIHT-STDL-Mini-Java/issues"
+  },
+  "homepage": "https://github.com/7PH/ENSEEIHT-STDL-Mini-Java#readme",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fs": "0.0.1-security"
+  }
+}
