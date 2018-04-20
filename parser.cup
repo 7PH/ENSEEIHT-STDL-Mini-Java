@@ -347,55 +347,10 @@ NonArrayType ::=
 //  - "{" $Instructions* "}"
 Bloc ::=
     UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
-        {: :};
+        {: /* RESULT = new Block(instructions); */ :};
 
 
 
-
-
-Champ ::= Type:type Identifiant:identifiant UL_Point_Virgule
-			{:
-				Type _type = identifiant.getRight();
-				if (_type == null) {
-					_type = type;
-				} else {
-					_type = ((PartialType)_type).complete( type );
- 				}
-				RESULT = new FieldDeclaration( identifiant.getLeft(), _type);
-			:}
-		;
-
-Champs ::= Champs:champs Champ:champ
-			{:
-				champs.add(champ);
-				RESULT = champs;
-			:}
-		| Champ:champ
-			{:
-				List<FieldDeclaration> _champs = new LinkedList<FieldDeclaration>();
-				_champs.add(champ);
-				RESULT = _champs;
-			:}
-		;
-
-Etiquette ::= UL_Identificateur:nom
-				{:
-					RESULT = new LabelDeclaration( nom );
-				:}
-			;
-
-Etiquettes ::= Etiquettes:etiquettes UL_Virgule Etiquette:etiquette
-			{:
-				etiquettes.add(etiquette);
-				RESULT = etiquettes;
-			:}
-		| Etiquette:etiquette
-			{:
-				List<LabelDeclaration> _etiquettes = new LinkedList<LabelDeclaration>();
-				_etiquettes.add(etiquette);
-				RESULT = _etiquettes;
-			:}
-		;
 
 Atomique ::= UL_Type_Booleen
 			{:
@@ -413,10 +368,6 @@ Atomique ::= UL_Type_Booleen
 			{:
 				RESULT = AtomicType.IntegerType;
 			:}
-		|	UL_Type_Vide
-			{:
-				RESULT = AtomicType.VoidType;
-			:}
 		;
 
 Type ::= Atomique:atomique
@@ -425,68 +376,20 @@ Type ::= Atomique:atomique
 			:}
 		| UL_Identificateur:nom
 			{:
-				RESULT = new NamedType( nom );
-			:}
-		| UL_Enregistrement UL_Identificateur:nom UL_Accolade_Ouvrante Champs:champs UL_Accolade_Fermante
-			{:
-				RESULT = new RecordType( nom, champs );
-			:}
-		| UL_Enumeration UL_Identificateur:nom UL_Accolade_Ouvrante Etiquettes:etiquettes UL_Accolade_Fermante
-			{:
-				RESULT = new EnumerationType( nom, etiquettes );
-			:}
-		| UL_Enregistrement UL_Identificateur:nom
-			{:
-				RESULT = new NamedType( nom );
-			:}
-		| UL_Enumeration UL_Identificateur:nom
-			{:
-				RESULT = new NamedType( nom );
-			:}
-		| UL_Inferieur Type:gauche UL_Virgule Type:droit UL_Superieur
-			{:
-				RESULT = new CoupleType( gauche, droit );
+				RESULT = new NamedType(nom);
 			:}
 		;
 
 Instructions ::= Instructions:instructions Instruction:instruction
 				{:
-					instructions.add( instruction );
+					instructions.add(instruction);
 					RESULT = instructions;
 				:}
 			|
 				{: RESULT = new LinkedList<Instruction>(); :}
 			;
 
-Identifiant ::= UL_Identificateur:nom
-				{:
-					RESULT = new Pair<String,PartialType>( nom, null );
-				:}
-			| UL_Asterisque Identifiant:identifiant
-				{:
-					if (identifiant.getRight() == null) {
-						identifiant.setRight( new PartialPointerType() );
-					} else {
-						identifiant.getRight().enrich(new PartialPointerType());
-					}
-					RESULT = identifiant;
-				:}
-			| Identifiant:identifiant UL_Crochet_Ouvrant UL_Crochet_Fermant
-				{:
-					if (identifiant.getRight() == null) {
-						identifiant.setRight( new PartialArrayType() );
-					} else {
-						identifiant.getRight().enrich(new PartialArrayType());
-					}
-					RESULT = identifiant;
-				:}
-			| UL_Parenthese_Ouvrante Identifiant:identifiant UL_Parenthese_Fermante
-				{:
-					RESULT = identifiant;
-				:}
-			;
-
-Parameters ::= Parameters:parameters UL_Virgule Type:type Identifiant:identifiant
+Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:identifiant
 				{:
 					Type _type = identifiant.getRight();
 					if (_type == null) {
@@ -521,49 +424,6 @@ Declaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_P
  					}
 					RESULT = new VariableDeclaration( identifiant.getLeft(), _type, valeur);
 				:}
-			| Type:type Identifiant:identifiant UL_Parenthese_Ouvrante Parameters:parametres UL_Parenthese_Fermante Bloc:corps
-				{:
-					Type _type = identifiant.getRight();
-					if (_type == null) {
-						_type = type;
-					} else {
-						_type = ((PartialType)_type).complete( type );
- 					}
-					RESULT = new FunctionDeclaration( identifiant.getLeft(), _type, parametres, corps);
-
-				:}
-			| Type:type Identifiant:identifiant UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:corps
-				{:
-					Type _type = identifiant.getRight();
-					if (_type == null) {
-						_type = type;
-					} else {
-						_type = ((PartialType)_type).complete( type );
- 					}
-					List<ParameterDeclaration> _parametres = new LinkedList<ParameterDeclaration>();
-					RESULT = new FunctionDeclaration( identifiant.getLeft(), _type, _parametres, corps);
-
-				:}
-			| UL_Definition_Type Type:type Identifiant:identifiant UL_Point_Virgule
-				{:
-					Type _type = identifiant.getRight();
-					if (_type == null) {
-						_type = type;
-					} else {
-						_type = ((PartialType)_type).complete( type );
- 					}
-					RESULT = new TypeDeclaration( identifiant.getLeft(), _type);
-				:}
-			| UL_Definition_Constante Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
-				{:
-					Type _type = identifiant.getRight();
-					if (_type == null) {
-						_type = type;
-					} else {
-						_type = ((PartialType)_type).complete( type );
- 					}
-					RESULT = new ConstantDeclaration( identifiant.getLeft(), _type, valeur);
-				:}
 			;
 
 Instruction ::= Declaration:declaration
@@ -573,6 +433,15 @@ Instruction ::= Declaration:declaration
 			| Affectable:affectable UL_Egal Expression:expression UL_Point_Virgule
 				{:
 					RESULT = new Assignment( affectable, expression);
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante  UL_Point_Virgule
+             	{:
+					RESULT = new FunctionCall( nom, parametres );
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante  UL_Point_Virgule
+             	{:
+					List<Expression> _parametres = new LinkedList<Expression>();
+					RESULT = new FunctionCall( nom, _parametres );
 				:}
 			| UL_Afficher Expression:expression UL_Point_Virgule
 				{:
@@ -613,10 +482,6 @@ Affectable ::= UL_Identificateur:nom
 				{:
 					RESULT = new VariableAssignment( nom );
 				:}
-			| UL_Asterisque Affectable:pointeur
-				{:
-					RESULT = new PointerAssignment( pointeur );
-				:}
 			| Affectable:tableau UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
 				{:
 					RESULT = new ArrayAssignment( tableau, indice);
@@ -629,6 +494,22 @@ Affectable ::= UL_Identificateur:nom
 				{:
 					RESULT = new FieldAssignment( enregistrement, etiquette);
 				:}
+			| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+             	{:
+					// TODO
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+             	{:
+					// TODO
+				:}
 			;
 
 Expression ::= /* Affectable:affectable UL_Egal Expression:expression
@@ -636,20 +517,16 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 					RESULT = new Assignment( affectable, expression);
 				:}
 			| */ Expression:gauche UL_Double_Egal Expression:droite
-                {:
-                    RESULT = new BinaryExpression( gauche, BinaryOperator.Equals, droite);
-                :}
-            | Expression:gauche UL_Exclamation_Egal Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Equals, droite);
+				:}
+			| Expression:gauche UL_Exclamation_Egal Expression:droite
 				{:
 					RESULT = new BinaryExpression( gauche, BinaryOperator.Different, droite);
 				:}
 			| Expression:gauche UL_Inferieur Expression:droite
 				{:
 					RESULT = new BinaryExpression( gauche, BinaryOperator.Lesser, droite);
-				:}
-			| Expression:gauche UL_Point UL_Point Expression:droite
-				{:
-					RESULT = new BinaryExpression(gauche, BinaryOperator.Concat, droite);
 				:}
 			| Expression:gauche UL_Superieur Expression:droite
 				{:
@@ -699,22 +576,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new UnaryExpression( UnaryOperator.Negate, expression);
 				:}
-            | UL_Esperluette Affectable:affectable
-             	{:
-					RESULT = new AddressAccess( affectable );
-				:}
-			| UL_Asterisque Expression:expression
-             	{:
-					RESULT = new PointerAccess( expression );
-				:}
-			| UL_Premier Expression:expression
-             	{:
-					RESULT = new First( expression );
-				:}
-			| UL_Second Expression:expression
-             	{:
-					RESULT = new Second( expression );
-				:}
 			| Expression:expression UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
 				{:
 					RESULT = new ArrayAccess( expression, indice );
@@ -722,6 +583,14 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 			| Expression:expression UL_Point UL_Identificateur:etiquette
 				{:
 					RESULT = new FieldAccess( expression, etiquette );
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+				{:
+					// TODO
 				:}
 			| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
 				{:
@@ -733,15 +602,11 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				:}
 			| UL_Parenthese_Ouvrante UL_Identificateur:type UL_Parenthese_Fermante Expression:expression
              	{:
-					RESULT = new TypeCast( expression, type);
+					RESULT = new TypeConversion( expression, type);
 				:}
 			| UL_Accolade_Ouvrante Expressions:expressions UL_Accolade_Fermante
              	{:
 					RESULT = new Sequence( expressions );
-				:}
-			| UL_Inferieur Expression:premier UL_Virgule Expression:second UL_Superieur
-             	{:
-					RESULT = new Couple( premier, second );
 				:}
 			| UL_Identificateur:nom
              	{:
@@ -790,5 +655,7 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new PointerAllocation( type );
 				:}
+			| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+             	{: /* TODO */ :}
             ;
        
