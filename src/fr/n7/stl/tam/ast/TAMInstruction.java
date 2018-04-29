@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.tam.ast;
+package fr.n7.stl.tam.ast;
 
 /**
  * A TAM instruction than can be prefixed by a label used to resolve the address of the instruction

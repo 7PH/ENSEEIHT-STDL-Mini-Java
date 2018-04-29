@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.tam.ast;
+package fr.n7.stl.tam.ast;
 
 import java.util.LinkedList;
 import java.util.List;

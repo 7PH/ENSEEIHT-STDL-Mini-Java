@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.util;
+package fr.n7.stl.util;
 
 /**
  * @author Marc Pantel

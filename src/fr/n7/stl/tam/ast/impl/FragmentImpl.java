@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.tam.ast.impl;
+package fr.n7.stl.tam.ast.impl;
 
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMInstruction;

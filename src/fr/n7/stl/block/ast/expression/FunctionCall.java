@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.expression;
+package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.instruction.declaration.FunctionDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast;
+package fr.n7.stl.block.ast;
 
 /**
  * Runtime exception that is triggered when a semantics element is not implemented.

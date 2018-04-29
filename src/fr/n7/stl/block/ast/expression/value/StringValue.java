@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.expression.value;
+package fr.n7.stl.block.ast.expression.value;
 
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.type.declaration;
+package fr.n7.stl.block.ast.type.declaration;
 
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.AtomicType;

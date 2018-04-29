@@ -1,4 +1,4 @@
-package stl.block.ast.expression.accessible;
+package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.expression.AbstractUse;
 import fr.n7.stl.block.ast.expression.Expression;

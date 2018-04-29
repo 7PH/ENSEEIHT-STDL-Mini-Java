@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.expression.allocation;
+package fr.n7.stl.block.ast.expression.allocation;
 
 import fr.n7.stl.block.ast.expression.BinaryOperator;
 import fr.n7.stl.block.ast.expression.Expression;

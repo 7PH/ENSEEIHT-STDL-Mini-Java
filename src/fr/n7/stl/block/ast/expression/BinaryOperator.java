@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.expression;
+package fr.n7.stl.block.ast.expression;
 
 /**
  * Binary operators in the Bloc language.

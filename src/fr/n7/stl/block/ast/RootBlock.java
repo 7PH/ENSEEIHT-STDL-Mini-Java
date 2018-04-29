@@ -1,4 +1,4 @@
-package stl.block.ast;
+package fr.n7.stl.block.ast;
 
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.type.AtomicType;

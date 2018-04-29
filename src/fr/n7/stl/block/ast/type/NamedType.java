@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.type;
+package fr.n7.stl.block.ast.type;
 
 import fr.n7.stl.block.ast.instruction.declaration.TypeDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.tam.ast;
+package fr.n7.stl.tam.ast;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.BinaryOperator;

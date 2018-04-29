@@ -1,4 +1,4 @@
-package stl.block.ast.expression;
+package fr.n7.stl.block.ast.expression;
 
 /**
  * Common elements between left (Assignable) and right (Expression) end sides of assignments. These elements

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.scope;
+package fr.n7.stl.block.ast.scope;
 
 /**
  * Interface to mark a node in the Abstract Syntax Tree as a Scope in the language.

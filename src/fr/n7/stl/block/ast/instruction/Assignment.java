@@ -1,4 +1,4 @@
-package stl.block.ast.instruction;
+package fr.n7.stl.block.ast.instruction;
 
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.expression.assignable.AssignableExpression;

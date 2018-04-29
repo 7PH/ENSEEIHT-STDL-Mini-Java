@@ -1,7 +1,7 @@
 /**
  * 
  */
-package stl.block.ast.scope;
+package fr.n7.stl.block.ast.scope;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package stl.block.ast.expression;
+package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
