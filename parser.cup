@@ -88,8 +88,7 @@ terminal				UL_Definition_Constante, UL_Definition_Type, UL_Enregistrement, UL_E
 terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Vide;
 terminal String		    UL_Identificateur, UL_Chaine, UL_Caractere;
 terminal String		    UL_Nombre_Entier, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
-
-terminal 				UL_Interface, UL_Extends, UL_Class, UL_Implements;
+terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
 terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
@@ -108,6 +107,31 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
+/** @TODO */
+non terminal void                           InterfaceDeclaration;
+non terminal void                           ClassDeclaration;
+non terminal void                           MethodSignatures;
+non terminal void                           MethodSignature;
+non terminal void                           Instantiations;
+non terminal void                           Instantiation;
+non terminal void                           NullableType;
+non terminal void                           Parameter;
+non terminal void                           ClassModifier;
+non terminal void                           Extension;
+non terminal void                           Definitions;
+non terminal void                           GenericTypes;
+non terminal void                           GenericType;
+non terminal void                           GenericInstantiations;
+non terminal void                           GenericInstantiation;
+non terminal void                           Definition;
+non terminal void                           AccessModifier;
+non terminal void                           ClassConstructor;
+non terminal void                           DefinitionModifier;
+non terminal void                           AttributeDefinition;
+non terminal void                           MethodDefinition;
+non terminal void                           NonArrayType;
+non terminal void                           Insantiation;
+
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
