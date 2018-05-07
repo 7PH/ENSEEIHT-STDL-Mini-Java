@@ -22,8 +22,6 @@ import fr.n7.stl.block.ast.instruction.*;
 import fr.n7.stl.block.ast.instruction.declaration.*;
 import fr.n7.stl.block.ast.scope.*;
 import fr.n7.stl.block.ast.type.*;
-import fr.n7.stl.block.ast.Block;
-import fr.n7.stl.block.ast.RootBlock;
 import fr.n7.stl.block.ast.type.declaration.*;
 import fr.n7.stl.tam.ast.impl.*;
 import fr.n7.stl.tam.ast.*;
@@ -32,25 +30,18 @@ import fr.n7.stl.util.*;
 /* Variables partagées dans les actions de l'analyseur syntaxique. */
 parser code {:
     protected Lexer lexer;
-
     public String name;
-
-    public Block block;
-
-    public boolean resolve, checkType;
-
-    public double
-        resolveTimeMs,
-        checkTypeTimeMs,
-        allocateMemoryTimeMs,
-        getCodeTimeMs;
-
-    public Fragment fragment;
-
-    public Parser(String _name) {
+    //public Block block;
+    //public boolean resolve, checkType;
+    //public double
+    //    resolveTimeMs,
+    //    checkTypeTimeMs,
+    //    allocateMemoryTimeMs,
+    //    getCodeTimeMs;
+    //public Fragment fragment;
+    public Parser(String name) {
         this();
-
-        this.name = _name;
+        this.name = name;
     }
 :}
 
@@ -65,12 +56,13 @@ init with {:
     } catch (IOException e) {
         e.printStackTrace();
     }
-    lexer = new Lexer(f,fis);
+    lexer = new Lexer(f, fis);
 :};
 
 /* Expression qui permet de progresser dans l'analyse lexicale. */
 scan with {: return lexer.next_token(); :};
 
+/* Terminaux qui seront transmis par l'analyseur lexical. */
 /* Terminaux qui seront transmis par l'analyseur lexical. */
 terminal 			    UL_Point_Virgule, UL_Virgule, UL_Point, UL_Deux_Points, UL_Point_Interrogation, UL_Point_Exclamation;
 terminal				UL_Egal, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe;
@@ -85,29 +77,26 @@ terminal				UL_Inferieur_Egal, UL_Superieur_Egal;
 terminal				UL_Double_Egal, UL_Exclamation_Egal;
 terminal				UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
 terminal				UL_Definition_Constante, UL_Definition_Type, UL_Enregistrement, UL_Enumeration;
-terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Vide;
+terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
 terminal String		    UL_Identificateur, UL_Chaine, UL_Caractere;
-terminal String		    UL_Nombre_Entier, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
+terminal String		    UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
+/* @TODO */
 terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
 terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
-non terminal Block						    Program;
 non terminal Block						    Bloc;
 non terminal List<Instruction>			    Instructions;
 non terminal Instruction					Instruction;
 non terminal Instruction					Declaration;
 non terminal List<Expression>			    Expressions;
-non terminal List<FieldDeclaration>		    Champs;
-non terminal FieldDeclaration			    Champ;
-non terminal List<LabelDeclaration>		    Etiquettes;
-non terminal LabelDeclaration			    Etiquette;
 non terminal List<ParameterDeclaration>	    Parameters;
 non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
+non terminal void						    Program;
 non terminal void                           InterfaceDeclaration;
 non terminal void                           ClassDeclaration;
 non terminal void                           MethodSignatures;
@@ -130,6 +119,7 @@ non terminal void                           DefinitionModifier;
 non terminal void                           AttributeDefinition;
 non terminal void                           MethodDefinition;
 non terminal void                           NonArrayType;
+non terminal void                           ClassType;
 non terminal void                           Insantiation;
 
 
@@ -149,7 +139,8 @@ precedence left             UL_Premier, UL_Second;
 precedence left             UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
 precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-/* Opératuer le plus prioritaire */
+/* Opérateur le plus prioritaire */
+
 
 
 
@@ -194,7 +185,7 @@ MethodSignature ::=
 NullableType ::=
     UL_Type_Vide
         {: :}
-    | Type:type
+    | ClassType:type
         {: :};
 
 // Parameters
@@ -208,7 +199,7 @@ Parameters ::=
 // Parameter
 //  - $Type $UL_Identificateur
 Parameter ::=
-    Type:type UL_Identificateur
+    ClassType:type UL_Identificateur
         {: :};
 
 // Instantiations
@@ -334,7 +325,7 @@ AccessModifier ::=
 // AttributeDefinition
 //  - $Type $UL_Identificateur ";"
 AttributeDefinition ::=
-    Type:type UL_Identificateur UL_Point_Virgule
+    ClassType:type UL_Identificateur UL_Point_Virgule
         {: :};
 
 // MethodDefinition
@@ -347,7 +338,7 @@ MethodDefinition ::=
 
 // Type
 //  - $NonArrayType ("[]")?
-Type ::=
+ClassType ::=
     NonArrayType:type
         {: :}
     | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant

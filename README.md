@@ -14,14 +14,14 @@ npm i
 Ensuite, pour lancer le jeu de tests, tapez
 
 ```bash
-npm test spec
+npm test {spec}
 ```
 
-Le mot clef `spec` est le reporter souhaité pour mocha.
+`{spec}` est le reporter souhaité pour mocha.
 
 
 Plus d'infos sur mocha: https://mochajs.org/
 
 Liste des reporters: https://mochajs.org/#reporters
 
-Par exemple: `npm test nyan`
+Par exemple: `npm test spec` ou `npm test nyan`
