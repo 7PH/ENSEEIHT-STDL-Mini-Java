@@ -63,7 +63,6 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminaux qui seront transmis par l'analyseur lexical. */
-/* Terminaux qui seront transmis par l'analyseur lexical. */
 terminal 			    UL_Point_Virgule, UL_Virgule, UL_Point, UL_Deux_Points, UL_Point_Interrogation, UL_Point_Exclamation;
 terminal				UL_Egal, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe;
 terminal 			    UL_Plus, UL_Moins, UL_Moins_Unaire, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
@@ -139,6 +138,7 @@ precedence left             UL_Premier, UL_Second;
 precedence left             UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
 precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
+precedence left             /* @TODO */     UL_Identificateur;
 /* Opérateur le plus prioritaire */
 
 
@@ -279,7 +279,7 @@ Extension ::=
 // Definitions - methods and attributes definition inside a class
 //  - ($Definition)*
 Definitions ::=
-    | Definitions:definitions Definition:definition
+    Definitions:definitions Definition:definition
         {: :}
     |
         {: :};
