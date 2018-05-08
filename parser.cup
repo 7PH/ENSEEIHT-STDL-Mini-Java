@@ -118,7 +118,6 @@ non terminal void                           AttributeDefinition;
 non terminal void                           MethodDefinition;
 non terminal void                           NonArrayType;
 non terminal void                           Type;
-non terminal void                           Insantiation;
 
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
@@ -136,8 +135,6 @@ precedence right            UL_Nouveau;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence left             /* @TODO */ UL_Identificateur;
-precedence left             /* @TODO */ Type;
 /* Opérateur le plus prioritaire */
 
 
