@@ -133,11 +133,11 @@ precedence nonassoc         UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Su
 precedence left             UL_Plus, UL_Moins;
 precedence left             UL_Asterisque, UL_Oblique, UL_Pour_Cent;
 precedence right            UL_Nouveau;
-//precedence left             UL_Premier, UL_Second;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence left             /* @TODO */     UL_Identificateur, UL_Virgule;
+precedence left             /* @TODO */ UL_Identificateur;
+precedence left             /* @TODO */ Type;
 /* Opérateur le plus prioritaire */
 
 
@@ -354,7 +354,7 @@ NonArrayType ::=
         {: :}
     | UL_Type_Chaine
         {: :}
-    | Insantiation:instation
+    | Instantiation:instantiation
         {: :};
 
 // Bloc
