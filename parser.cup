@@ -188,11 +188,11 @@ NullableType ::=
 
 // Parameters
 //  - ($Parameter ",")* $Parameter
-Parameters ::=
-    Parameters:parameters UL_Virgule Parameter:parameter
-        {: :}
-    | Parameter:parameter
-        {: :};
+//Parameters ::=
+//    Parameters:parameters UL_Virgule Parameter:parameter
+//        {: :}
+//    | Parameter:parameter
+//        {: :};
 
 // Parameter
 //  - $Type $UL_Identificateur
