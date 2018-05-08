@@ -110,7 +110,7 @@ Identificateur = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "["          		{ return symbolFactory.newSymbol("Crochet Ouvrant", UL_Crochet_Ouvrant); }
   "]"          		{ return symbolFactory.newSymbol("Crochet Fermant", UL_Crochet_Fermant); }
   "const"			{ return symbolFactory.newSymbol("Définition Constante", UL_Definition_Constante); }
-  "typedef"			{ return symbolFactory.newSymbol("Définition Type", UL_Definition_Type); }
+//  "typedef"			{ return symbolFactory.newSymbol("Définition Type", UL_Definition_Type); }
   "struct"			{ return symbolFactory.newSymbol("Enregistrement", UL_Enregistrement); }
   "enum"			{ return symbolFactory.newSymbol("Enumération", UL_Enumeration); }
   "int"				{ return symbolFactory.newSymbol("Type Entier", UL_Type_Entier); }

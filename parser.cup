@@ -64,21 +64,21 @@ scan with {: return lexer.next_token(); :};
 
 /* Terminaux qui seront transmis par l'analyseur lexical. */
 terminal 			    UL_Point_Virgule, UL_Virgule, UL_Point, UL_Deux_Points, UL_Point_Interrogation, UL_Point_Exclamation;
-terminal				UL_Egal, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe;
-terminal 			    UL_Plus, UL_Moins, UL_Moins_Unaire, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
+terminal				UL_Egal/*, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe*/;
+terminal 			    UL_Plus, UL_Moins/*, UL_Moins_Unaire*/, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
 terminal				UL_Esperluette, UL_Double_Barre, UL_Double_Esperluette;
 terminal				UL_Parenthese_Ouvrante, UL_Parenthese_Fermante;
-terminal				UL_Premier, UL_Second;
+//terminal				UL_Premier, UL_Second;
 terminal				UL_Accolade_Ouvrante, UL_Accolade_Fermante;
 terminal				UL_Crochet_Ouvrant, UL_Crochet_Fermant;
 terminal				UL_Inferieur, UL_Superieur;
 terminal				UL_Inferieur_Egal, UL_Superieur_Egal;
 terminal				UL_Double_Egal, UL_Exclamation_Egal;
 terminal				UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
-terminal				UL_Definition_Constante, UL_Definition_Type, UL_Enregistrement, UL_Enumeration;
-terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
+//terminal				UL_Definition_Constante,  UL_Definition_Type, UL_Enregistrement, UL_Enumeration;
+terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier/*, UL_Type_Flottant*/, UL_Type_Vide;
 terminal String		    UL_Identificateur, UL_Chaine, UL_Caractere;
-terminal String		    UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
+terminal String		    UL_Nombre_Entier/*, UL_Nombre_Flottant*/, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
 /* @TODO */
 terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
 terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
@@ -110,7 +110,6 @@ non terminal void                           Definitions;
 non terminal void                           GenericTypes;
 non terminal void                           GenericType;
 non terminal void                           GenericInstantiations;
-non terminal void                           GenericInstantiation;
 non terminal void                           Definition;
 non terminal void                           AccessModifier;
 non terminal void                           ClassConstructor;
@@ -134,11 +133,11 @@ precedence nonassoc         UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Su
 precedence left             UL_Plus, UL_Moins;
 precedence left             UL_Asterisque, UL_Oblique, UL_Pour_Cent;
 precedence right            UL_Nouveau;
-precedence left             UL_Premier, UL_Second;
-precedence left             UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
-precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
+//precedence left             UL_Premier, UL_Second;
+precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
+//precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-//precedence left             /* @TODO */     UL_Identificateur;
+precedence left             /* @TODO */     UL_Identificateur, UL_Virgule;
 /* Opérateur le plus prioritaire */
 
 
@@ -221,7 +220,7 @@ Instantiation ::=
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    ClassModifier:modifier Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    UL_Class ClassModifier:modifier Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
         {: :};
 
 // ClassModifier
