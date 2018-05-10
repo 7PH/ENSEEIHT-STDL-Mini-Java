@@ -95,33 +95,34 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
-non terminal void						    Program;
-non terminal void                           InterfaceDeclaration;
-non terminal void                           ClassDeclaration;
-non terminal void                           MethodSignatures;
-non terminal void                           MethodSignature;
-non terminal void                           Instantiations;
-non terminal void                           Instantiation;
-non terminal void                           NullableType;
-non terminal void                           Parameter;
-non terminal void                           ClassModifier;
-non terminal void                           Extension;
-non terminal void                           Definitions;
-non terminal void                           GenericTypes;
-non terminal void                           GenericType;
-non terminal void                           GenericInstantiations;
-non terminal void                           Definition;
-non terminal void                           AccessModifier;
-non terminal void                           ClassConstructor;
-non terminal void                           DefinitionModifier;
-non terminal void                           AttributeDefinition;
-non terminal void                           MethodDefinition;
-non terminal void                           NonArrayType;
-non terminal void                           Type;
+non terminal Integer						    Program;
+non terminal Integer                           InterfaceDeclaration;
+non terminal Integer                           ClassDeclaration;
+non terminal Integer                           MethodSignatures;
+non terminal Integer                           MethodSignature;
+non terminal Integer                           Instantiations;
+non terminal Integer                           Instantiation;
+non terminal Integer                           NullableType;
+non terminal Integer                           Parameter;
+non terminal Integer                           ClassModifier;
+non terminal Integer                           Extension;
+non terminal Integer                           Definitions;
+non terminal Integer                           GenericTypes;
+non terminal Integer                           GenericType;
+non terminal Integer                           GenericInstantiations;
+non terminal Integer                           Definition;
+non terminal Integer                           AccessModifier;
+non terminal Integer                           ClassConstructor;
+non terminal Integer                           DefinitionModifier;
+non terminal Integer                           AttributeDefinition;
+non terminal Integer                           MethodDefinition;
+non terminal Integer                           NonArrayType;
+non terminal Integer                           Type;
 
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
+precedence nonassoc         /* @TODO */ UL_Identificateur;
 precedence nonassoc         UL_Parenthese_Fermante;	// Résolution du conflit décaler/réduire sur conversion de type
 precedence right            UL_Egal;
 precedence nonassoc         UL_Point_Interrogation, UL_Deux_Points;
@@ -135,8 +136,6 @@ precedence right            UL_Nouveau;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence left             /* @TODO */ UL_Identificateur, Affectable;
-precedence left             /* @TODO */ Instantiation;
 /* Opérateur le plus prioritaire */
 
 
@@ -146,81 +145,81 @@ precedence left             /* @TODO */ Instantiation;
 //  - ($InterfaceDeclaration|$ClassDeclaration)+
 Program ::=
     Program:program InterfaceDeclaration:interfaceDeclaration
-        {: :}
+        {: RESULT = 1; :}
     | Program:program ClassDeclaration:classDeclaration
-        {: :}
+        {: RESULT = 1; :}
     | InterfaceDeclaration:interfaceDeclaration
-        {: :}
+        {: RESULT = 1; :}
     | ClassDeclaration:classDeclaration
-        {: :};
+        {: RESULT = 1; :};
 
 // InterfaceDeclaration
 //  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
 InterfaceDeclaration ::=
     UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
-        {: :}
+        {: RESULT = 1; :}
     | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
-        {: :};
+        {: RESULT = 1; :};
 
 // MethodSignatures
 //  - ($MethodSignature ";")*
 MethodSignatures ::=
     MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
-        {: :}
+        {: RESULT = 1; :}
     |
-        {: :};
+        {: RESULT = 1; :};
 
 // MethodSignature
 //  - $NullableType $Identificateur "(" $Parameters? ")"
 MethodSignature ::=
     NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-        {: :}
+        {: RESULT = 1; :}
     | NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
-        {: :};
+        {: RESULT = 1; :};
 
 // NullableType
 //  - (void|$Type)
 NullableType ::=
     UL_Type_Vide
-        {: :}
+        {: RESULT = 1; :}
     | Type:type
-        {: :};
+        {: RESULT = 1; :};
 
 // Parameters
 //  - ($Parameter ",")* $Parameter
 //Parameters ::=
 //    Parameters:parameters UL_Virgule Parameter:parameter
-//        {: :}
+//        {: RESULT = 1; :}
 //    | Parameter:parameter
-//        {: :};
+//        {: RESULT = 1; :};
 
 // Parameter
 //  - $Type $UL_Identificateur
 Parameter ::=
     Type:type UL_Identificateur:ident
-        {: :};
+        {: RESULT = 1; :};
 
 // Instantiations
 //  - ($Instantiation ",")* $Instantiation
 Instantiations ::=
     Instantiation:instantiation
-        {: :}
+        {: RESULT = 1; :}
     | Instantiations:instantiations UL_Virgule Instantiation:instantiation
-        {: :};
+        {: RESULT = 1; :};
 
 // Instantiation
 //  - $UL_Identificateur ("<" $Instanciations ">")?
 Instantiation ::=
     UL_Identificateur
-        {: :}
+        {: RESULT = 1; :}
     | UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
-        {: :};
+        {: RESULT = 1; :};
 
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
     UL_Class ClassModifier:modifier Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
-        {: :};
+        {: RESULT = 1; :};
 
 // ClassModifier
 //  - (final|abstract)?
@@ -228,133 +227,133 @@ ClassModifier ::=
     UL_Final
     | UL_Abstract
     |
-        {: :};
+        {: RESULT = 1; :};
 
 // Declaration
 //  - $UL_Identificateur ("<" GenericTypes ">")?
 Declaration ::=
     UL_Identificateur
-        {: :}
+        {: RESULT = 1; :}
     | UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
-        {: :};
+        {: RESULT = 1; :};
 
 // GenericTypes
 //  - ($GenericType ",")* $GenericType
 GenericTypes ::=
     GenericType
-        {: :}
+        {: RESULT = 1; :}
     | GenericTypes:generics UL_Virgule GenericType:generic
-        {: :};
+        {: RESULT = 1; :};
 
 // GenericType
 //  - $UL_Identificateur ("extends" $GenericInstantiations)?
 GenericType ::=
     UL_Identificateur
-        {: :}
+        {: RESULT = 1; :}
     | UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
-        {: :};
+        {: RESULT = 1; :};
 
 // GenericInstantiations
 //  - ($Instantiation ",")* $Instantiation
 GenericInstantiations ::=
     Instantiation
-        {: :}
+        {: RESULT = 1; :}
     | GenericInstantiations:genericInstantiations UL_Esperluette Instantiation:instantiation
-        {: :};
+        {: RESULT = 1; :};
 
 // Extension
 //  - ("extends" $Instantiations)? ("implements" $Instantiations)?
 Extension ::=
     UL_Extends Instantiation:instantiation
-        {: :}
+        {: RESULT = 1; :}
     | UL_Extends Instantiation:instantiation UL_Implements Instantiations:instantiations
-        {: :}
+        {: RESULT = 1; :}
     | UL_Implements Instantiations:instantiations
-        {: :}
+        {: RESULT = 1; :}
     |
-        {: :};
+        {: RESULT = 1; :};
 
 // Definitions - methods and attributes definition inside a class
 //  - ($Definition)*
 Definitions ::=
     Definitions:definitions Definition:definition
-        {: :}
+        {: RESULT = 1; :}
     |
-        {: :};
+        {: RESULT = 1; :};
 
 // Definition - definition of one method/attribute
 //  ("public"|"private") ($ClassConstructor|($DefinitionModifier ($Attribute|$Method)))
 Definition ::=
     AccessModifier:access ClassConstructor:constructor
-        {: :}
+        {: RESULT = 1; :}
     | AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
-        {: :}
+        {: RESULT = 1; :}
     | AccessModifier:access DefinitionModifier:modifier MethodDefinition:methodDefinition
-        {: :};
+        {: RESULT = 1; :};
 
 // DefinitionModifier
 //  - "static"? "final"?
 DefinitionModifier ::=
     UL_Static
-        {: :}
+        {: RESULT = 1; :}
     | UL_Final
-        {: :}
+        {: RESULT = 1; :}
     | UL_Static UL_Final
-        {: :}
+        {: RESULT = 1; :}
     |
-        {: :};
+        {: RESULT = 1; :};
 
 // ClassConstructor
 // - $UL_Identificateur "(" $Parameters ")"
 ClassConstructor ::=
     UL_Identificateur UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
-        {: :}
+        {: RESULT = 1; :}
     | UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
-        {: :};
+        {: RESULT = 1; :};
 
 // AccessModifier
 //  - (public|private)
 AccessModifier ::=
     UL_Public
-        {: :}
+        {: RESULT = 1; :}
     | UL_Private
-        {: :};
+        {: RESULT = 1; :};
 
 // AttributeDefinition
 //  - $Type $UL_Identificateur ";"
 AttributeDefinition ::=
     Type:type UL_Identificateur UL_Point_Virgule
-        {: :};
+        {: RESULT = 1; :};
 
 // MethodDefinition
 //  - "abstract"? $MethodSignature $Bloc
 MethodDefinition ::=
     MethodSignature:methodSignature Bloc:body
-        {: :}
+        {: RESULT = 1; :}
     | UL_Abstract MethodSignature:methodSignature Bloc:body
-        {: :};
+        {: RESULT = 1; :};
 
 // Type
 //  - $NonArrayType ("[]")?
 Type ::=
     NonArrayType:type
-        {: :}
+        {: RESULT = 1; :}
     | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant
-        {: :};
+        {: RESULT = 1; :};
 
 // NonArrayType
 //  - (bool|character|String|int|$Instanciation)
 NonArrayType ::=
     UL_Type_Entier
-        {: :}
+        {: RESULT = 1; :}
     | UL_Type_Booleen
-        {: :}
+        {: RESULT = 1; :}
     | UL_Type_Caractere
-        {: :}
+        {: RESULT = 1; :}
     | UL_Type_Chaine
-        {: :}
+        {: RESULT = 1; :}
     | Instantiation:instantiation
-        {: :};
+        {: RESULT = 1; :};
 
 // Bloc
 //  - "{" $Instructions* "}"
