@@ -10,7 +10,8 @@ interface B<T extends A> {
 class TheA implements A {
     @Override
     public void doA() {
-        System.out.println("A!");
+        String A = "issou";
+        System.out.println("A: " + A);
     }
 }
 
