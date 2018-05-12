@@ -198,7 +198,7 @@ NullableType ::=
 //    Type:type UL_Identificateur:ident
 //        {: RESULT = 1; :};
 
-// Instantiations
+// Instantiations (instantiation of generic types)
 //  - ($Instantiation ",")* $Instantiation
 Instantiations ::=
     Instantiation:instantiation
@@ -209,22 +209,24 @@ Instantiations ::=
 // Instantiation
 //  - $UL_Identificateur ("<" $Instanciations ">")?
 Instantiation ::=
-    UL_Identificateur
+    UL_Identificateur:ident
         {: RESULT = 1; :}
-    | UL_Identificateur UL_Inferieur Instantiations:instantiations UL_Superieur
+    | UL_Identificateur:ident UL_Inferieur Instantiations:instantiations UL_Superieur
         {: RESULT = 1; :};
 
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    UL_Class ClassModifier:modifier Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    ClassModifier:modifier UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
         {: RESULT = 1; :};
 
 // ClassModifier
 //  - (final|abstract)?
 ClassModifier ::=
     UL_Final
+        {: RESULT = 1; :}
     | UL_Abstract
+        {: RESULT = 1; :}
     |
         {: RESULT = 1; :};
 
