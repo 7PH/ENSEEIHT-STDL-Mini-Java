@@ -195,9 +195,9 @@ NullableType ::=
 
 // Parameter
 //  - $Type $UL_Identificateur
-Parameter ::=
-    Type:type UL_Identificateur:ident
-        {: RESULT = 1; :};
+//Parameter ::=
+//    Type:type UL_Identificateur:ident
+//        {: RESULT = 1; :};
 
 // Instantiations
 //  - ($Instantiation ",")* $Instantiation
