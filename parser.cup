@@ -103,7 +103,6 @@ non terminal Integer                           MethodSignature;
 non terminal Integer                           Instantiations;
 non terminal Integer                           Instantiation;
 non terminal Integer                           NullableType;
-non terminal Integer                           Parameter;
 non terminal Integer                           ClassModifier;
 non terminal Integer                           Extension;
 non terminal Integer                           Definitions;
