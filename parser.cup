@@ -217,7 +217,7 @@ Instantiation ::=
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    ClassModifier:modifier UL_Class Declaration:declaration Extension:extension UL_Crochet_Ouvrant Definitions:definitions UL_Crochet_Fermant
+    ClassModifier UL_Class Declaration Extension UL_Crochet_Ouvrant Definitions UL_Crochet_Fermant
         {: RESULT = 1; :};
 
 // ClassModifier
@@ -233,15 +233,15 @@ ClassModifier ::=
 // Declaration
 //  - $UL_Identificateur ("<" GenericTypes ">")?
 Declaration ::=
-    UL_Identificateur
+    UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
         {: RESULT = 1; :}
-    | UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
+    | UL_Identificateur
         {: RESULT = 1; :};
 
 // GenericTypes
 //  - ($GenericType ",")* $GenericType
 GenericTypes ::=
-    GenericType
+
         {: RESULT = 1; :}
     | GenericTypes:generics UL_Virgule GenericType:generic
         {: RESULT = 1; :};
