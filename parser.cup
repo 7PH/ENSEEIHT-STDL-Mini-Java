@@ -163,7 +163,7 @@ InterfaceDeclaration ::=
 // MethodSignatures
 //  - ($MethodSignature ";")*
 MethodSignatures ::=
-    MethodSignature:methodeSignature UL_Point_Virgule MethodSignatures:methodeSignatures
+    MethodSignatures MethodSignature UL_Point_Virgule
         {: RESULT = 1; :}
     |
         {: RESULT = 1; :};
@@ -211,7 +211,7 @@ Instantiations ::=
 Instantiation ::=
     UL_Identificateur:ident
         {: RESULT = 1; :}
-    | UL_Identificateur:ident UL_Inferieur Instantiations:instantiations UL_Superieur
+    | UL_Identificateur:ident UL_Inferieur Instantiations UL_Superieur
         {: RESULT = 1; :};
 
 // ClassDeclaration
@@ -233,7 +233,7 @@ ClassModifier ::=
 // Declaration
 //  - $UL_Identificateur ("<" GenericTypes ">")?
 Declaration ::=
-    UL_Identificateur UL_Inferieur GenericTypes:generics UL_Superieur
+    UL_Identificateur UL_Inferieur GenericTypes UL_Superieur
         {: RESULT = 1; :}
     | UL_Identificateur
         {: RESULT = 1; :};
@@ -241,9 +241,9 @@ Declaration ::=
 // GenericTypes
 //  - ($GenericType ",")* $GenericType
 GenericTypes ::=
-
+    GenericTypes:generics UL_Virgule GenericType:generic
         {: RESULT = 1; :}
-    | GenericTypes:generics UL_Virgule GenericType:generic
+    |
         {: RESULT = 1; :};
 
 // GenericType
@@ -259,17 +259,17 @@ GenericType ::=
 GenericInstantiations ::=
     Instantiation
         {: RESULT = 1; :}
-    | GenericInstantiations:genericInstantiations UL_Esperluette Instantiation:instantiation
+    | GenericInstantiations UL_Esperluette Instantiation
         {: RESULT = 1; :};
 
 // Extension
 //  - ("extends" $Instantiations)? ("implements" $Instantiations)?
 Extension ::=
-    UL_Extends Instantiation:instantiation
+    UL_Extends Instantiation
         {: RESULT = 1; :}
-    | UL_Extends Instantiation:instantiation UL_Implements Instantiations:instantiations
+    | UL_Extends Instantiation UL_Implements Instantiations
         {: RESULT = 1; :}
-    | UL_Implements Instantiations:instantiations
+    | UL_Implements Instantiations
         {: RESULT = 1; :}
     |
         {: RESULT = 1; :};
