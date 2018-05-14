@@ -87,7 +87,7 @@ terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 non terminal Block						    Bloc;
 non terminal List<Instruction>			    Instructions;
 non terminal Instruction					Instruction;
-non terminal Instruction					Declaration;
+non terminal Instruction					VarDeclaration;
 non terminal List<Expression>			    Expressions;
 non terminal List<ParameterDeclaration>	    Parameters;
 non terminal Pair<String,PartialType>	    Identifiant;
@@ -95,7 +95,8 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
-non terminal Integer						    Program;
+non terminal Integer						   Program;
+non terminal Integer                           Declaration;
 non terminal Integer                           InterfaceDeclaration;
 non terminal Integer                           ClassDeclaration;
 non terminal Integer                           MethodSignatures;
@@ -428,7 +429,7 @@ Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:iden
 				:}
 			;
 
-Declaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
+VarDeclaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
 				{:
 					Type _type = identifiant.getRight();
 					if (_type == null) {
@@ -440,7 +441,7 @@ Declaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_P
 				:}
 			;
 
-Instruction ::= Declaration:declaration
+Instruction ::= VarDeclaration:declaration
 				{:
 					RESULT = declaration;
 				:}
