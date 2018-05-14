@@ -90,7 +90,7 @@ non terminal Instruction					Instruction;
 non terminal Instruction					VarDeclaration;
 non terminal List<Expression>			    Expressions;
 non terminal List<ParameterDeclaration>	    Parameters;
-non terminal Pair<String,PartialType>	    Identifiant;
+//non terminal Pair<String,PartialType>	    Identifiant;
 //non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
@@ -340,6 +340,8 @@ MethodDefinition ::=
 Type ::=
     NonArrayType:type
         {: RESULT = 1; :}
+    | Instantiation
+        {: RESULT = 1; :}
     | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant
         {: RESULT = 1; :};
 
@@ -354,14 +356,15 @@ NonArrayType ::=
         {: RESULT = 1; :}
     | UL_Type_Chaine
         {: RESULT = 1; :}
-    | Instantiation:instantiation
-        {: RESULT = 1; :};
+    //| Instantiation:instantiation
+    //    {: RESULT = 1; :}
+    ;
 
 // Bloc
 //  - "{" $Instructions* "}"
 Bloc ::=
     UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
-        {: /* RESULT = new Block(instructions); */ :};
+        {: RESULT = 1; /* RESULT = new Block(instructions); */ :};
 
 
 
@@ -394,33 +397,6 @@ Type ::= Atomique:atomique
 			:}
 		;
 */
-Identifiant ::= UL_Identificateur:nom
-				{:
-					RESULT = new Pair<String,PartialType>( nom, null );
-				:}
-			| UL_Asterisque Identifiant:identifiant
-				{:
-					if (identifiant.getRight() == null) {
-						identifiant.setRight( new PartialPointerType() );
-					} else {
-						identifiant.getRight().enrich(new PartialPointerType());
-					}
-					RESULT = identifiant;
-				:}
-			| Identifiant:identifiant UL_Crochet_Ouvrant UL_Crochet_Fermant
-				{:
-					if (identifiant.getRight() == null) {
-						identifiant.setRight( new PartialArrayType() );
-					} else {
-						identifiant.getRight().enrich(new PartialArrayType());
-					}
-					RESULT = identifiant;
-				:}
-			| UL_Parenthese_Ouvrante Identifiant:identifiant UL_Parenthese_Fermante
-				{:
-					RESULT = identifiant;
-				:}
-			;
 
 Instructions ::= Instructions:instructions Instruction:instruction
 				{:
@@ -442,7 +418,7 @@ Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:iden
 					parameters.add( new ParameterDeclaration( identifiant.getLeft(), _type) );
 					RESULT = parameters;
 				:}
-			| Type:type Identifiant:identifiant
+			| Type:type UL_Identificateur:identifiant
 				{:
 					List<ParameterDeclaration> _parameters = new LinkedList<ParameterDeclaration>();
 					Type _type = identifiant.getRight();
@@ -456,7 +432,7 @@ Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:iden
 				:}
 			;
 
-VarDeclaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
+VarDeclaration ::= Type:type UL_Identificateur:identifiant UL_Egal Expression:valeur UL_Point_Virgule
 				{:
 					Type _type = identifiant.getRight();
 					if (_type == null) {
@@ -544,7 +520,7 @@ Affectable ::= UL_Identificateur:nom
 				{:
 					// TODO
 				:}
-			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			/* wtf | UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
              	{:
 					// TODO
 				:}
@@ -552,6 +528,7 @@ Affectable ::= UL_Identificateur:nom
              	{:
 					// TODO
 				:}
+				*/
 			;
 
 Expression ::= /* Affectable:affectable UL_Egal Expression:expression
