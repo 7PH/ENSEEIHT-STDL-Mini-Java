@@ -31,14 +31,14 @@ import fr.n7.stl.util.*;
 parser code {:
     protected Lexer lexer;
     public String name;
-    //public Block block;
-    //public boolean resolve, checkType;
-    //public double
-    //    resolveTimeMs,
-    //    checkTypeTimeMs,
-    //    allocateMemoryTimeMs,
-    //    getCodeTimeMs;
-    //public Fragment fragment;
+    public Block block;
+    public boolean resolve, checkType;
+    public double
+        resolveTimeMs,
+        checkTypeTimeMs,
+        allocateMemoryTimeMs,
+        getCodeTimeMs;
+    public Fragment fragment;
     public Parser(String name) {
         this();
         this.name = name;
