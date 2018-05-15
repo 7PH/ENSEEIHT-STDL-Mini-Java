@@ -135,7 +135,7 @@ precedence right            UL_Nouveau;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence nonassoc         UL_Type_Entier;
+precedence nonassoc         UL_Type_Chaine, UL_Type_Booleen, UL_Type_Entier, UL_Type_Vide;
 precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Implements, UL_Extends,
                             UL_Public, UL_Private, UL_Static, UL_Final;
 

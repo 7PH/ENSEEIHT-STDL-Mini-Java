@@ -9,6 +9,4 @@ class Test00 {
         point.draw(1, 0);
     }
 
-    public static int main() {
-    }
 }
