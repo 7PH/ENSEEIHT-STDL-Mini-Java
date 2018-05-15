@@ -90,7 +90,7 @@ non terminal Instruction					Instruction;
 non terminal Instruction					VarDeclaration;
 non terminal List<Expression>			    Expressions;
 non terminal List<ParameterDeclaration>	    Parameters;
-//non terminal Pair<String,PartialType>	    Identifiant;
+non terminal Pair<String,PartialType>	    Identifiant;
 //non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
@@ -359,6 +359,25 @@ NonArrayType ::=
     //| Instantiation:instantiation
     //    {: RESULT = 1; :}
     ;
+
+Identifiant ::= UL_Identificateur:nom
+				{:
+					RESULT = new Pair<String,PartialType>( nom, null );
+				:}
+			| Identifiant:identifiant UL_Crochet_Ouvrant UL_Crochet_Fermant
+				{:
+					if (identifiant.getRight() == null) {
+						identifiant.setRight( new PartialArrayType() );
+					} else {
+						identifiant.getRight().enrich(new PartialArrayType());
+					}
+					RESULT = identifiant;
+				:}
+			| UL_Parenthese_Ouvrante Identifiant:identifiant UL_Parenthese_Fermante
+				{:
+					RESULT = identifiant;
+				:}
+;
 
 // Bloc
 //  - "{" $Instructions* "}"
