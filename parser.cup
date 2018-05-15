@@ -115,7 +115,7 @@ non terminal Integer ClassConstructor;
 non terminal Integer DefinitionModifier;
 non terminal Integer AttributeDefinition;
 non terminal Integer MethodDefinition;
-non terminal Integer NonArrayType;
+non terminal AtomicType NonArrayType;
 non terminal Type Type;
 
 
@@ -140,8 +140,6 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Im
                             UL_Public, UL_Private;
 
 /* Opérateur le plus prioritaire */
-
-
 
 
 // Program
@@ -187,20 +185,6 @@ NullableType ::=
         {: RESULT = 1; :}
     | Type:type
         {: RESULT = 1; :};
-
-// Parameters
-//  - ($Parameter ",")* $Parameter
-//Parameters ::=
-//    Parameters:parameters UL_Virgule Parameter:parameter
-//        {: RESULT = 1; :}
-//    | Parameter:parameter
-//        {: RESULT = 1; :};
-
-// Parameter
-//  - $Type $UL_Identificateur
-//Parameter ::=
-//    Type:type UL_Identificateur:ident
-//        {: RESULT = 1; :};
 
 // Instantiations (instantiation of generic types)
 //  - ($Instantiation ",")* $Instantiation
@@ -352,15 +336,13 @@ Type ::=
 //  - (bool|character|String|int|$Instanciation)
 NonArrayType ::=
     UL_Type_Entier
-        {: RESULT = 1; :}
+        {: RESULT = AtomicType.IntegerType; :}
     | UL_Type_Booleen
-        {: RESULT = 1; :}
+        {: RESULT = AtomicType.BooleanType; :}
     | UL_Type_Caractere
-        {: RESULT = 1; :}
+        {: RESULT = AtomicType.CharacterType; :}
     | UL_Type_Chaine
-        {: RESULT = 1; :}
-    //| Instantiation:instantiation
-    //    {: RESULT = 1; :}
+        {: RESULT = AtomicType.StringType; :}
     ;
 
 Identifiant ::= UL_Identificateur:nom
@@ -388,37 +370,6 @@ Bloc ::=
     UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
         {: RESULT = new Block(instructions); :};
 
-
-
-/*
-Atomique ::= UL_Type_Booleen
-			{:
-				RESULT = AtomicType.BooleanType;
-			:}
-		|	UL_Type_Caractere
-			{:
-				RESULT = AtomicType.CharacterType;
-			:}
-		|	UL_Type_Chaine
-			{:
-				RESULT = AtomicType.StringType;
-			:}
-		|	UL_Type_Entier
-			{:
-				RESULT = AtomicType.IntegerType;
-			:}
-		;
-
-Type ::= Atomique:atomique
-			{:
-				RESULT = atomique;
-			:}
-		| UL_Identificateur:nom
-			{:
-				RESULT = new NamedType(nom);
-			:}
-		;
-*/
 
 Instructions ::= Instructions:instructions Instruction:instruction
 				{:
@@ -542,7 +493,8 @@ Affectable ::= UL_Identificateur:nom
 				{:
 					// TODO
 				:}
-			/* | UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			/* EN ATTENTE DE REPONSE
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
              	{:
 					// TODO
 				:}
