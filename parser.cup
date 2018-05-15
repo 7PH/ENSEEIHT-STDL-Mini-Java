@@ -137,7 +137,7 @@ precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, U
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 precedence nonassoc         UL_Type_Entier;
 precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Implements, UL_Extends,
-                            UL_Public, UL_Private;
+                            UL_Public, UL_Private, UL_Static, UL_Final;
 
 /* Opérateur le plus prioritaire */
 
@@ -425,6 +425,16 @@ Instruction ::= VarDeclaration:declaration
 				{:
 					RESULT = new Assignment( affectable, expression);
 				:}
+			| UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
+			    {:
+			        /* @TODO */
+			        RESULT = null;
+			    :}
+			| UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
+			    {:
+			        /* @TODO */
+			        RESULT = null;
+			    :}
 			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante  UL_Point_Virgule
              	{:
 					RESULT = new FunctionCall(nom, parameters);

@@ -1,4 +1,14 @@
 class Test00 {
     public int x;
-    private Bonjour y;
+
+    // @TODO:
+    //private Bonjour y;
+
+    public static void main(String args[]) {
+        Point point = new Point(0, 0);
+        point.draw(1, 0);
+    }
+
+    public static int main() {
+    }
 }
