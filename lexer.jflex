@@ -129,7 +129,12 @@ Identificateur = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 //  "snd"				{ return symbolFactory.newSymbol("Second", UL_Second); }
   "while"			{ return symbolFactory.newSymbol("Tant que", UL_Tant_Que); }
   "return"			{ return symbolFactory.newSymbol("Return", UL_Retour); }
+  "class"		    { return symbolFactory.newSymbol("Classe", UL_Class); }
   "interface"		{ return symbolFactory.newSymbol("Interface", UL_Interface); }
+  "implements"		{ return symbolFactory.newSymbol("Implements", UL_Implements); }
+  "extends"		    { return symbolFactory.newSymbol("Extends", UL_Extends); }
+  "public"		    { return symbolFactory.newSymbol("Public", UL_Public); }
+  "private"		    { return symbolFactory.newSymbol("Private", UL_Private); }
   {Caractere}		{ return symbolFactory.newSymbol("Caractère", UL_Caractere, yytext()); }
   {Chaine}			{ return symbolFactory.newSymbol("Chaine de caractères", UL_Chaine, yytext()); }
   {Entier}     		{ return symbolFactory.newSymbol("Nombre Entier", UL_Nombre_Entier, yytext()); }

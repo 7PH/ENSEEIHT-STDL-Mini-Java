@@ -1,0 +1,4 @@
+class Test00 {
+    public int x;
+    private Bonjour y;
+}

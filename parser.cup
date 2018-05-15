@@ -135,7 +135,10 @@ precedence right            UL_Nouveau;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract;
+precedence nonassoc         UL_Type_Entier;
+precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Implements, UL_Extends,
+                            UL_Public, UL_Private;
+
 /* Opérateur le plus prioritaire */
 
 
@@ -218,7 +221,7 @@ Instantiation ::=
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    ClassModifier UL_Class Declaration Extension UL_Crochet_Ouvrant Definitions UL_Crochet_Fermant
+    ClassModifier UL_Class Declaration Extension UL_Accolade_Ouvrante Definitions UL_Accolade_Fermante
         {: RESULT = 1; :};
 
 // ClassModifier
