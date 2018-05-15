@@ -135,6 +135,7 @@ precedence right            UL_Nouveau;
 precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
 //precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
+precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract;
 /* Opérateur le plus prioritaire */
 
 

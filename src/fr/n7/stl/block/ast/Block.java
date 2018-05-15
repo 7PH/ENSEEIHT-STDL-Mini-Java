@@ -13,6 +13,7 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class Block {
 		    reachedReturn = instruction instanceof Return;
         }
 
-        return true;
+		return true;
 	}
 
 	public Type getReturnType() {

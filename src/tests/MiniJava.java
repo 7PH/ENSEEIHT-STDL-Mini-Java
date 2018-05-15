@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+package tests;
 
 interface A {
     void doA();
