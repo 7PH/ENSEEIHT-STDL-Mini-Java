@@ -3,6 +3,7 @@
  */
 package fr.n7.stl.block.ast.expression;
 
+import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.FunctionDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -21,7 +22,7 @@ import java.util.List;
  * @TODO resolve
  *
  */
-public class FunctionCall implements Expression {
+public class FunctionCall implements Expression, Instruction {
 
 	/**
 	 * Name of the called function.
@@ -76,8 +77,8 @@ public class FunctionCall implements Expression {
 		this.function = (FunctionDeclaration) _scope.get(name);
         return true;
 	}
-	
-	/* (non-Javadoc)
+
+    /* (non-Javadoc)
 	 * @see fr.n7.stl.block.ast.Expression#getType()
 	 */
 	@Override
@@ -110,6 +111,23 @@ public class FunctionCall implements Expression {
         fragment.add(factory.createPop(function.getType().length(), function.getParametersLength()));
 
         return fragment;
+    }
+
+
+    /* @TODO */
+    @Override
+    public boolean checkType() {
+        return false;
+    }
+
+    @Override
+    public int allocateMemory(Register register, int offset) {
+        return 0;
+    }
+
+    @Override
+    public Type getReturnType() {
+        return null;
     }
 
 
