@@ -1,5 +1,5 @@
 /*
-    Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Mini-Java
+    Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Mini-Java.
 */
 
 package fr.n7.stl.block;
@@ -68,7 +68,6 @@ terminal				UL_Egal/*, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, 
 terminal 			    UL_Plus, UL_Moins/*, UL_Moins_Unaire*/, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
 terminal				UL_Esperluette, UL_Double_Barre, UL_Double_Esperluette;
 terminal				UL_Parenthese_Ouvrante, UL_Parenthese_Fermante;
-//terminal				UL_Premier, UL_Second;
 terminal				UL_Accolade_Ouvrante, UL_Accolade_Fermante;
 terminal				UL_Crochet_Ouvrant, UL_Crochet_Fermant;
 terminal				UL_Inferieur, UL_Superieur;
@@ -426,22 +425,40 @@ Instructions ::= Instructions:instructions Instruction:instruction
 				{: RESULT = new LinkedList<Instruction>(); :}
 			;
 
-Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:identifiant
+Parameters ::= Parameters:parameters UL_Virgule Type:type Identifiant:identifiant
 				{:
-					parameters.add(new ParameterDeclaration(identifiant, type));
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
+					parameters.add(new ParameterDeclaration(identifiant.getLeft(), _type));
 					RESULT = parameters;
 				:}
-			| Type:type UL_Identificateur:identifiant
+			| Type:type Identifiant:identifiant
 				{:
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
 					List<ParameterDeclaration> parameters = new LinkedList<ParameterDeclaration>();
-					parameters.add(new ParameterDeclaration(identifiant, type));
+					parameters.add(new ParameterDeclaration(identifiant.getLeft(), _type));
 					RESULT = parameters;
 				:}
 			;
 
-VarDeclaration ::= Type:type UL_Identificateur:identifiant UL_Egal Expression:valeur UL_Point_Virgule
+VarDeclaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
 				{:
-					RESULT = new VariableDeclaration(identifiant, type, valeur);
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
+					RESULT = new VariableDeclaration( identifiant.getLeft(), _type, valeur);
 				:}
 			;
 
@@ -521,7 +538,7 @@ Affectable ::= UL_Identificateur:nom
 				{:
 					// TODO
 				:}
-			/* wtf | UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			/* | UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
              	{:
 					// TODO
 				:}
