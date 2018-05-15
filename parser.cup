@@ -139,8 +139,6 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract;
 /* Opérateur le plus prioritaire */
 
 
-
-
 // Program
 //  - ($InterfaceDeclaration|$ClassDeclaration)+
 Program ::=
@@ -184,20 +182,6 @@ NullableType ::=
         {: RESULT = 1; :}
     | Type:type
         {: RESULT = 1; :};
-
-// Parameters
-//  - ($Parameter ",")* $Parameter
-//Parameters ::=
-//    Parameters:parameters UL_Virgule Parameter:parameter
-//        {: RESULT = 1; :}
-//    | Parameter:parameter
-//        {: RESULT = 1; :};
-
-// Parameter
-//  - $Type $UL_Identificateur
-//Parameter ::=
-//    Type:type UL_Identificateur:ident
-//        {: RESULT = 1; :};
 
 // Instantiations (instantiation of generic types)
 //  - ($Instantiation ",")* $Instantiation
