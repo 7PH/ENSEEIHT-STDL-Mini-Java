@@ -270,13 +270,13 @@ ClassModifier ::=
 // Declaration
 //  - $UL_Identificateur ("<" GenericTypes ">")?
 Declaration ::=
-    UL_Identificateur UL_Inferieur GenericTypes UL_Superieur
+    UL_Identificateur:ident UL_Inferieur GenericTypes:generics UL_Superieur
         {:
-			RESULT = 1;
+			RESULT = new Declaration(ident, generics);
 		:}
-    | UL_Identificateur
+    | UL_Identificateur:ident
         {:
-			RESULT = 1;
+			RESULT = new Declaration(ident);
 		:}
     ;
 
@@ -285,23 +285,26 @@ Declaration ::=
 GenericTypes ::=
     GenericTypes:generics UL_Virgule GenericType:generic
         {:
-			RESULT = 1;
+			List<Declaration> generics = new LinkedList<Declaration>();
+			generics.add(new Declaration(ident));
+			RESULT = generics;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = null;
 		:}
     ;
 
 // GenericType
 //  - $UL_Identificateur ("extends" $GenericInstantiations)?
 GenericType ::=
-    UL_Identificateur
+    UL_Identificateur:ident
         {:
 			RESULT = 1;
 		:}
     | UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
         {:
+			
 			RESULT = 1;
 		:}
     ;
