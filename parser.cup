@@ -243,9 +243,10 @@ Instantiation ::=
 // ClassDeclaration
 //  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    ClassModifier UL_Class Declaration Extension UL_Accolade_Ouvrante Definitions UL_Accolade_Fermante
+    ClassModifier:modifier UL_Class Declaration:declaration Extension:extension UL_Accolade_Ouvrante Definitions:definitions UL_Accolade_Fermante
         {:
-			RESULT = 1;
+			// TODO : ClasseDeclaration.java 
+			RESULT = new ClassDeclaration(modifier, declaration, extension, definitions);
 		:}
     ;
 
@@ -254,15 +255,15 @@ ClassDeclaration ::=
 ClassModifier ::=
     UL_Final
         {:
-			RESULT = 1;
+			RESULT = ClassModifier.Final;
 		:}
     | UL_Abstract
         {:
-			RESULT = 1;
+			RESULT = ClassModifier.Abstract;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = null;
 		:}
     ;
 
@@ -408,11 +409,11 @@ ClassConstructor ::=
 AccessModifier ::=
     UL_Public
         {:
-			RESULT = 1;
+			RESULT = AccessModifier.Public;
 		:}
     | UL_Private
         {:
-			RESULT = 1;
+			RESULT = AccessModifier.Private;
 		:}
     ;
 
