@@ -96,7 +96,7 @@ non terminal AssignableExpression		    Affectable;
 /** @TODO */
 non terminal Integer AccessModifier;
 non terminal Integer Program;
-non terminal Integer Declaration;
+non terminal Declaration Declaration;
 non terminal Integer InterfaceDeclaration;
 non terminal Integer ClassDeclaration;
 non terminal Integer MethodSignatures;
@@ -107,7 +107,7 @@ non terminal Type NullableType;
 non terminal Integer ClassModifier;
 non terminal Integer Extension;
 non terminal Integer Definitions;
-non terminal Integer GenericTypes;
+non terminal LinkedList<Declaration> GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
@@ -286,12 +286,12 @@ GenericTypes ::=
     GenericTypes:generics UL_Virgule GenericType:generic
         {:
 			List<Declaration> generics = new LinkedList<Declaration>();
-			generics.add(new Declaration(ident));
+			generics.add(new Declaration(generic));
 			RESULT = generics;
 		:}
     |
         {:
-			RESULT = null;
+			RESULT = new LinkedList<Declaration>();
 		:}
     ;
 
