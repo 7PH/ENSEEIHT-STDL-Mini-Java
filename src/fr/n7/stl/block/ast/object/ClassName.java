@@ -2,17 +2,17 @@ package fr.n7.stl.block.ast.object;
 
 import java.util.List;
 
-public class Declaration {
+public class ClassName {
 	
 	private String ident;
 	
-	private List<Declaration> generics;	
+	private List<ClassName> generics;	
 
-	public Declaration(String _ident) {
+	public ClassName(String _ident) {
 		this.ident = _ident;
 	}
 	
-	public Declaration(String _ident, List<Declaration> _generics) {
+	public ClassName(String _ident, List<ClassName> _generics) {
 		this.ident = _ident;
 		this.generics = _generics;
 		

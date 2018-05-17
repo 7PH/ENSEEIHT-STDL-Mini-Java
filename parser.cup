@@ -96,7 +96,7 @@ non terminal AssignableExpression		    Affectable;
 /** @TODO */
 non terminal AccessArguments AccessModifier;
 non terminal Integer Program;
-non terminal Declaration Declaration;
+non terminal ClassName Declaration;
 non terminal Integer InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
 non terminal List<Signature> MethodSignatures;
@@ -107,13 +107,13 @@ non terminal Type NullableType;
 non terminal ClassArguments ClassModifier;
 non terminal AtomicType Extension;
 non terminal List<Definition> Definitions;
-non terminal List<Declaration> GenericTypes;
+non terminal List<ClassName> GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
 non terminal Constructor ClassConstructor;
 non terminal DefinitionArguments DefinitionModifier;
-non terminal Integer AttributeDefinition;
+non terminal AttributeDefinition AttributeDefinition;
 non terminal Integer MethodDefinition;
 non terminal AtomicType NonArrayType;
 non terminal Type Type;
@@ -272,11 +272,11 @@ ClassModifier ::=
 Declaration ::=
     UL_Identificateur:ident UL_Inferieur GenericTypes:generics UL_Superieur
         {:
-			RESULT = new Declaration(ident, generics);
+			RESULT = new ClassName(ident, generics);
 		:}
     | UL_Identificateur:ident
         {:
-			RESULT = new Declaration(ident);
+			RESULT = new ClassName(ident);
 		:}
     ;
 
@@ -285,13 +285,12 @@ Declaration ::=
 GenericTypes ::=
     GenericTypes:generics UL_Virgule GenericType:generic
         {:
-			List<Declaration> generics = new LinkedList<Declaration>();
-			generics.add(new Declaration(generic));
+			generics.add(new ClassName(generic));
 			RESULT = generics;
 		:}
     |
         {:
-			RESULT = new LinkedList<Declaration>();
+			RESULT = new LinkedList<ClassName>();
 		:}
     ;
 
@@ -426,7 +425,7 @@ AccessModifier ::=
 AttributeDefinition ::=
     Type:type UL_Identificateur:name UL_Point_Virgule
         {:
-			RESULT = new Attribute(type, name);
+			RESULT = new AttributeDefinition(type, name);
 		:}
     ;
 
