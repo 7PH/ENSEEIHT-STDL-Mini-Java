@@ -1,0 +1,27 @@
+package fr.n7.stl.block.ast.object;
+
+public class ClassDeclaration {
+	
+	private ClassArguments modifier;
+	
+	private Declaration declaration;
+	
+	private List<Declaration> extension;
+	
+	private List<Definition> definitions;
+	
+	public ClassDeclaration(ClassArguments _modifier, Declaration _declaration, List<Declaration> _extension, List<Definition> _definitions) {
+		this.modifier = _modifier;
+		this.declaration = _declaration;
+		LinkedList<Declaration> ext = new LinkedList<Declaration>();
+		for (Declaration d : _extension) {
+			ext.add(d);
+		}
+		this.extension = ext;
+		LinkedList<Definition> def = new LinkedList<Definition>();
+		for (Definition d : _definitions) {
+			def.add(d);
+		}
+		this.definitions = def;
+	}
+}

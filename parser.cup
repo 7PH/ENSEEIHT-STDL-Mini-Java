@@ -98,14 +98,14 @@ non terminal Integer AccessModifier;
 non terminal Integer Program;
 non terminal Integer Declaration;
 non terminal Integer InterfaceDeclaration;
-non terminal Integer ClassDeclaration;
-non terminal Integer MethodSignatures;
+non terminal ClassDeclaration ClassDeclaration;
+non terminal List<Signature> MethodSignatures;
 non terminal Signature MethodSignature;
 non terminal Integer Instantiations;
 non terminal Integer Instantiation;
 non terminal Type NullableType;
-non terminal Integer ClassModifier;
-non terminal Integer Extension;
+non terminal ClassArguments ClassModifier;
+non terminal AtomicType Extension;
 non terminal Integer Definitions;
 non terminal Integer GenericTypes;
 non terminal Integer GenericType;
@@ -178,13 +178,14 @@ InterfaceDeclaration ::=
 // MethodSignatures
 //  - ($MethodSignature ";")*
 MethodSignatures ::=
-    MethodSignatures MethodSignature UL_Point_Virgule
+    MethodSignatures:signatures MethodSignature:signature UL_Point_Virgule
         {:
-			RESULT = 1;
+			signatures.add(signature);
+			RESULT = signatures;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = new LinkedList<Signature>();
 		:}
     ;
 
@@ -245,7 +246,6 @@ Instantiation ::=
 ClassDeclaration ::=
     ClassModifier:modifier UL_Class Declaration:declaration Extension:extension UL_Accolade_Ouvrante Definitions:definitions UL_Accolade_Fermante
         {:
-			// TODO : ClasseDeclaration.java 
 			RESULT = new ClassDeclaration(modifier, declaration, extension, definitions);
 		:}
     ;
@@ -324,19 +324,19 @@ GenericInstantiations ::=
 Extension ::=
     UL_Extends Instantiation
         {:
-			RESULT = 1;
+			RESULT = AtomicType.VoidType;
 		:}
     | UL_Extends Instantiation UL_Implements Instantiations
         {:
-			RESULT = 1;
+			RESULT = AtomicType.VoidType;
 		:}
     | UL_Implements Instantiations
         {:
-			RESULT = 1;
+			RESULT = AtomicType.VoidType;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = AtomicType.VoidType;
 		:}
     ;
 
