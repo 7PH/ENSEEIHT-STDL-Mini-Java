@@ -17,14 +17,10 @@ public class ClassDeclaration {
 		this.modifier = _modifier;
 		this.declaration = _declaration;
 		LinkedList<ClassName> ext = new LinkedList<ClassName>();
-		for (ClassName d : _extension) {
-			ext.add(d);
-		}
+        ext.addAll(_extension);
 		this.extension = ext;
 		LinkedList<Definition> def = new LinkedList<Definition>();
-		for (Definition d : _definitions) {
-			def.add(d);
-		}
+        def.addAll(_definitions);
 		this.definitions = def;
 	}
 }
