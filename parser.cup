@@ -397,13 +397,13 @@ DefinitionModifier ::=
 // ClassConstructor
 // - $UL_Identificateur "(" $Parameters ")"
 ClassConstructor ::=
-    UL_Identificateur UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
+    UL_Identificateur:ident UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new Constructor(ident, new LinkedList<ParameterDeclaration>(), body);
 		:}
-    | UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
+    | UL_Identificateur:ident UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new Constructor(ident, parameters, body);
 		:}
     ;
 
