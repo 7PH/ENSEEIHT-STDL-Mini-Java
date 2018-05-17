@@ -1,5 +1,8 @@
 package fr.n7.stl.block.ast.object;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ClassDeclaration {
 	
 	private ClassArguments modifier;

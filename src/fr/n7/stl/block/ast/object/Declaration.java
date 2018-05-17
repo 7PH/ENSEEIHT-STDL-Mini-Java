@@ -7,8 +7,7 @@ public class Declaration {
 	private String ident;
 	
 	private List<Declaration> generics;	
-	
-	
+
 	public Declaration(String _ident) {
 		this.ident = _ident;
 	}

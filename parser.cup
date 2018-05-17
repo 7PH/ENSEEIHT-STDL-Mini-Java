@@ -94,7 +94,7 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
-non terminal Integer AccessModifier;
+non terminal AccessArguments AccessModifier;
 non terminal Integer Program;
 non terminal Integer Declaration;
 non terminal Integer InterfaceDeclaration;
@@ -106,13 +106,13 @@ non terminal Integer Instantiation;
 non terminal Type NullableType;
 non terminal ClassArguments ClassModifier;
 non terminal AtomicType Extension;
-non terminal Integer Definitions;
+non terminal LinkedList<Definition> Definitions;
 non terminal Integer GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
 non terminal Integer ClassConstructor;
-non terminal Integer DefinitionModifier;
+non terminal DefinitionArguments DefinitionModifier;
 non terminal Integer AttributeDefinition;
 non terminal Integer MethodDefinition;
 non terminal AtomicType NonArrayType;
@@ -255,11 +255,11 @@ ClassDeclaration ::=
 ClassModifier ::=
     UL_Final
         {:
-			RESULT = ClassModifier.Final;
+			RESULT = ClassArguments.Final;
 		:}
     | UL_Abstract
         {:
-			RESULT = ClassModifier.Abstract;
+			RESULT = ClassArguments.Abstract;
 		:}
     |
         {:
@@ -348,11 +348,12 @@ Extension ::=
 Definitions ::=
     Definitions:definitions Definition:definition
         {:
-			RESULT = 1;
+			definitions.add(definition);
+			RESULT = definitions;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = new LinkedList<Definition>();
 		:}
     ;
 
@@ -378,19 +379,19 @@ Definition ::=
 DefinitionModifier ::=
     UL_Static
         {:
-			RESULT = 1;
+			RESULT = DefinitionArguments.Static;
 		:}
     | UL_Final
         {:
-			RESULT = 1;
+			RESULT = DefinitionArguments.Final;
 		:}
     | UL_Static UL_Final
         {:
-			RESULT = 1;
+			RESULT = DefinitionArguments.Static_Final;
 		:}
     |
         {:
-			RESULT = 1;
+			RESULT = null;
 		:}
     ;
 
@@ -412,20 +413,20 @@ ClassConstructor ::=
 AccessModifier ::=
     UL_Public
         {:
-			RESULT = AccessModifier.Public;
+			RESULT = AccessArguments.Public;
 		:}
     | UL_Private
         {:
-			RESULT = AccessModifier.Private;
+			RESULT = AccessArguments.Private;
 		:}
     ;
 
 // AttributeDefinition
 //  - $Type $UL_Identificateur ";"
 AttributeDefinition ::=
-    Type:type UL_Identificateur UL_Point_Virgule
+    Type:type UL_Identificateur:name UL_Point_Virgule
         {:
-			RESULT = 1;
+			RESULT = new Attribute(type, name);
 		:}
     ;
 
