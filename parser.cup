@@ -111,7 +111,7 @@ non terminal LinkedList<Declaration> GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
-non terminal Integer ClassConstructor;
+non terminal Constructor ClassConstructor;
 non terminal Integer DefinitionModifier;
 non terminal Integer AttributeDefinition;
 non terminal Integer MethodDefinition;
