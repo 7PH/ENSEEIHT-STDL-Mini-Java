@@ -9,15 +9,15 @@ public class ClassDeclaration {
 	
 	private ClassName declaration;
 	
-	private List<ClassName> extension;
+	private List<Instantiation> extension;
 	
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassArguments _modifier, ClassName _declaration, List<ClassName> _extension, List<Definition> _definitions) {
+	public ClassDeclaration(ClassArguments _modifier, ClassName _declaration, List<Instantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
 		this.declaration = _declaration;
-		LinkedList<ClassName> ext = new LinkedList<ClassName>();
-		for (ClassName d : _extension) {
+		List<Instantiation> ext = new LinkedList<Instantiation>();
+		for (Instantiation d : _extension) {
 			ext.add(d);
 		}
 		this.extension = ext;

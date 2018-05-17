@@ -5,7 +5,7 @@ import java.util.List;
 import fr.n7.stl.block.ast.Block;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 
-public class Constructor {
+public class Constructor extends Definition {
 	
 	private String ident;
 	private List<ParameterDeclaration> parameters;

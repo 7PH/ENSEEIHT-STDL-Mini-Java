@@ -101,14 +101,14 @@ non terminal Integer InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
 non terminal List<Signature> MethodSignatures;
 non terminal Signature MethodSignature;
-non terminal Integer Instantiations;
-non terminal Integer Instantiation;
+non terminal List<Instantiation> Instantiations;
+non terminal Instantiation Instantiation;
 non terminal Type NullableType;
 non terminal ClassArguments ClassModifier;
-non terminal AtomicType Extension;
+non terminal List<Instantiation> Extension;
 non terminal List<Definition> Definitions;
 non terminal List<ClassName> GenericTypes;
-non terminal Integer GenericType;
+non terminal String GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
 non terminal Constructor ClassConstructor;
@@ -220,11 +220,14 @@ NullableType ::=
 Instantiations ::=
     Instantiation:instantiation
         {:
-			RESULT = 1;
+			List<Instantiation> inst = new LinkedList<Instantiation>();
+			inst.add(instantiation);
+			RESULT = inst;
 		:}
     | Instantiations:instantiations UL_Virgule Instantiation:instantiation
         {:	
-			RESULT = 1;
+			instantiations.add(instantiation);
+			RESULT = instantiations;
 		:}
     ;
 
@@ -233,11 +236,11 @@ Instantiations ::=
 Instantiation ::=
     UL_Identificateur:ident
         {:
-			RESULT = 1;
+			RESULT = new Instantiation(ident);
 		:}
-    | UL_Identificateur:ident UL_Inferieur Instantiations UL_Superieur
+    | UL_Identificateur:ident UL_Inferieur Instantiations:instantiations UL_Superieur
         {:
-			RESULT = 1;
+			RESULT = new Instantiation(ident, instantiations);
 		:}
     ;
 
@@ -299,12 +302,12 @@ GenericTypes ::=
 GenericType ::=
     UL_Identificateur:ident
         {:
-			RESULT = 1;
+			RESULT = ident;
 		:}
-    | UL_Identificateur UL_Extends GenericInstantiations:genericInstantiations
+    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
         {:
 			
-			RESULT = 1;
+			RESULT = ident; //@TODO//
 		:}
     ;
 
@@ -324,21 +327,24 @@ GenericInstantiations ::=
 // Extension
 //  - ("extends" $Instantiations)? ("implements" $Instantiations)?
 Extension ::=
-    UL_Extends Instantiation
+    UL_Extends Instantiation:instantiation
         {:
-			RESULT = AtomicType.VoidType;
+			List<Instantiation> inst = new LinkedList<Instantiation>();
+			inst.add(instantiation);
+			RESULT = inst;
 		:}
-    | UL_Extends Instantiation UL_Implements Instantiations
+    | UL_Extends Instantiation:instExtends UL_Implements Instantiations:instImpls
         {:
-			RESULT = AtomicType.VoidType;
+			instImpls.add(instExtends);
+			RESULT = instImpls;
 		:}
-    | UL_Implements Instantiations
+    | UL_Implements Instantiations:instantiations
         {:
-			RESULT = AtomicType.VoidType;
+			RESULT = instantiations;
 		:}
     |
         {:
-			RESULT = AtomicType.VoidType;
+			RESULT = null;
 		:}
     ;
 
@@ -361,7 +367,8 @@ Definitions ::=
 Definition ::=
     AccessModifier:access ClassConstructor:constructor
         {:
-			RESULT = 1;
+			constructor.setAccess(access);
+			RESULT = new Constructor(constructor., List<ParameterDeclaration> _parameters, Block _body) ;
 		:}
     | AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
         {:
