@@ -13,6 +13,7 @@ import java.util.*;
 
 // Elements du métamodèle pour la construction de l'arbre abstrait
 import fr.n7.stl.block.ast.*;
+import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.*;
 import fr.n7.stl.block.ast.expression.accessible.*;
 import fr.n7.stl.block.ast.expression.allocation.*;
@@ -99,7 +100,7 @@ non terminal Integer Declaration;
 non terminal Integer InterfaceDeclaration;
 non terminal Integer ClassDeclaration;
 non terminal Integer MethodSignatures;
-non terminal Integer MethodSignature;
+non terminal Signature MethodSignature;
 non terminal Integer Instantiations;
 non terminal Integer Instantiation;
 non terminal Type NullableType;
@@ -192,11 +193,11 @@ MethodSignatures ::=
 MethodSignature ::=
     NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante UL_Parenthese_Fermante
         {:
-			RESULT = 1;
+			RESULT = new Signature(nullable, name);
 		:}
     | NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
         {:
-			RESULT = 1;
+			RESULT = new Signature(nullable, name, parameters);
 		:}
     ;
 
