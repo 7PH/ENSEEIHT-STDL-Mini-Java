@@ -96,7 +96,7 @@ non terminal AssignableExpression		    Affectable;
 /** @TODO */
 non terminal AccessArguments AccessModifier;
 non terminal Integer Program;
-non terminal Integer Declaration;
+non terminal Declaration Declaration;
 non terminal Integer InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
 non terminal List<Signature> MethodSignatures;
@@ -106,12 +106,12 @@ non terminal Integer Instantiation;
 non terminal Type NullableType;
 non terminal ClassArguments ClassModifier;
 non terminal AtomicType Extension;
-non terminal LinkedList<Definition> Definitions;
-non terminal Integer GenericTypes;
+non terminal List<Definition> Definitions;
+non terminal List<Declaration> GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
-non terminal Integer ClassConstructor;
+non terminal Constructor ClassConstructor;
 non terminal DefinitionArguments DefinitionModifier;
 non terminal Integer AttributeDefinition;
 non terminal Integer MethodDefinition;
@@ -286,12 +286,12 @@ GenericTypes ::=
     GenericTypes:generics UL_Virgule GenericType:generic
         {:
 			List<Declaration> generics = new LinkedList<Declaration>();
-			generics.add(new Declaration(ident));
+			generics.add(new Declaration(generic));
 			RESULT = generics;
 		:}
     |
         {:
-			RESULT = null;
+			RESULT = new LinkedList<Declaration>();
 		:}
     ;
 
@@ -398,13 +398,13 @@ DefinitionModifier ::=
 // ClassConstructor
 // - $UL_Identificateur "(" $Parameters ")"
 ClassConstructor ::=
-    UL_Identificateur UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
+    UL_Identificateur:ident UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new Constructor(ident, new LinkedList<ParameterDeclaration>(), body);
 		:}
-    | UL_Identificateur UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
+    | UL_Identificateur:ident UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new Constructor(ident, parameters, body);
 		:}
     ;
 
