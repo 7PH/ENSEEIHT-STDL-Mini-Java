@@ -90,10 +90,10 @@ non terminal Instruction					VarDeclaration;
 non terminal List<Expression>			    Expressions;
 non terminal List<ParameterDeclaration>	    Parameters;
 non terminal Pair<String,PartialType>	    Identifiant;
-//non terminal Type						    Type, Atomique;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
+non terminal Integer AccessModifier;
 non terminal Integer Program;
 non terminal Integer Declaration;
 non terminal Integer InterfaceDeclaration;
@@ -102,7 +102,7 @@ non terminal Integer MethodSignatures;
 non terminal Integer MethodSignature;
 non terminal Integer Instantiations;
 non terminal Integer Instantiation;
-non terminal Integer NullableType;
+non terminal Type NullableType;
 non terminal Integer ClassModifier;
 non terminal Integer Extension;
 non terminal Integer Definitions;
@@ -110,7 +110,6 @@ non terminal Integer GenericTypes;
 non terminal Integer GenericType;
 non terminal Integer GenericInstantiations;
 non terminal Integer Definition;
-non terminal Integer AccessModifier;
 non terminal Integer ClassConstructor;
 non terminal Integer DefinitionModifier;
 non terminal Integer AttributeDefinition;
@@ -206,11 +205,11 @@ MethodSignature ::=
 NullableType ::=
     UL_Type_Vide
         {:
-			RESULT = 1;
+			RESULT = AtomicType.VoidType;
 		:}
     | Type:type
         {:
-			RESULT = 1;
+			RESULT = type;
 		:}
     ;
 
