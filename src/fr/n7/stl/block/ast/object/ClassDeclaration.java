@@ -21,7 +21,7 @@ public class ClassDeclaration {
 			ext.add(d);
 		}
 		this.extension = ext;
-		LinkedList<Definition> def = new LinkedList<Definition>();
+		List<Definition> def = new LinkedList<Definition>();
 		for (Definition d : _definitions) {
 			def.add(d);
 		}
