@@ -110,11 +110,11 @@ non terminal List<Definition> Definitions;
 non terminal List<ClassName> GenericTypes;
 non terminal String GenericType;
 non terminal Integer GenericInstantiations;
-non terminal Integer Definition;
+non terminal Definition Definition;
 non terminal Constructor ClassConstructor;
 non terminal DefinitionArguments DefinitionModifier;
 non terminal AttributeDefinition AttributeDefinition;
-non terminal Integer MethodDefinition;
+non terminal MethodDefinition MethodDefinition;
 non terminal AtomicType NonArrayType;
 non terminal Type Type;
 
@@ -368,15 +368,19 @@ Definition ::=
     AccessModifier:access ClassConstructor:constructor
         {:
 			constructor.setAccess(access);
-			RESULT = new Constructor(constructor., List<ParameterDeclaration> _parameters, Block _body) ;
+			RESULT = constructor ;
 		:}
     | AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
         {:
-			RESULT = 1;
+			attributeDefinition.setAccess(access);
+			attributeDefinition.setArguments(modifier);
+			RESULT = attributeDefinition;
 		:}
     | AccessModifier:access DefinitionModifier:modifier MethodDefinition:methodDefinition
         {:
-			RESULT = 1;
+			methodDefinition.setAccess(access);
+			methodDefinition.setArguments(modifier);
+			RESULT = methodDefinition;
 		:}
     ;
 
@@ -441,11 +445,11 @@ AttributeDefinition ::=
 MethodDefinition ::=
     MethodSignature:methodSignature Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new MethodDefinition(methodSignature, body, false);
 		:}
     | UL_Abstract MethodSignature:methodSignature Bloc:body
         {:
-			RESULT = 1;
+			RESULT = new MethodDefinition(methodSignature, body, true);
 		:}
     ;
 
