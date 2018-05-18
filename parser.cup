@@ -95,7 +95,7 @@ non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
 non terminal AccessArguments AccessModifier;
-non terminal Integer Program;
+non terminal List<ClassDeclaration> Program;
 non terminal ClassName Declaration;
 non terminal Integer InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
@@ -146,19 +146,25 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Im
 Program ::=
     Program:program InterfaceDeclaration:interfaceDeclaration
         {: 
-			RESULT = 1;
+			//program.add(interfaceDeclaration);
+			RESULT = program;
 		:}
     | Program:program ClassDeclaration:classDeclaration
         {: 
-			RESULT = 1;
+			program.add(classDeclaration);
+			RESULT = program;
 		:}
     | InterfaceDeclaration:interfaceDeclaration
         {: 
-			RESULT = 1;
+			//List<ClassDeclaration> classes = new LinkedList<ClassDeclaration>();
+			//classes.add(interfaceDeclaration);
+			RESULT = new LinkedList<ClassDeclaration>();
 		:}
     | ClassDeclaration:classDeclaration
         {:	
-			RESULT = 1;
+			List<ClassDeclaration> classes = new LinkedList<ClassDeclaration>();
+			classes.add(classDeclaration);
+			RESULT = classes;
 		:}
     ;
 
@@ -458,7 +464,7 @@ MethodDefinition ::=
 Type ::=
     NonArrayType:type
         {:
-			RESULT = AtomicType.VoidType;
+			RESULT = type;
 		:}
     | Instantiation
         {:
@@ -466,7 +472,7 @@ Type ::=
 		:}
     | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant
         {:
-			RESULT = AtomicType.VoidType;
+			RESULT = type;
 		:}
     ;
 
