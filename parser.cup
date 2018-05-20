@@ -109,7 +109,7 @@ non terminal List<Instantiation> Extension;
 non terminal List<Definition> Definitions;
 non terminal List<ClassName> GenericTypes;
 non terminal String GenericType;
-non terminal Integer GenericInstantiations;
+non terminal List<Instantiation> GenericInstantiations;
 non terminal Definition Definition;
 non terminal Constructor ClassConstructor;
 non terminal DefinitionArguments DefinitionModifier;
@@ -146,6 +146,7 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Im
 Program ::=
     Program:program InterfaceDeclaration:interfaceDeclaration
         {: 
+			// @TODO: fix interface/class link to uncomment following code
 			//program.add(interfaceDeclaration);
 			RESULT = program;
 		:}
@@ -156,6 +157,7 @@ Program ::=
 		:}
     | InterfaceDeclaration:interfaceDeclaration
         {: 
+			// @TODO: fix interface/class link to uncomment following code
 			//List<ClassDeclaration> classes = new LinkedList<ClassDeclaration>();
 			//classes.add(interfaceDeclaration);
 			RESULT = new LinkedList<ClassDeclaration>();
@@ -312,21 +314,23 @@ GenericType ::=
 		:}
     | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
         {:
-			
-			RESULT = ident; //@TODO//
+			RESULT = ident; // @TODO: use genericInstantiations parameter //
 		:}
     ;
 
 // GenericInstantiations
 //  - ($Instantiation ",")* $Instantiation
 GenericInstantiations ::=
-    Instantiation
+    Instantiation:instantiation
         {:
-			RESULT = 1;
+			List<Instantiation> classes = new LinkedList<Instantiation>();
+			classes.add(instantiation);
+			RESULT = classes;
 		:}
-    | GenericInstantiations UL_Esperluette Instantiation
+    | GenericInstantiations:instantiationsList UL_Esperluette Instantiation:instantiation
         {:
-			RESULT = 1;
+			instantiationsList.add(instantiation);
+			RESULT = instantiationsList;
 		:}
     ;
 
