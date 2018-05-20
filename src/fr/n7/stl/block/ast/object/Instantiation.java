@@ -11,11 +11,10 @@ public class Instantiation implements Type {
 	
 	private String name;
 	
-	private List<Instantiation> instantiations;
+	private List<Instantiation> instantiations = new LinkedList<>();
 	
-	public Instantiation(String _name) {
-		this.name = _name;
-		this.instantiations = new LinkedList<Instantiation>();
+	public Instantiation(String name) {
+		this.name = name;
 	}
 	
 	public Instantiation(String _name, List<Instantiation> _instantiations) {
@@ -24,10 +23,11 @@ public class Instantiation implements Type {
 	}
 
 	@Override
-	public boolean equalsTo(Type _other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean equalsTo(Type other) {
+        return
+                other instanceof Instantiation
+                && ((Instantiation) other).name.equals(name);
+    }
 
 	@Override
 	public boolean compatibleWith(Type _other) {
@@ -52,5 +52,10 @@ public class Instantiation implements Type {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+    public String toString() {
+	    return name;
+    }
 
 }
