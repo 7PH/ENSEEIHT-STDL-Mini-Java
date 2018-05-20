@@ -97,7 +97,7 @@ non terminal AssignableExpression		    Affectable;
 non terminal AccessArguments AccessModifier;
 non terminal List<ClassDeclaration> Program;
 non terminal ClassName Declaration;
-non terminal Integer InterfaceDeclaration;
+non terminal InterfaceDeclaration InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
 non terminal List<Signature> MethodSignatures;
 non terminal Signature MethodSignature;
@@ -173,11 +173,11 @@ Program ::=
 InterfaceDeclaration ::=
     UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {:
-			RESULT = 1;
+			RESULT = new InterfaceDeclaration(declaration, signatures);
 		:}
     | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {:
-			RESULT = 1;
+			RESULT = new InterfaceDeclaration(declaration, instantiations, signatures);
 		:}
     ;
 
