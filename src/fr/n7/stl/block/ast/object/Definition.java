@@ -1,6 +1,8 @@
 package fr.n7.stl.block.ast.object;
 
-public class Definition {
+import fr.n7.stl.block.ast.scope.Declaration;
+
+public abstract class Definition implements Declaration {
 
 	private AccessArguments access;
 
@@ -13,5 +15,7 @@ public class Definition {
 	public void setArguments(DefinitionArguments arguments) {
 		this.arguments = arguments;
 	}
+	
+
 
 }
