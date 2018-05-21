@@ -13,35 +13,18 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 public class Program implements ASTNode {
 
-    private List<InterfaceDeclaration> interfaceDeclarations = new LinkedList<>();
+    private List<ASTNode> declarations = new LinkedList<>();
 
-    private List<ClassDeclaration> classDeclarations = new LinkedList<>();
+    public Program(ASTNode declaration) {
+        this.declarations.add(declaration);
+    }
 
-    public Program(InterfaceDeclaration interfaceDeclaration) {
-        this.interfaceDeclarations.add(interfaceDeclaration);
-    }
-    
-    public Program(ClassDeclaration classDeclaration) {
-        this.classDeclarations.add(classDeclaration);
-    }
-    
-    /** Add a interface declaration to the program.
-     * @param _interface the interface to add
+    /**
+     *
+     * @param declaration
      */
-    public void addInterface(InterfaceDeclaration _interface) {
-    	this.interfaceDeclarations.add(_interface);
-    }
-    
-    /** Add a class declaration to the program.
-     * @param _class the class to add
-     */
-    public void addClass(ClassDeclaration _class) {
-    	this.classDeclarations.add(_class);
-    }
-
-    @Override
-    public String toString() {
-    	throw new SemanticsUndefinedException("toString method is undefined for Program.");
+    public void add(ASTNode declaration) {
+    	this.declarations.add(declaration);
     }
 
 	/** Check if a program is well typed.
@@ -71,14 +54,15 @@ public class Program implements ASTNode {
     // @TODO
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-        for (ClassDeclaration classDeclaration: classDeclarations) {
-            if (! classDeclaration.resolve(scope))
+        for (ASTNode declaration: declarations) {
+            if (! declaration.resolve(scope))
                 return false;
         }
-        for (InterfaceDeclaration interfaceDeclaration: interfaceDeclarations) {
-            if (! interfaceDeclaration.resolve(scope))
-                return false;
-        }
-        return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        throw new SemanticsUndefinedException("toString method is undefined for Program.");
     }
 }

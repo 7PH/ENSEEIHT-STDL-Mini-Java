@@ -147,12 +147,12 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Im
 Program ::=
     Program:program InterfaceDeclaration:interfaceDeclaration
         {: 
-			program.addInterface(interfaceDeclaration);
+			program.add(interfaceDeclaration);
 			RESULT = program;
 		:}
     | Program:program ClassDeclaration:classDeclaration
         {: 
-			program.addClass(classDeclaration);
+			program.add(classDeclaration);
 			RESULT = program;
 		:}
     | InterfaceDeclaration:interfaceDeclaration
