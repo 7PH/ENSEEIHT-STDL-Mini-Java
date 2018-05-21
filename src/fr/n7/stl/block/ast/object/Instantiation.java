@@ -55,7 +55,7 @@ public class Instantiation implements Type {
 
 	@Override
     public String toString() {
-	    return name;
+        return name + (instantiations.size() > 0 ? ("<" + instantiations + ">") : "");
     }
 
 }
