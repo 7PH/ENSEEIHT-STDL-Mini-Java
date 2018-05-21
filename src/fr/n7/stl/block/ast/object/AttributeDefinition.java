@@ -12,4 +12,14 @@ public class AttributeDefinition extends Definition {
 		this.type = _type;
 		this.name = _name;
 	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public Type getType() {
+		return this.type;
+	}
 }
