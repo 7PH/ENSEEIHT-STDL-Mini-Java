@@ -3,8 +3,7 @@
  */
 package fr.n7.stl.block.ast.type;
 
-import fr.n7.stl.block.ast.scope.Declaration;
-import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.ASTNode;
 
 /**
  * Gathers the common services provided by types.
@@ -12,7 +11,7 @@ import fr.n7.stl.block.ast.scope.HierarchicalScope;
  * @author Marc Pantel
  *
  */
-public interface Type {
+public interface Type extends ASTNode {
 	
 	/**
 	 * Check if two types are equals.
@@ -47,15 +46,5 @@ public interface Type {
 	 * @return Number of TAM words needed to store a value of the _self type.
 	 */
 	public int length();
-
-	/**
-	 * Inherited Semantics attribute to check that all identifiers have been defined and
-	 * associate all identifiers uses with their definitions.
-	 * @param _scope Inherited Scope attribute that contains the defined identifiers.
-	 * @return Synthesized Semantics attribute that indicates if the identifier used in the
-	 * type have been previously defined.
-
-	 */
-	public boolean resolve(HierarchicalScope<Declaration> _scope);
 	
 }

@@ -1,9 +1,12 @@
 package fr.n7.stl.block.ast.object;
 
-import java.util.LinkedList;
+import fr.n7.stl.block.ast.ASTNode;
+import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
+
 import java.util.List;
 
-public class ClassDeclaration {
+public class ClassDeclaration implements ASTNode {
 	
 	private ClassModifier modifier;
 	
@@ -16,15 +19,12 @@ public class ClassDeclaration {
 	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<Instantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
 		this.name = _name;
-		List<Instantiation> ext = new LinkedList<Instantiation>();
-		for (Instantiation d : _extension) {
-			ext.add(d);
-		}
-		this.extension = ext;
-		List<Definition> def = new LinkedList<Definition>();
-		for (Definition d : _definitions) {
-			def.add(d);
-		}
-		this.definitions = def;
+		this.extension = _extension;
+		this.definitions = _definitions;
 	}
+
+    @Override
+    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+        return false;
+    }
 }

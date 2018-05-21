@@ -3,8 +3,7 @@
  */
 package fr.n7.stl.block.ast.instruction;
 
-import fr.n7.stl.block.ast.scope.Declaration;
-import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
@@ -16,17 +15,8 @@ import fr.n7.stl.tam.ast.TAMFactory;
  * @author Marc Pantel
  *
  */
-public interface Instruction {
-	
-	/**
-	 * Inherited Semantics attribute to check that all identifiers have been defined and
-	 * associate all identifiers uses with their definitions.
-	 * @param _scope Inherited Scope attribute that contains the defined identifiers.
-	 * @return Synthesized Semantics attribute that indicates if the identifier used in the
-	 * instruction have been previously defined.
-	 */
-	public boolean resolve(HierarchicalScope<Declaration> _scope);
-	
+public interface Instruction extends ASTNode {
+
 	/**
 	 * Synthesized Semantics attribute to check that an instruction if well typed.
 	 * @return Synthesized True if the instruction is well typed, False if not.
