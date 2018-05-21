@@ -94,8 +94,8 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
+non terminal Program Program;
 non terminal AccessArguments AccessModifier;
-non terminal List<ClassDeclaration> Program;
 non terminal ClassName Declaration;
 non terminal InterfaceDeclaration InterfaceDeclaration;
 non terminal ClassDeclaration ClassDeclaration;
@@ -146,27 +146,21 @@ precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Im
 Program ::=
     Program:program InterfaceDeclaration:interfaceDeclaration
         {: 
-			// @TODO: fix interface/class link to uncomment following code
-			//program.add(interfaceDeclaration);
+			program.addInterface(interfaceDeclaration);
 			RESULT = program;
 		:}
     | Program:program ClassDeclaration:classDeclaration
         {: 
-			program.add(classDeclaration);
+			program.addClass(classDeclaration);
 			RESULT = program;
 		:}
     | InterfaceDeclaration:interfaceDeclaration
         {: 
-			// @TODO: fix interface/class link to uncomment following code
-			//List<ClassDeclaration> classes = new LinkedList<ClassDeclaration>();
-			//classes.add(interfaceDeclaration);
-			RESULT = new LinkedList<ClassDeclaration>();
+			RESULT = new Program(interfaceDeclaration);
 		:}
     | ClassDeclaration:classDeclaration
         {:	
-			List<ClassDeclaration> classes = new LinkedList<ClassDeclaration>();
-			classes.add(classDeclaration);
-			RESULT = classes;
+			RESULT = new Program(classDeclaration);
 		:}
     ;
 
