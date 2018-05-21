@@ -1,13 +1,19 @@
 package fr.n7.stl.block.ast.object;
 
-import fr.n7.stl.block.ast.ASTNode;
+import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.type.AtomicType;
+import fr.n7.stl.block.ast.type.Type;
+import fr.n7.stl.tam.ast.Fragment;
+import fr.n7.stl.tam.ast.Register;
+import fr.n7.stl.tam.ast.TAMFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class InterfaceDeclaration implements ASTNode {
+public class InterfaceDeclaration implements Instruction {
 	
 	/** Class name of the interface. */
 	private ClassName name;
@@ -34,6 +40,26 @@ public class InterfaceDeclaration implements ASTNode {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-        return false;
+		throw new SemanticsUndefinedException("resolve method not implemented yet in InterfaceDeclaration");
     }
+
+	@Override
+	public boolean checkType() {
+		throw new SemanticsUndefinedException("checkType method not implemented yet in InterfaceDeclaration");
+	}
+
+	@Override
+	public int allocateMemory(Register register, int offset) {
+		throw new SemanticsUndefinedException("allocateMemory method not implemented yet in InterfaceDeclaration");
+	}
+
+	@Override
+	public Fragment getCode(TAMFactory factory) {
+		throw new SemanticsUndefinedException("getCode method not implemented yet in InterfaceDeclaration");
+	}
+
+	@Override
+	public Type getReturnType() {
+		return AtomicType.VoidType;
+	}
 }
