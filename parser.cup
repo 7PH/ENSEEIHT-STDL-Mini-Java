@@ -655,7 +655,7 @@ Affectable ::=
 		{:
 			RESULT = new FieldAssignment( enregistrement, etiquette);
 		:}
-	| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+	| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
 		{:
 			// TODO
 		:}
@@ -664,7 +664,7 @@ Affectable ::=
 			// TODO
 		:}
 	/* EN ATTENTE DE REPONSE
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
        	{:
 			// TODO
 		:}
@@ -777,9 +777,9 @@ Expression ::=
 			RESULT = new IdentifierAccess(nom);
 		:}
 	// TODO : Should accept an expression as function
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
        	{:
-			RESULT = new FunctionCall(nom, parametres);
+			RESULT = new FunctionCall(nom, parameters);
 		:}
 	// TODO : Should accept an expression as function
 	| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
@@ -819,8 +819,8 @@ Expression ::=
        	{:
 			RESULT = new PointerAllocation(type);
 		:}
-	| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+	| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
        	{:
-			/* TODO */
+			RESULT = new ObjectInstantiation(type, parameters);
 		:}
     ;
