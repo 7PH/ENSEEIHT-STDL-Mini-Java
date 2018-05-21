@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ClassDeclaration {
 	
-	private ClassArguments modifier;
+	private ClassModifier modifier;
 	
 	private ClassName name;
 	
@@ -13,7 +13,7 @@ public class ClassDeclaration {
 	
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassArguments _modifier, ClassName _name, List<Instantiation> _extension, List<Definition> _definitions) {
+	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<Instantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
 		this.name = _name;
 		List<Instantiation> ext = new LinkedList<Instantiation>();

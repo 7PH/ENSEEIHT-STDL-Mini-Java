@@ -83,7 +83,8 @@ terminal String		    UL_Nombre_Entier/*, UL_Nombre_Flottant*/, UL_Nul, UL_Vrai, 
 terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
 terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 
-/* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
+/* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...)	*/
+/*			| Returned Type				   | CUP Rule						*/
 non terminal Block						    Bloc;
 non terminal List<Instruction>			    Instructions;
 non terminal Instruction					Instruction;
@@ -94,29 +95,29 @@ non terminal Pair<String,PartialType>	    Identifiant;
 non terminal Expression 					Expression;
 non terminal AssignableExpression		    Affectable;
 /** @TODO */
-non terminal Program Program;
-non terminal AccessArguments AccessModifier;
-non terminal ClassName Declaration;
-non terminal InterfaceDeclaration InterfaceDeclaration;
-non terminal ClassDeclaration ClassDeclaration;
-non terminal List<Signature> MethodSignatures;
-non terminal Signature MethodSignature;
-non terminal List<Instantiation> Instantiations;
-non terminal Instantiation Instantiation;
-non terminal Type NullableType;
-non terminal ClassArguments ClassModifier;
-non terminal List<Instantiation> Extension;
-non terminal List<Definition> Definitions;
-non terminal List<ClassName> GenericTypes;
-non terminal String GenericType;
-non terminal List<Instantiation> GenericInstantiations;
-non terminal Definition Definition;
-non terminal Constructor ClassConstructor;
-non terminal DefinitionArguments DefinitionModifier;
-non terminal AttributeDefinition AttributeDefinition;
-non terminal MethodDefinition MethodDefinition;
-non terminal AtomicType NonArrayType;
-non terminal Type Type;
+non terminal Program 						Program;
+non terminal AccessModifier 				AccessModifier;
+non terminal ClassName 						Declaration;
+non terminal InterfaceDeclaration 			InterfaceDeclaration;
+non terminal ClassDeclaration 				ClassDeclaration;
+non terminal List<Signature> 				MethodSignatures;
+non terminal Signature 						MethodSignature;
+non terminal List<Instantiation> 			Instantiations;
+non terminal Instantiation 					Instantiation;
+non terminal Type 							NullableType;
+non terminal ClassModifier 					ClassModifier;
+non terminal List<Instantiation> 			Extension;
+non terminal List<Definition> 				Definitions;
+non terminal List<ClassName> 				GenericTypes;
+non terminal String 						GenericType;
+non terminal List<Instantiation> 			GenericInstantiations;
+non terminal Definition 					Definition;
+non terminal Constructor 					ClassConstructor;
+non terminal DefinitionModifier 			DefinitionModifier;
+non terminal AttributeDefinition 			AttributeDefinition;
+non terminal MethodDefinition 				MethodDefinition;
+non terminal AtomicType 					NonArrayType;
+non terminal Type 							Type;
 
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
@@ -260,11 +261,11 @@ ClassDeclaration ::=
 ClassModifier ::=
     UL_Final
         {:
-			RESULT = ClassArguments.Final;
+			RESULT = ClassModifier.Final;
 		:}
     | UL_Abstract
         {:
-			RESULT = ClassArguments.Abstract;
+			RESULT = ClassModifier.Abstract;
 		:}
     |
         {:
@@ -393,15 +394,15 @@ Definition ::=
 DefinitionModifier ::=
     UL_Static
         {:
-			RESULT = DefinitionArguments.Static;
+			RESULT = DefinitionModifier.Static;
 		:}
     | UL_Final
         {:
-			RESULT = DefinitionArguments.Final;
+			RESULT = DefinitionModifier.Final;
 		:}
     | UL_Static UL_Final
         {:
-			RESULT = DefinitionArguments.Static_Final;
+			RESULT = DefinitionModifier.Static_Final;
 		:}
     |
         {:
@@ -427,11 +428,11 @@ ClassConstructor ::=
 AccessModifier ::=
     UL_Public
         {:
-			RESULT = AccessArguments.Public;
+			RESULT = AccessModifier.Public;
 		:}
     | UL_Private
         {:
-			RESULT = AccessArguments.Private;
+			RESULT = AccessModifier.Private;
 		:}
     ;
 

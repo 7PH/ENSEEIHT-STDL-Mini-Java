@@ -1,20 +1,17 @@
 package fr.n7.stl.block.ast.object;
 
-public enum DefinitionArguments {
-	Static,
+public enum ClassModifier {
 	Final,
-	Static_Final;
+	Abstract;
 	
 	@Override
 	public String toString() {
 		switch(this) {
-			case Static : 
-				return "static";
-			case Final : 
+			case Final :
 				return "final";
-			case Static_Final : 
-				return "static final";
-			default : 
+			case Abstract :
+				return "abstract";
+			default :
 				throw new IllegalArgumentException( "The default case should never be triggered.");
 		}
 	}
