@@ -370,12 +370,12 @@ Definitions ::=
 // Definition - definition of one method/attribute
 //  ("public"|"private") ($ClassConstructor|($DefinitionModifier ($Attribute|$Method)))
 Definition ::=
-    AccessModifier:access ClassConstructor:constructor
+    /*AccessModifier:access ClassConstructor:constructor
         {:
 			constructor.setAccess(access);
 			RESULT = constructor ;
 		:}
-    | AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
+    | */AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
         {:
 			attributeDefinition.setAccess(access);
 			attributeDefinition.setArguments(modifier);
