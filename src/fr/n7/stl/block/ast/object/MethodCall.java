@@ -9,7 +9,6 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class MethodCall implements Instruction, Expression {
