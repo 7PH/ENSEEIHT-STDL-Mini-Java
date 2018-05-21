@@ -16,7 +16,7 @@ public class InterfaceDeclaration implements ASTNode {
 	private List<Signature> signatures = new LinkedList<Signature>();
 	
 	/** Extended class. */
-	private List<Instantiation> extendedClass = new LinkedList<Instantiation>();
+	private List<TypeInstantiation> extendedClass = new LinkedList<TypeInstantiation>();
 	
 	public InterfaceDeclaration(ClassName _name, List<Signature> _signatures) {
 		this.name = _name;
@@ -25,9 +25,9 @@ public class InterfaceDeclaration implements ASTNode {
 		}
 	}
 	
-	public InterfaceDeclaration(ClassName _declaration, List<Instantiation> _instantiations, List<Signature> _signatures) {
+	public InterfaceDeclaration(ClassName _declaration, List<TypeInstantiation> _Type_instantiations, List<Signature> _signatures) {
 		this(_declaration, _signatures);
-		for (Instantiation i : _instantiations) {
+		for (TypeInstantiation i : _Type_instantiations) {
 			extendedClass.add(i);
 		}
 	}

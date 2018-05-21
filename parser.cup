@@ -102,15 +102,15 @@ non terminal InterfaceDeclaration 			InterfaceDeclaration;
 non terminal ClassDeclaration 				ClassDeclaration;
 non terminal List<Signature> 				MethodSignatures;
 non terminal Signature 						MethodSignature;
-non terminal List<Instantiation> 			Instantiations;
-non terminal Instantiation 					Instantiation;
+non terminal List<TypeInstantiation> 		Instantiations;
+non terminal TypeInstantiation 				TypeInstantiation;
 non terminal Type 							NullableType;
 non terminal ClassModifier 					ClassModifier;
-non terminal List<Instantiation> 			Extension;
+non terminal List<TypeInstantiation> 		Extension;
 non terminal List<Definition> 				Definitions;
 non terminal List<ClassName> 				GenericTypes;
 non terminal String 						GenericType;
-non terminal List<Instantiation> 			GenericInstantiations;
+non terminal List<TypeInstantiation> 		GenericInstantiations;
 non terminal Definition 					Definition;
 non terminal Constructor 					ClassConstructor;
 non terminal DefinitionModifier 			DefinitionModifier;
@@ -172,9 +172,9 @@ InterfaceDeclaration ::=
         {:
 			RESULT = new InterfaceDeclaration(declaration, signatures);
 		:}
-    | UL_Interface Declaration:declaration UL_Extends Instantiations:instantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
+    | UL_Interface Declaration:declaration UL_Extends Instantiations:typeInstantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
         {:
-			RESULT = new InterfaceDeclaration(declaration, instantiations, signatures);
+			RESULT = new InterfaceDeclaration(declaration, typeInstantiations, signatures);
 		:}
     ;
 
@@ -218,32 +218,32 @@ NullableType ::=
 		:}
     ;
 
-// Instantiations (instantiation of generic types)
-//  - ($Instantiation ",")* $Instantiation
+// Instantiations (typeInstantiation of generic types)
+//  - ($TypeInstantiation ",")* $TypeInstantiation
 Instantiations ::=
-    Instantiation:instantiation
+    TypeInstantiation:typeInstantiation
         {:
-			List<Instantiation> inst = new LinkedList<Instantiation>();
-			inst.add(instantiation);
+			List<TypeInstantiation> inst = new LinkedList<>();
+			inst.add(typeInstantiation);
 			RESULT = inst;
 		:}
-    | Instantiations:instantiations UL_Virgule Instantiation:instantiation
+    | Instantiations:typeInstantiations UL_Virgule TypeInstantiation:typeInstantiation
         {:	
-			instantiations.add(instantiation);
-			RESULT = instantiations;
+			typeInstantiations.add(typeInstantiation);
+			RESULT = typeInstantiations;
 		:}
     ;
 
-// Instantiation
+// TypeInstantiation
 //  - $UL_Identificateur ("<" $Instanciations ">")?
-Instantiation ::=
+TypeInstantiation ::=
     UL_Identificateur:ident
         {:
-			RESULT = new Instantiation(ident);
+			RESULT = new TypeInstantiation(ident);
 		:}
-    | UL_Identificateur:ident UL_Inferieur Instantiations:instantiations UL_Superieur
+    | UL_Identificateur:ident UL_Inferieur Instantiations:typeInstantiations UL_Superieur
         {:
-			RESULT = new Instantiation(ident, instantiations);
+			RESULT = new TypeInstantiation(ident, typeInstantiations);
 		:}
     ;
 
@@ -307,24 +307,24 @@ GenericType ::=
         {:
 			RESULT = ident;
 		:}
-    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
+    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericTypeInstantiations
         {:
-			RESULT = ident; // @TODO: use genericInstantiations parameter //
+			RESULT = ident; // @TODO: use genericTypeInstantiations parameter //
 		:}
     ;
 
 // GenericInstantiations
-//  - ($Instantiation ",")* $Instantiation
+//  - ($TypeInstantiation ",")* $TypeInstantiation
 GenericInstantiations ::=
-    Instantiation:instantiation
+    TypeInstantiation:typeInstantiation
         {:
-			List<Instantiation> classes = new LinkedList<Instantiation>();
-			classes.add(instantiation);
+			List<TypeInstantiation> classes = new LinkedList<>();
+			classes.add(typeInstantiation);
 			RESULT = classes;
 		:}
-    | GenericInstantiations:instantiationsList UL_Esperluette Instantiation:instantiation
+    | GenericInstantiations:instantiationsList UL_Esperluette TypeInstantiation:typeInstantiation
         {:
-			instantiationsList.add(instantiation);
+			instantiationsList.add(typeInstantiation);
 			RESULT = instantiationsList;
 		:}
     ;
@@ -332,20 +332,20 @@ GenericInstantiations ::=
 // Extension
 //  - ("extends" $Instantiations)? ("implements" $Instantiations)?
 Extension ::=
-    UL_Extends Instantiation:instantiation
+    UL_Extends TypeInstantiation:typeInstantiation
         {:
-			List<Instantiation> inst = new LinkedList<Instantiation>();
-			inst.add(instantiation);
+			List<TypeInstantiation> inst = new LinkedList<>();
+			inst.add(typeInstantiation);
 			RESULT = inst;
 		:}
-    | UL_Extends Instantiation:instExtends UL_Implements Instantiations:instImpls
+    | UL_Extends TypeInstantiation:instExtends UL_Implements Instantiations:instImpls
         {:
 			instImpls.add(instExtends);
 			RESULT = instImpls;
 		:}
-    | UL_Implements Instantiations:instantiations
+    | UL_Implements Instantiations:typeInstantiations
         {:
-			RESULT = instantiations;
+			RESULT = typeInstantiations;
 		:}
     |
         {:
@@ -465,7 +465,7 @@ Type ::=
         {:
 			RESULT = type;
 		:}
-    | Instantiation
+    | TypeInstantiation
         {:
 			RESULT = AtomicType.VoidType;
 		:}

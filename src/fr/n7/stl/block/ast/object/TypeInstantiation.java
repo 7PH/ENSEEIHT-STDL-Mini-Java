@@ -7,26 +7,26 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 
-public class Instantiation implements Type {
+public class TypeInstantiation implements Type {
 	
 	private String name;
 	
-	private List<Instantiation> instantiations = new LinkedList<>();
+	private List<TypeInstantiation> typeInstantiations = new LinkedList<>();
 	
-	public Instantiation(String name) {
+	public TypeInstantiation(String name) {
 		this.name = name;
 	}
 	
-	public Instantiation(String _name, List<Instantiation> _instantiations) {
+	public TypeInstantiation(String _name, List<TypeInstantiation> _Type_instantiations) {
 		this.name = _name;
-		this.instantiations = _instantiations;
+		this.typeInstantiations = _Type_instantiations;
 	}
 
 	@Override
 	public boolean equalsTo(Type other) {
         return
-                other instanceof Instantiation
-                && ((Instantiation) other).name.equals(name);
+                other instanceof TypeInstantiation
+                && ((TypeInstantiation) other).name.equals(name);
     }
 
 	@Override
@@ -55,7 +55,7 @@ public class Instantiation implements Type {
 
 	@Override
     public String toString() {
-        return name + (instantiations.size() > 0 ? ("<" + instantiations + ">") : "");
+        return name + (typeInstantiations.size() > 0 ? ("<" + typeInstantiations + ">") : "");
     }
 
 }

@@ -11,7 +11,7 @@
 	<taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${tools}/java-cup-11b.jar" />
 
 	<target name="generate">
-		<cup srcfile="${base}/parser.cup" destdir="${java}" parser="Parser" interface="true" locations="true" debugsymbols="true" />
+		<cup srcfile="${base}/parser.cup" expect="0" destdir="${java}" parser="Parser" interface="true" locations="true" debugsymbols="true" />
 		<jflex file="lexer.jflex" destdir="${java}" />
 	</target>
 

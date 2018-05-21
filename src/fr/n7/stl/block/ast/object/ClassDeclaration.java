@@ -12,11 +12,11 @@ public class ClassDeclaration implements ASTNode {
 	
 	private ClassName name;
 	
-	private List<Instantiation> extension;
+	private List<TypeInstantiation> extension;
 	
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<Instantiation> _extension, List<Definition> _definitions) {
+	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<TypeInstantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
 		this.name = _name;
 		this.extension = _extension;
