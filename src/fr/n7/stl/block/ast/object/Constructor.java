@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.n7.stl.block.ast.Block;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
+import fr.n7.stl.block.ast.type.Type;
 
 public class Constructor extends Definition {
 	
@@ -15,6 +16,16 @@ public class Constructor extends Definition {
 		this.ident = _ident;
 		this.parameters = _parameters;
 		this.body = _body;
+	}
+
+	@Override
+	public String getName() {
+		return this.ident;
+	}
+
+	@Override
+	public Type getType() {
+		return null;
 	}
 
 }
