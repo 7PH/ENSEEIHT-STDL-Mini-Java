@@ -13,6 +13,8 @@ import java.util.List;
 
 public class MethodCall implements Instruction, Expression {
 
+    private String identifier;
+
     private Expression object;
 
     private String method;
@@ -21,6 +23,12 @@ public class MethodCall implements Instruction, Expression {
 
     public MethodCall(Expression object, String method, List<Expression> parameters) {
         this.object = object;
+        this.method = method;
+        this.parameters = parameters;
+    }
+
+    public MethodCall(String identifier, String method, List<Expression> parameters) {
+        this.identifier = identifier;
         this.method = method;
         this.parameters = parameters;
     }
