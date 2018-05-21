@@ -81,7 +81,7 @@ terminal String		    UL_Identificateur, UL_Chaine, UL_Caractere;
 terminal String		    UL_Nombre_Entier/*, UL_Nombre_Flottant*/, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
 /* @TODO */
 terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
-terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
+terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...)	*/
 /*			| Returned Type				   | CUP Rule						*/
@@ -138,7 +138,7 @@ precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, U
 precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 precedence nonassoc         UL_Type_Chaine, UL_Type_Booleen, UL_Type_Entier, UL_Type_Vide;
 precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Implements, UL_Extends,
-                            UL_Public, UL_Private, UL_Static, UL_Final;
+                            UL_Public, UL_Private, UL_Static, UL_Final, UL_This;
 /* Opérateur le plus prioritaire */
 
 
@@ -594,6 +594,14 @@ Instruction ::=
 	    {:
 		    RESULT = new MethodCall(object, method, new LinkedList<Expression>());
 		:}
+	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
+	    {:
+		    RESULT = new MethodCall("this", method, parameters);
+		:}
+	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
+	    {:
+		    RESULT = new MethodCall("this", method, new LinkedList<Expression>());
+		:}
 	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante  UL_Point_Virgule
      	{:
 			RESULT = new FunctionCall(nom, parameters);
@@ -756,6 +764,14 @@ Expression ::=
 	| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
 		{:
 			RESULT = new MethodCall(object, method, new LinkedList<Expression>());
+		:}
+	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
+	    {:
+		    RESULT = new MethodCall("this", method, parameters);
+		:}
+	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
+	    {:
+		    RESULT = new MethodCall("this", method, new LinkedList<Expression>());
 		:}
 	| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
 		{:
