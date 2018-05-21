@@ -55,4 +55,9 @@ public class MethodCall implements Instruction, Expression {
     public Type getReturnType() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return identifier + "." + method + "(" + parameters + ");";
+    }
 }
