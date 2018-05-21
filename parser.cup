@@ -591,8 +591,7 @@ Instruction ::=
 		:}
 	| UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
 	    {:
-		    /* @TODO */
-		    RESULT = null;
+		    RESULT = new MethodCall(object, method, new LinkedList<Expression>());
 		:}
 	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante  UL_Point_Virgule
      	{:
