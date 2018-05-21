@@ -815,10 +815,6 @@ Expression ::=
        	{:
 			RESULT = new ArrayAllocation(type, taille);
 		:}
-	| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-       	{:
-			RESULT = new PointerAllocation(type);
-		:}
 	| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
        	{:
 			RESULT = new ObjectInstantiation(type, parameters);
