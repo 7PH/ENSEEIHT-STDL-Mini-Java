@@ -3,11 +3,12 @@ package fr.n7.stl.block.ast.object;
 import java.util.LinkedList;
 import java.util.List;
 
-import fr.n7.stl.block.ast.SemanticsUndefinedException;
+
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
+import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 
-public class Signature {
+public class Signature implements Declaration {
 
 	/** Type of the method.*/
 	private Type type;
@@ -30,11 +31,6 @@ public class Signature {
 		this.parameters = _parameters;
 	}
 	
-	@Override
-	public String toString() {
-		throw new SemanticsUndefinedException("toString method is undefined for Signature.");
-	}
-	
 	/** Get signature name.
 	 * @return the name of the signature
 	 */
@@ -55,5 +51,26 @@ public class Signature {
     public List<ParameterDeclaration> getParameters() {
         return this.parameters;
     }
+    
+	@Override
+	public String toString() {
+		String _result = "";
+		
+		_result += this.type + " ";
+		_result += this.name + "(";
+		
+		boolean putComaFirst = false;
+		for (ParameterDeclaration p : this.parameters) {
+			if (putComaFirst) {
+				_result += ", ";
+			}
+			_result += p;  
+		}
+		
+		_result += ")";
+		
+		
+		return _result;
+	}
 
 }
