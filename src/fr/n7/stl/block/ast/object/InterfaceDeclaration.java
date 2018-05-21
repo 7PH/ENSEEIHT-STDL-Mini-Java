@@ -1,9 +1,13 @@
 package fr.n7.stl.block.ast.object;
 
+import fr.n7.stl.block.ast.ASTNode;
+import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class InterfaceDeclaration {
+public class InterfaceDeclaration implements ASTNode {
 	
 	/** Class name of the interface. */
 	private ClassName name;
@@ -28,4 +32,8 @@ public class InterfaceDeclaration {
 		}
 	}
 
+    @Override
+    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+        return false;
+    }
 }

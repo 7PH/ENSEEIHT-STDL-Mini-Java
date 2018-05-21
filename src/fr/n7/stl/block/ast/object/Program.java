@@ -3,39 +3,40 @@ package fr.n7.stl.block.ast.object;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-public class Program {
+public class Program implements ASTNode {
 
-    private List<InterfaceDeclaration> interfaces;
-    
-    private List<ClassDeclaration> classes;
+    private List<InterfaceDeclaration> interfaceDeclarations = new LinkedList<>();
 
-    public Program(InterfaceDeclaration _interface) {
-        this.interfaces = new LinkedList<InterfaceDeclaration>();
-        this.interfaces.add(_interface);
+    private List<ClassDeclaration> classDeclarations = new LinkedList<>();
+
+    public Program(InterfaceDeclaration interfaceDeclaration) {
+        this.interfaceDeclarations.add(interfaceDeclaration);
     }
     
-    public Program(ClassDeclaration _classe) {
-        this.classes = new LinkedList<ClassDeclaration>();
-        this.classes.add(_classe);
+    public Program(ClassDeclaration classDeclaration) {
+        this.classDeclarations.add(classDeclaration);
     }
     
     /** Add a interface declaration to the program.
      * @param _interface the interface to add
      */
     public void addInterface(InterfaceDeclaration _interface) {
-    	this.interfaces.add(_interface);
+    	this.interfaceDeclarations.add(_interface);
     }
     
     /** Add a class declaration to the program.
-     * @param _classe the class to add
+     * @param _class the class to add
      */
-    public void addClass(ClassDeclaration _classe) {
-    	this.classes.add(_classe);
+    public void addClass(ClassDeclaration _class) {
+    	this.classDeclarations.add(_class);
     }
 
     @Override
@@ -67,4 +68,17 @@ public class Program {
     	throw new SemanticsUndefinedException("getCode method is undefined for Program.");
     }
 
+    // @TODO
+    @Override
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
+        for (ClassDeclaration classDeclaration: classDeclarations) {
+            if (! classDeclaration.resolve(scope))
+                return false;
+        }
+        for (InterfaceDeclaration interfaceDeclaration: interfaceDeclarations) {
+            if (! interfaceDeclaration.resolve(scope))
+                return false;
+        }
+        return false;
+    }
 }
