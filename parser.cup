@@ -414,7 +414,7 @@ DefinitionModifier ::=
 ClassConstructor ::=
     UL_Identificateur:ident UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
         {:
-			RESULT = new Constructor(ident, new LinkedList<ParameterDeclaration>(), body);
+			RESULT = new Constructor(ident, body);
 		:}
     | UL_Identificateur:ident UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
         {:
