@@ -7,15 +7,15 @@ public class ClassDeclaration {
 	
 	private ClassArguments modifier;
 	
-	private ClassName declaration;
+	private ClassName name;
 	
 	private List<Instantiation> extension;
 	
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassArguments _modifier, ClassName _declaration, List<Instantiation> _extension, List<Definition> _definitions) {
+	public ClassDeclaration(ClassArguments _modifier, ClassName _name, List<Instantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
-		this.declaration = _declaration;
+		this.name = _name;
 		List<Instantiation> ext = new LinkedList<Instantiation>();
 		for (Instantiation d : _extension) {
 			ext.add(d);

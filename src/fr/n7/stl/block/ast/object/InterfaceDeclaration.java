@@ -6,7 +6,7 @@ import java.util.List;
 public class InterfaceDeclaration {
 	
 	/** Class name of the interface. */
-	private ClassName declaration;
+	private ClassName name;
 	
 	/** List of the methods signatures. */
 	private List<Signature> signatures = new LinkedList<Signature>();
@@ -14,8 +14,8 @@ public class InterfaceDeclaration {
 	/** Extended class. */
 	private List<Instantiation> extendedClass = new LinkedList<Instantiation>();
 	
-	public InterfaceDeclaration(ClassName _declaration, List<Signature> _signatures) {
-		this.declaration = _declaration;
+	public InterfaceDeclaration(ClassName _name, List<Signature> _signatures) {
+		this.name = _name;
 		for (Signature s : _signatures) {
 			this.signatures.add(s);
 		}
