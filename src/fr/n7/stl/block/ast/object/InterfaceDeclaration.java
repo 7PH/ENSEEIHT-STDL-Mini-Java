@@ -57,4 +57,15 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	public Type getReturnType() {
 		return AtomicType.VoidType;
 	}
+
+	@Override
+	public String toString() {
+		String _result = "interface" + this.className.toString() + " { \n";
+		
+		for (Signature s : this.signatures) {
+			_result += s.toString() + "; \n";
+		}		
+		
+		return _result + "\n }";
+	}
 }
