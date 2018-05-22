@@ -9,6 +9,15 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 public class AttributeAssignment implements AssignableExpression {
+	
+	private AssignableExpression objet;
+	
+	private String identificateur;
+
+	public AttributeAssignment(AssignableExpression _objet, String _identificateur) {
+		this.objet = _objet;
+		this.identificateur = _identificateur;
+	}
 
 	@Override
 	public Type getType() {
