@@ -83,7 +83,7 @@ public class MethodDefinition extends Definition {
 	
 	@Override
     public boolean checkType() {
-        throw new SemanticsUndefinedException("checkType method is undefined for MethodDefinition.");
+        return this.body.checkType();
     }
 
 	@Override

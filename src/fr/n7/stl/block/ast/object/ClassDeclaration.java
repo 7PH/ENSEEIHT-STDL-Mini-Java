@@ -8,6 +8,7 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
@@ -34,7 +35,11 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public boolean checkType() {
-		throw new SemanticsUndefinedException("checkType method not implemented yet in ClassDeclaration");
+		boolean b = false;
+		for (Definition d : this.definitions) {
+			b &= d.checkType();
+		}
+		return b;
 	}
 
 	@Override
