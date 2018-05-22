@@ -17,6 +17,5 @@ public class ClassName {
 		this.generics = _generics;
 		
 	}
-	
 
 }

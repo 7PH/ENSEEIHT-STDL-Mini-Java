@@ -15,11 +15,11 @@ import java.util.List;
 public class InterfaceDeclaration extends ProgramDeclaration {
 	
 	/** List of the methods signatures. */
-	private List<Signature> signatures = new LinkedList<Signature>();
-	
+	private List<Signature> signatures;
 	
 	public InterfaceDeclaration(ClassName _name, List<Signature> _signatures) {
 		this.className = _name;
+		this.signatures= new LinkedList<Signature>();
 		for (Signature s : _signatures) {
 			this.signatures.add(s);
 		}
