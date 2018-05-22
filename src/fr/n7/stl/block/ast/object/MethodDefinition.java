@@ -2,6 +2,8 @@ package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.Block;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
@@ -74,26 +76,22 @@ public class MethodDefinition extends Definition {
         return this.offset;
     }
 
-	/** Check if the method is well typed.
-	 * @return true if the mehod is well typed, false if not
-	 */
+	@Override
+	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	throw new SemanticsUndefinedException("resolve method is undefined for MethodDefinition.");
+	}
+	
+	@Override
     public boolean checkType() {
         throw new SemanticsUndefinedException("checkType method is undefined for MethodDefinition.");
     }
 
-	/** Compute the size of the allocated memory. 
-	 * @param _register register associated to the address of the method.
-	 * @param _offset current offset for the address of the method.
-	 * @return size of the memory allocated to the method.
-	 */
+	@Override
     public int allocateMemory(Register _register, int _offset) {
     	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodDefinition.");
     }
 
-	/** Provide the generated TAM code.
-	 * @param _factory factory to build AST nodes for TAM code.
-	 * @return the generated TAM code.
-	 */
+	@Override
     public Fragment getCode(TAMFactory _factory) {
     	throw new SemanticsUndefinedException("getCode method is undefined for MethodDefinition.");
     }
@@ -102,4 +100,10 @@ public class MethodDefinition extends Definition {
     public String toString() {
     	throw new SemanticsUndefinedException("toString method is undefined for MethodDefinition.");
     }
+
+	@Override
+	public Type getReturnType() {
+    	throw new SemanticsUndefinedException("getReturnType method is undefined for MethodDefinition.");
+	}
+
 }
