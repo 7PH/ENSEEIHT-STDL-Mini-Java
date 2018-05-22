@@ -68,17 +68,13 @@ public class MethodCall implements Instruction, Expression {
     				Logger.error("Parameter " + parameterType.toString() + " use in "
     							+ this.identifier + " method is not compatible with declared one : " + declaredParameters + ".");
     				}
-
     			} else {
-    				Logger.error("Parameter " + parameterType.toString() + " use in "
-							+ this.identifier + "method is an ErrorType.");
+    				Logger.error("Parameter " + parameterType.toString() + " use in " + this.identifier + "method is an ErrorType.");
     			}
-    		}
-    		
+    		}	
     	} else {
     		Logger.error("Call of " + this.identifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
     	}
-    	
     	return b;
     }
 

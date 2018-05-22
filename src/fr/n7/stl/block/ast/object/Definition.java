@@ -5,24 +5,24 @@ import fr.n7.stl.block.ast.scope.Declaration;
 
 public abstract class Definition implements Declaration, Instruction {
 
-	private AccessModifier access;
+	private AccessModifier accessModifier;
 	
-	private DefinitionModifier arguments;
+	private DefinitionModifier definitionModifier;
 
-	public AccessModifier getAccess() {
-		return access;
+	public AccessModifier getAccessModifier() {
+		return this.accessModifier;
 	}
 
-	public DefinitionModifier getArguments() {
-		return arguments;
+	public DefinitionModifier getDefinitionModifier() {
+		return this.definitionModifier;
 	}
 
-	public void setAccess(AccessModifier access) {
-		this.access = access;
+	public void setAccessModifier(AccessModifier _accessModifier) {
+		this.accessModifier = _accessModifier;
 	}
 
-	public void setArguments(DefinitionModifier arguments) {
-		this.arguments = arguments;
+	public void setDefinitionModifier(DefinitionModifier _definitionModifier) {
+		this.definitionModifier = _definitionModifier;
 	}
 	
 	public abstract String toString();
