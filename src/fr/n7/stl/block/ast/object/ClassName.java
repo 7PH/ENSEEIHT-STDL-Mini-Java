@@ -20,5 +20,9 @@ public class ClassName {
 	public String getName() {
 		return this.className;
 	}
+	
+	public List<ClassName> getGenerics() {
+		return this.generics;
+	}
 
 }
