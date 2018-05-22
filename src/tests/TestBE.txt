@@ -2,7 +2,12 @@ class Circle {
     public Circle bar;
     public Circle() { }
     public Circle foo() { return bar; }
+    public static Circle foo() { }
+    private static final int foo() { }
 }
 final class abc { }
 abstract class abc { }
-interface issou { }
+interface issou1 { }
+interface issou2 extends issou1 { }
+interface issou3 extends issou2<T> { }
+interface issou4 extends issou3<F<D<P>>> { }
