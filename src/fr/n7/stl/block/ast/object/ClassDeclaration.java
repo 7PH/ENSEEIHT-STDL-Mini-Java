@@ -3,6 +3,7 @@ package fr.n7.stl.block.ast.object;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
@@ -27,12 +28,27 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		//if (! _scope.accepts(this)) return false;
-    	//_scope.register(this);
-    	//new scope + resolve des definitions
-		//TODO (work in progress by Loic)
-		throw new SemanticsUndefinedException("resolve method not implemented yet in ClassDeclaration");
+		if (! _scope.accepts(this)) {
+			Logger.error("Could not resolve class " + this.getName() + " because this name is already taken.");
+			return false;
+		}			
 		
+    	_scope.register(this);
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+    	
+    	for (Definition d : definitions) {
+    		if (!d.resolve(newScope)) {
+    			Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
+    			return false;
+    		}
+    	}
+    	
+    	// Verifier que les méthodes abstraites de la super classe ont été implémenté.
+    	for (TypeInstantiation _super : this.extendedClass) {
+    		//TODO
+    	}
+    	
+		return true;
     }
 
 	@Override

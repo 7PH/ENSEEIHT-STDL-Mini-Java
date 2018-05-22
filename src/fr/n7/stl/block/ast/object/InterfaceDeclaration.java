@@ -3,11 +3,13 @@ package fr.n7.stl.block.ast.object;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +37,22 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		throw new SemanticsUndefinedException("resolve method not implemented yet in InterfaceDeclaration");
+    	if (! _scope.accepts(this)) {
+			Logger.error("Could not resolve interface " + this.getName() + " because this name is already taken.");
+			return false;
+		}			
+		
+    	_scope.register(this);
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+    	
+    	for (Signature s : signatures) {
+    		if (! newScope.accepts(s)) {
+    			Logger.error("Could not resolve interface " + this.getName() + " because the method " + s.toString() + " was defined twice.");
+    			return false;
+    		}
+    	}
+    	
+		return true;
     }
 
 	@Override

@@ -32,12 +32,22 @@ public class Signature implements Declaration {
 	}
 	
 	/** Get signature name.
-	 * @return the name of the signature
+	 * @return the name of the signature followed by the parameters types.
 	 */
 	public String getName() {
-        return this.name;
+		String _params = "";
+		boolean first = true;
+		for (ParameterDeclaration p : this.parameters) {
+			if (!first) {
+				_params += " ";
+				first = false;
+			}
+			_params += p.getType().toString();
+		}
+		
+        return this.name + " " + _params;
     }
-
+	
 	/** Get signature type.
 	 * @return the type of the signature
 	 */
