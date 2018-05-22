@@ -113,7 +113,7 @@ non terminal List<TypeInstantiation>    TypeInstantiations;
 non terminal TypeInstantiation          TypeInstantiation;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
-non terminal List<String>               GenericTypes;
+non terminal List<ClassName>            GenericTypes;
 non terminal String                     GenericType;
 non terminal List<Signature>            InnerInterfaceDefinitions;
 non terminal Signature                  InnerInterfaceDefinition;
@@ -223,11 +223,12 @@ GenericTypes ::=
         :}
     | GenericType:genericType
         {:
-            RESULT = new LinkedList<>();
+            RESULT = new LinkedList<ClassName>();
             RESULT.add(genericType);
         :}
     ;
 
+// @TODO
 GenericType ::=
     UL_Identificateur:ident
         {: RESULT = ident; :}
