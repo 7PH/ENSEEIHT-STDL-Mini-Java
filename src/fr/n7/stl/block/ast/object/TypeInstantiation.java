@@ -27,7 +27,7 @@ public class TypeInstantiation implements Type {
 	public boolean equalsTo(Type other) {
         boolean b = false;
         if (other instanceof TypeInstantiation) {
-        	b = ((TypeInstantiation) other).name.equals(name);
+        	b = ((TypeInstantiation) other).name.equals(this.name);
         }
         return b;
     }
@@ -54,7 +54,7 @@ public class TypeInstantiation implements Type {
 
 	@Override
     public String toString() {
-        return name + (typeInstantiations.size() > 0 ? ("<" + typeInstantiations + ">") : "");
+        return this.name + (this.typeInstantiations.size() > 0 ? ("<" + this.typeInstantiations + ">") : "");
     }
 
 }
