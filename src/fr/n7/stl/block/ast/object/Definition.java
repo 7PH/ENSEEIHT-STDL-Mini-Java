@@ -6,8 +6,16 @@ import fr.n7.stl.block.ast.scope.Declaration;
 public abstract class Definition implements Declaration, Instruction {
 
 	private AccessModifier access;
-
+	
 	private DefinitionModifier arguments;
+
+	public AccessModifier getAccess() {
+		return access;
+	}
+
+	public DefinitionModifier getArguments() {
+		return arguments;
+	}
 
 	public void setAccess(AccessModifier access) {
 		this.access = access;
@@ -16,4 +24,6 @@ public abstract class Definition implements Declaration, Instruction {
 	public void setArguments(DefinitionModifier arguments) {
 		this.arguments = arguments;
 	}
+	
+	public abstract String toString();
 }

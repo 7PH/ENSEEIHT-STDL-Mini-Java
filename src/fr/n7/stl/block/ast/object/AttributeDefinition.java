@@ -52,7 +52,17 @@ public class AttributeDefinition extends Definition {
 
     @Override
     public String toString() {
-    	throw new SemanticsUndefinedException("toString method is undefined for AttributeDefinition.");
+    	String _result = "";
+    	
+    	if (this.getAccess() != null) {
+    		_result += this.getAccess();
+    	}
+    	if (this.getArguments() != null) {
+    		_result += this.getArguments();
+    	}
+    	_result += this.type + " " + this.name + ";"; 
+    	
+    	return _result;
     }
 
 	@Override

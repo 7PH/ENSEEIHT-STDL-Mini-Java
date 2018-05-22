@@ -81,4 +81,8 @@ public class Constructor extends Definition {
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
     	throw new SemanticsUndefinedException("resolve method is undefined for Constructor.");
 	}
+	
+	public String toString() {
+		throw new SemanticsUndefinedException("toString method is undefined for Constructor.");
+	}
 }

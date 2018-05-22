@@ -24,4 +24,6 @@ public abstract class ProgramDeclaration {
 	public abstract Fragment getCode(TAMFactory factory);
 
 	public abstract Type getReturnType();
+	
+	public abstract String toString();
 }

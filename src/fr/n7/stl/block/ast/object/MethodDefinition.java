@@ -98,7 +98,7 @@ public class MethodDefinition extends Definition {
 
     @Override
     public String toString() {
-    	throw new SemanticsUndefinedException("toString method is undefined for MethodDefinition.");
+    	return this.signature.toString() + this.body.toString();
     }
 
 	@Override

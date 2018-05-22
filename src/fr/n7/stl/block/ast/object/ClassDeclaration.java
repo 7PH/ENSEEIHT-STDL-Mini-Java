@@ -53,4 +53,15 @@ public class ClassDeclaration extends ProgramDeclaration {
 	public Type getReturnType() {
 		return AtomicType.VoidType;
 	}
+
+	@Override
+	public String toString() {
+		String _result = "interface" + this.className.toString() + " { \n";
+		
+		for (Definition d : this.definitions) {
+			_result += d.toString() + "\n";
+		}		
+		
+		return _result + "\n }";
+	}
 }
