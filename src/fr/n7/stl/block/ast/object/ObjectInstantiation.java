@@ -4,9 +4,11 @@ import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
@@ -23,7 +25,20 @@ public class ObjectInstantiation implements Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-    	throw new SemanticsUndefinedException("resolve method is undefined for ObjectInstantiation.");
+    	if (!this.type.resolve(_scope)) {
+    		Logger.error("Could not resolve object instantiation because the type " + this.type.toString() + " is unknown.");
+    		return false;
+    	}
+    	
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+    	for (Expression e : parameters) {
+    		if(!e.resolve(newScope)) {
+    			Logger.error("Could not resolve object insantiation because the constructor parameters could not be resolved.");
+    			return false;
+    		}
+    	}
+    	
+    	return true;    	
     }
 
     @Override
