@@ -54,11 +54,11 @@ public class AttributeDefinition extends Definition {
     public String toString() {
     	String _result = "";
     	
-    	if (this.getAccess() != null) {
-    		_result += this.getAccess();
+    	if (this.getAccessModifier() != null) {
+    		_result += this.getAccessModifier();
     	}
-    	if (this.getArguments() != null) {
-    		_result += this.getArguments();
+    	if (this.getDefinitionModifier() != null) {
+    		_result += this.getDefinitionModifier();
     	}
     	_result += this.type + " " + this.name + ";"; 
     	
