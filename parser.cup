@@ -1,5 +1,5 @@
 /*
-    Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Mini-Java.
+   Grammaire attribuée pour construire l'arbre abstrait correspondant au langage Block
 */
 
 package fr.n7.stl.block;
@@ -13,7 +13,6 @@ import java.util.*;
 
 // Elements du métamodèle pour la construction de l'arbre abstrait
 import fr.n7.stl.block.ast.*;
-import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.*;
 import fr.n7.stl.block.ast.expression.accessible.*;
 import fr.n7.stl.block.ast.expression.allocation.*;
@@ -30,19 +29,26 @@ import fr.n7.stl.util.*;
 
 /* Variables partagées dans les actions de l'analyseur syntaxique. */
 parser code {:
+
     protected Lexer lexer;
+
     public String name;
+
     public Block block;
+
     public boolean resolve, checkType;
+
     public double
         resolveTimeMs,
         checkTypeTimeMs,
         allocateMemoryTimeMs,
         getCodeTimeMs;
+
     public Fragment fragment;
-    public Parser(String name) {
+
+    public Parser(String _name) {
         this();
-        this.name = name;
+        this.name = _name;
     }
 :}
 
@@ -57,783 +63,510 @@ init with {:
     } catch (IOException e) {
         e.printStackTrace();
     }
-    lexer = new Lexer(f, fis);
+    lexer = new Lexer(f,fis);
 :};
 
 /* Expression qui permet de progresser dans l'analyse lexicale. */
 scan with {: return lexer.next_token(); :};
 
 /* Terminaux qui seront transmis par l'analyseur lexical. */
-terminal 			    UL_Point_Virgule, UL_Virgule, UL_Point, UL_Deux_Points, UL_Point_Interrogation, UL_Point_Exclamation;
-terminal				UL_Egal/*, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe*/;
-terminal 			    UL_Plus, UL_Moins/*, UL_Moins_Unaire*/, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
+terminal 			UL_Point_Virgule, UL_Virgule, UL_Point, UL_Deux_Points, UL_Point_Interrogation, UL_Point_Exclamation;
+terminal				UL_Egal, UL_Double_Plus, UL_Double_Moins, UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe;
+terminal 			UL_Plus, UL_Moins, UL_Moins_Unaire, UL_Asterisque, UL_Oblique, UL_Pour_Cent;
 terminal				UL_Esperluette, UL_Double_Barre, UL_Double_Esperluette;
 terminal				UL_Parenthese_Ouvrante, UL_Parenthese_Fermante;
+terminal				UL_Premier, UL_Second;
 terminal				UL_Accolade_Ouvrante, UL_Accolade_Fermante;
 terminal				UL_Crochet_Ouvrant, UL_Crochet_Fermant;
 terminal				UL_Inferieur, UL_Superieur;
 terminal				UL_Inferieur_Egal, UL_Superieur_Egal;
 terminal				UL_Double_Egal, UL_Exclamation_Egal;
 terminal				UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
-//terminal				UL_Definition_Constante,  UL_Definition_Type, UL_Enregistrement, UL_Enumeration;
-terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier/*, UL_Type_Flottant*/, UL_Type_Vide;
-terminal String		    UL_Identificateur, UL_Chaine, UL_Caractere;
-terminal String		    UL_Nombre_Entier/*, UL_Nombre_Flottant*/, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
-/* @TODO */
-terminal 				UL_Extends, UL_Class, UL_Implements, UL_Interface;
-terminal				UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
+terminal				UL_Definition_Constante, UL_Definition_Type, UL_Enregistrement, UL_Enumeration;
+terminal				UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
+terminal String		UL_Identificateur, UL_Chaine, UL_Caractere;
+terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
+terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
 
-/* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...)	*/
-/*			| Returned Type				   | CUP Rule						*/
-non terminal Block						    Bloc;
-non terminal List<Instruction>			    Instructions;
-non terminal Instruction					Instruction;
-non terminal Instruction					VarDeclaration;
-non terminal List<Expression>			    Expressions;
-non terminal List<ParameterDeclaration>	    Parameters;
-non terminal Pair<String,PartialType>	    Identifiant;
-non terminal Expression 					Expression;
-non terminal AssignableExpression		    Affectable;
-/** @TODO */
-non terminal Program 						Program;
-non terminal AccessModifier 				AccessModifier;
-non terminal ClassName 						Declaration;
-non terminal InterfaceDeclaration 			InterfaceDeclaration;
-non terminal ClassDeclaration 				ClassDeclaration;
-non terminal List<Signature> 				MethodSignatures;
-non terminal Signature 						MethodSignature;
-non terminal List<TypeInstantiation> 		Instantiations;
-non terminal TypeInstantiation 				TypeInstantiation;
-non terminal Type 							NullableType;
-non terminal ClassModifier 					ClassModifier;
-non terminal List<TypeInstantiation> 		Extension;
-non terminal List<Definition> 				Definitions;
-non terminal List<ClassName> 				GenericTypes;
-non terminal String 						GenericType;
-non terminal List<TypeInstantiation> 		GenericInstantiations;
-non terminal Definition 					Definition;
-non terminal Constructor 					ClassConstructor;
-non terminal DefinitionModifier 			DefinitionModifier;
-non terminal AttributeDefinition 			AttributeDefinition;
-non terminal MethodDefinition 				MethodDefinition;
-non terminal AtomicType 					NonArrayType;
-non terminal Type 							Type;
-
+/* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
+non terminal Integer					Program;
+non terminal Block						Bloc;
+non terminal List<Instruction>			Instructions;
+non terminal Instruction				Instruction;
+non terminal Instruction				Declaration;
+non terminal List<Expression>			Expressions;
+non terminal List<ParameterDeclaration>	Parameters;
+non terminal List<ParameterDeclaration> ParametersOrNot;
+non terminal Pair<String,PartialType>	Identifiant;
+non terminal Type						Type, Atomique;
+non terminal Expression 				Expression;
+non terminal AssignableExpression		Affectable;
+non terminal Integer					ProgramDeclaration;
+non terminal Integer					InterfaceDeclaration;
+non terminal Integer					ClassDeclaration;
+non terminal Integer                    InnerClassDefinitions;
+non terminal Integer                    InnerClassDefinition;
+non terminal Integer                    AccessModifier;
+non terminal Integer                    TypeInstantiations;
+non terminal Integer                    TypeInstantiation;
+non terminal Integer                    DefinitionModifier;
+non terminal Integer                    ClassName;
+non terminal Integer                    GenericTypes;
+non terminal Integer                    GenericType;
+non terminal Integer                    GenericInstantiations;
+non terminal Integer                    InnerInterfaceDefinitions;
+non terminal Integer                    InnerInterfaceDefinition;
+non terminal Type                       NullableType;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
-precedence nonassoc         /* @TODO */ UL_Identificateur;
-precedence nonassoc         UL_Parenthese_Fermante;	// Résolution du conflit décaler/réduire sur conversion de type
-precedence right            UL_Egal;
-precedence nonassoc         UL_Point_Interrogation, UL_Deux_Points;
-precedence left             UL_Double_Barre;
-precedence left             UL_Double_Esperluette;
-precedence nonassoc         UL_Double_Egal, UL_Exclamation_Egal;
-precedence nonassoc         UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Superieur_Egal;
-precedence left             UL_Plus, UL_Moins;
-precedence left             UL_Asterisque, UL_Oblique, UL_Pour_Cent;
-precedence right            UL_Nouveau;
-precedence left             /*UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire,*/ UL_Esperluette, UL_Point_Exclamation;
-//precedence nonassoc         UL_Double_Plus, UL_Double_Moins;
-precedence left             UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
-precedence nonassoc         UL_Type_Chaine, UL_Type_Booleen, UL_Type_Entier, UL_Type_Vide;
-precedence nonassoc         UL_Class, UL_Interface, UL_Final, UL_Abstract, UL_Implements, UL_Extends,
-                            UL_Public, UL_Private, UL_Static, UL_Final, UL_This;
+precedence nonassoc UL_Parenthese_Fermante;	// Résolution du conflit décaler/réduire sur conversion de type
+precedence right UL_Egal;
+precedence nonassoc UL_Point_Interrogation, UL_Deux_Points;
+precedence left UL_Double_Barre;
+precedence left UL_Double_Esperluette;
+precedence nonassoc UL_Double_Egal, UL_Exclamation_Egal;
+precedence nonassoc UL_Inferieur, UL_Inferieur_Egal, UL_Superieur, UL_Superieur_Egal;
+precedence left UL_Plus, UL_Moins;
+precedence left UL_Asterisque, UL_Oblique, UL_Pour_Cent;
+precedence right UL_Nouveau;
+precedence left UL_Premier, UL_Second;
+precedence left UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
+precedence nonassoc UL_Double_Plus, UL_Double_Moins;
+precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 /* Opérateur le plus prioritaire */
 
-
+/* Règles de grammaire attribuée pour la construction de l'arbre abstrait */
 // Program
 //  - ($InterfaceDeclaration|$ClassDeclaration)+
 Program ::=
-    Program:program InterfaceDeclaration:interfaceDeclaration
-        {: 
-			program.add(interfaceDeclaration);
-			RESULT = program;
+    Program:program ProgramDeclaration:decl
+        {:
+			RESULT = 1;
 		:}
-    | Program:program ClassDeclaration:classDeclaration
-        {: 
-			program.add(classDeclaration);
-			RESULT = program;
-		:}
-    | InterfaceDeclaration:interfaceDeclaration
-        {: 
-			RESULT = new Program(interfaceDeclaration);
-		:}
-    | ClassDeclaration:classDeclaration
-        {:	
-			RESULT = new Program(classDeclaration);
+    | ProgramDeclaration:decl
+        {:
+			RESULT = 1;
 		:}
     ;
 
-// InterfaceDeclaration
-//  - "interface" $Declaration ("extends" $Instantiations)? "{" $MethodSignatures "}"
+ProgramDeclaration ::=
+    InterfaceDeclaration
+    | ClassDeclaration
+        {: RESULT = 1; :}
+    ;
+
 InterfaceDeclaration ::=
-    UL_Interface Declaration:declaration UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
+    UL_Interface ClassName UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
+    | UL_Interface ClassName UL_Extends TypeInstantiations UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
         {:
-			RESULT = new InterfaceDeclaration(declaration, signatures);
-		:}
-    | UL_Interface Declaration:declaration UL_Extends Instantiations:typeInstantiations UL_Crochet_Ouvrant MethodSignatures:signatures UL_Crochet_Fermant
-        {:
-			RESULT = new InterfaceDeclaration(declaration, typeInstantiations, signatures);
+			RESULT = 1;
 		:}
     ;
 
-// MethodSignatures
-//  - ($MethodSignature ";")*
-MethodSignatures ::=
-    MethodSignatures:signatures MethodSignature:signature UL_Point_Virgule
-        {:
-			signatures.add(signature);
-			RESULT = signatures;
-		:}
-    |
-        {:
-			RESULT = new LinkedList<Signature>();
-		:}
-    ;
-
-// MethodSignature
-//  - $NullableType $Identificateur "(" $Parameters? ")"
-MethodSignature ::=
-    NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-        {:
-			RESULT = new Signature(nullable, name);
-		:}
-    | NullableType:nullable UL_Identificateur:name UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante
-        {:
-			RESULT = new Signature(nullable, name, parameters);
-		:}
-    ;
-
-// NullableType
-//  - (void|$Type)
-NullableType ::=
-    UL_Type_Vide
-        {:
-			RESULT = AtomicType.VoidType;
-		:}
-    | Type:type
-        {:
-			RESULT = type;
-		:}
-    ;
-
-// Instantiations (typeInstantiation of generic types)
-//  - ($TypeInstantiation ",")* $TypeInstantiation
-Instantiations ::=
-    TypeInstantiation:typeInstantiation
-        {:
-			List<TypeInstantiation> inst = new LinkedList<>();
-			inst.add(typeInstantiation);
-			RESULT = inst;
-		:}
-    | Instantiations:typeInstantiations UL_Virgule TypeInstantiation:typeInstantiation
-        {:	
-			typeInstantiations.add(typeInstantiation);
-			RESULT = typeInstantiations;
-		:}
-    ;
-
-// TypeInstantiation
-//  - $UL_Identificateur ("<" $Instanciations ">")?
-TypeInstantiation ::=
-    UL_Identificateur:ident
-        {:
-			RESULT = new TypeInstantiation(ident);
-		:}
-    | UL_Identificateur:ident UL_Inferieur Instantiations:typeInstantiations UL_Superieur
-        {:
-			RESULT = new TypeInstantiation(ident, typeInstantiations);
-		:}
-    ;
-
-// ClassDeclaration
-//  - $ClassModifier $Declaration $Extension "{" $Definitions "}"
 ClassDeclaration ::=
-    ClassModifier:modifier UL_Class Declaration:declaration Extension:extension UL_Accolade_Ouvrante Definitions:definitions UL_Accolade_Fermante
-        {:
-			RESULT = new ClassDeclaration(modifier, declaration, extension, definitions);
-		:}
+    UL_Final UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+    | UL_Abstract UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+    | UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+        {: RESULT = 1; :}
     ;
 
-// ClassModifier
-//  - (final|abstract)?
-ClassModifier ::=
-    UL_Final
-        {:
-			RESULT = ClassModifier.Final;
-		:}
-    | UL_Abstract
-        {:
-			RESULT = ClassModifier.Abstract;
-		:}
-    |
-        {:
-			RESULT = null;
-		:}
+ClassName ::=
+    UL_Identificateur UL_Inferieur GenericTypes UL_Superieur
+    | UL_Identificateur
+        {: RESULT = 1; :}
     ;
 
-// Declaration
-//  - $UL_Identificateur ("<" GenericTypes ">")?
-Declaration ::=
-    UL_Identificateur:ident UL_Inferieur GenericTypes:generics UL_Superieur
-        {:
-			RESULT = new ClassName(ident, generics);
-		:}
-    | UL_Identificateur:ident
-        {:
-			RESULT = new ClassName(ident);
-		:}
-    ;
-
-// GenericTypes
-//  - ($GenericType ",")* $GenericType
 GenericTypes ::=
-    GenericTypes:generics UL_Virgule GenericType:generic
-        {:
-			generics.add(new ClassName(generic));
-			RESULT = generics;
-		:}
-    |
-        {:
-			RESULT = new LinkedList<ClassName>();
-		:}
+    GenericTypes UL_Virgule GenericType
+    | GenericType
+        {: RESULT = 1; :}
     ;
 
-// GenericType
-//  - $UL_Identificateur ("extends" $GenericInstantiations)?
 GenericType ::=
-    UL_Identificateur:ident
-        {:
-			RESULT = ident;
-		:}
-    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericTypeInstantiations
-        {:
-			RESULT = ident; // @TODO: use genericTypeInstantiations parameter //
-		:}
+    UL_Identificateur
+    | UL_Identificateur UL_Extends GenericInstantiations
+        {: RESULT = 1; :}
     ;
 
-// GenericInstantiations
-//  - ($TypeInstantiation ",")* $TypeInstantiation
-GenericInstantiations ::=
-    TypeInstantiation:typeInstantiation
-        {:
-			List<TypeInstantiation> classes = new LinkedList<>();
-			classes.add(typeInstantiation);
-			RESULT = classes;
-		:}
-    | GenericInstantiations:instantiationsList UL_Esperluette TypeInstantiation:typeInstantiation
-        {:
-			instantiationsList.add(typeInstantiation);
-			RESULT = instantiationsList;
-		:}
-    ;
-
-// Extension
-//  - ("extends" $Instantiations)? ("implements" $Instantiations)?
-Extension ::=
-    UL_Extends TypeInstantiation:typeInstantiation
-        {:
-			List<TypeInstantiation> inst = new LinkedList<>();
-			inst.add(typeInstantiation);
-			RESULT = inst;
-		:}
-    | UL_Extends TypeInstantiation:instExtends UL_Implements Instantiations:instImpls
-        {:
-			instImpls.add(instExtends);
-			RESULT = instImpls;
-		:}
-    | UL_Implements Instantiations:typeInstantiations
-        {:
-			RESULT = typeInstantiations;
-		:}
+InnerClassDefinitions ::=
+    InnerClassDefinitions:defs InnerClassDefinition:def
     |
-        {:
-			RESULT = null;
-		:}
+        {: RESULT = 1; :}
     ;
 
-// Definitions - methods and attributes definition inside a class
-//  - ($Definition)*
-Definitions ::=
-    Definitions:definitions Definition:definition
-        {:
-			definitions.add(definition);
-			RESULT = definitions;
-		:}
+// @TODO add attribute with inline definition
+InnerClassDefinition ::=
+    AccessModifier DefinitionModifier UL_Identificateur UL_Parenthese_Ouvrante ParametersOrNot UL_Parenthese_Fermante Bloc:body
+    | AccessModifier DefinitionModifier Type UL_Identificateur UL_Point_Virgule
+    //| AccessModifier DefinitionModifier Type UL_Identificateur UL_Egal Expression
+    | AccessModifier DefinitionModifier Type UL_Identificateur UL_Parenthese_Ouvrante ParametersOrNot UL_Parenthese_Fermante Bloc:body
+        {: RESULT = 1; :}
+    ;
+
+InnerInterfaceDefinitions ::=
+    InnerInterfaceDefinitions:defs InnerInterfaceDefinition:def UL_Point_Virgule
     |
-        {:
-			RESULT = new LinkedList<Definition>();
-		:}
-    ;
+        {: RESULT = 1; :};
 
-// Definition - definition of one method/attribute
-//  ("public"|"private") ($ClassConstructor|($DefinitionModifier ($Attribute|$Method)))
-Definition ::=
-    /*AccessModifier:access ClassConstructor:constructor
-        {:
-			constructor.setAccess(access);
-			RESULT = constructor ;
-		:}
-    | */AccessModifier:access DefinitionModifier:modifier AttributeDefinition:attributeDefinition
-        {:
-			attributeDefinition.setAccess(access);
-			attributeDefinition.setArguments(modifier);
-			RESULT = attributeDefinition;
-		:}
-    | AccessModifier:access DefinitionModifier:modifier MethodDefinition:methodDefinition
-        {:
-			methodDefinition.setAccess(access);
-			methodDefinition.setArguments(modifier);
-			RESULT = methodDefinition;
-		:}
-    ;
-
-// DefinitionModifier
-//  - "static"? "final"?
-DefinitionModifier ::=
-    UL_Static
-        {:
-			RESULT = DefinitionModifier.Static;
-		:}
-    | UL_Final
-        {:
-			RESULT = DefinitionModifier.Final;
-		:}
-    | UL_Static UL_Final
-        {:
-			RESULT = DefinitionModifier.Static_Final;
-		:}
+InnerInterfaceDefinition ::=
+    NullableType:nullable UL_Identificateur UL_Parenthese_Ouvrante ParametersOrNot UL_Parenthese_Fermante
     |
-        {:
-			RESULT = null;
-		:}
+        {: RESULT = 1; :}
     ;
 
-// ClassConstructor
-// - $UL_Identificateur "(" $Parameters ")"
-ClassConstructor ::=
-    UL_Identificateur:ident UL_Parenthese_Ouvrante UL_Parenthese_Fermante Bloc:body
-        {:
-			RESULT = new Constructor(ident, body);
-		:}
-    | UL_Identificateur:ident UL_Parenthese_Ouvrante Parameters:parameters UL_Parenthese_Fermante Bloc:body
-        {:
-			RESULT = new Constructor(ident, parameters, body);
-		:}
-    ;
-
-// AccessModifier
-//  - (public|private)
 AccessModifier ::=
     UL_Public
-        {:
-			RESULT = AccessModifier.Public;
-		:}
+        {: RESULT = 1; :}
     | UL_Private
-        {:
-			RESULT = AccessModifier.Private;
-		:}
+        {: RESULT = 1; :}
     ;
 
-// AttributeDefinition
-//  - $Type $UL_Identificateur ";"
-AttributeDefinition ::=
-    Type:type UL_Identificateur:name UL_Point_Virgule
-        {:
-			RESULT = new AttributeDefinition(type, name);
-		:}
+DefinitionModifier ::=
+    UL_Static
+    | UL_Final
+    | UL_Static UL_Final
+    |
+        {: RESULT = 1; :}
     ;
 
-// MethodDefinition
-//  - "abstract"? $MethodSignature $Bloc
-MethodDefinition ::=
-    MethodSignature:methodSignature Bloc:body
-        {:
-			RESULT = new MethodDefinition(methodSignature, body, false);
-		:}
-    | UL_Abstract MethodSignature:methodSignature Bloc:body
-        {:
-			RESULT = new MethodDefinition(methodSignature, body, true);
-		:}
+TypeInstantiations ::=
+    TypeInstantiation
+    | TypeInstantiations UL_Virgule TypeInstantiation
+        {: RESULT = 1; :}
+    ;
+TypeInstantiation ::=
+    UL_Identificateur:ident
+    | UL_Identificateur:ident UL_Inferieur TypeInstantiations UL_Superieur
+        {: RESULT = 1; :}
     ;
 
-// Type
-//  - $NonArrayType ("[]")?
-Type ::=
-    NonArrayType:type
-        {:
-			RESULT = type;
-		:}
-    | TypeInstantiation
-        {:
-			RESULT = AtomicType.VoidType;
-		:}
-    | NonArrayType:type UL_Crochet_Ouvrant UL_Crochet_Fermant
-        {:
-			RESULT = type;
-		:}
+NullableType ::=
+    UL_Type_Vide
+        {: RESULT = AtomicType.VoidType; :}
+    | Type:type
+        {: RESULT = type; :}
     ;
 
-// NonArrayType
-//  - (bool|character|String|int|$Instanciation)
-NonArrayType ::=
-    UL_Type_Entier
-        {:
-			RESULT = AtomicType.IntegerType;
-		:}
-    | UL_Type_Booleen
-        {: 
-			RESULT = AtomicType.BooleanType; 
-		:}
-    | UL_Type_Caractere
-        {: 
-			RESULT = AtomicType.CharacterType;
-		:}
-    | UL_Type_Chaine
-        {: 
-			RESULT = AtomicType.StringType;
-		:}
+// BLOCK
+Bloc ::= UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
+			{:
+				RESULT = new Block( instructions );
+			:}
+		;
+
+Atomique ::= UL_Type_Booleen
+			{:
+				RESULT = AtomicType.BooleanType;
+			:}
+		|	UL_Type_Caractere
+			{:
+				RESULT = AtomicType.CharacterType;
+			:}
+		|	UL_Type_Chaine
+			{:
+				RESULT = AtomicType.StringType;
+			:}
+		|	UL_Type_Entier
+			{:
+				RESULT = AtomicType.IntegerType;
+			:}
+		;
+
+Type ::= Atomique:atomique
+			{:
+				RESULT = atomique;
+			:}
+		| UL_Identificateur:nom
+			{:
+				RESULT = new NamedType( nom );
+			:}
+		;
+
+Instructions ::= Instructions:instructions Instruction:instruction
+				{:
+					instructions.add( instruction );
+					RESULT = instructions;
+				:}
+			|
+				{: RESULT = new LinkedList<Instruction>(); :}
+			;
+
+ParametersOrNot ::=
+    Parameters:parameters
+        {: RESULT = parameters; :}
+    |
+        {: RESULT = new LinkedList<ParameterDeclaration>(); :}
     ;
 
-Identifiant ::=
-	UL_Identificateur:nom
-		{:
-			RESULT = new Pair<String,PartialType>( nom, null );
-		:}
-	| Identifiant:identifiant UL_Crochet_Ouvrant UL_Crochet_Fermant
-		{:
-			if (identifiant.getRight() == null) {
-				identifiant.setRight( new PartialArrayType() );
-			} else {
-				identifiant.getRight().enrich(new PartialArrayType());
-			}
-			RESULT = identifiant;
-		:}
-	| UL_Parenthese_Ouvrante Identifiant:identifiant UL_Parenthese_Fermante
-		{:
-			RESULT = identifiant;
-		:}
-	;
+Parameters ::= Parameters:parameters UL_Virgule Type:type Identifiant:identifiant
+				{:
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
+					parameters.add( new ParameterDeclaration( identifiant.getLeft(), _type) );
+					RESULT = parameters;
+				:}
+			| Type:type Identifiant:identifiant
+				{:
+					List<ParameterDeclaration> _parameters = new LinkedList<ParameterDeclaration>();
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
+					_parameters.add( new ParameterDeclaration( identifiant.getLeft(), _type) );
+					RESULT = _parameters;
+				:}
+			;
 
-// Bloc
-//  - "{" $Instructions* "}"
-Bloc ::=
-    UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
-        {:
-			RESULT = new Block(instructions);
-		:}
-    ;
+Declaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
+				{:
+					Type _type = identifiant.getRight();
+					if (_type == null) {
+						_type = type;
+					} else {
+						_type = ((PartialType)_type).complete( type );
+ 					}
+					RESULT = new VariableDeclaration( identifiant.getLeft(), _type, valeur);
+				:}
+			;
 
+Instruction ::= Declaration:declaration
+				{:
+					RESULT = declaration;
+				:}
+			| Affectable:affectable UL_Egal Expression:expression UL_Point_Virgule
+				{:
+					RESULT = new Assignment( affectable, expression);
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante  UL_Point_Virgule
+             	{:
+					RESULT = new FunctionCall( nom, parametres );
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante  UL_Point_Virgule
+             	{:
+					List<Expression> _parametres = new LinkedList<Expression>();
+					RESULT = new FunctionCall( nom, _parametres );
+				:}
+			| UL_Afficher Expression:expression UL_Point_Virgule
+				{:
+					RESULT = new Printer( expression );
+				:}
+			| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors UL_Sinon Bloc:sinon
+				{:
+					RESULT = new Conditional( condition, alors, sinon);
+				:}
+			| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors
+				{:
+					RESULT = new Conditional( condition, alors);
+				:}
+			| UL_Tant_Que UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:corps
+				{:
+					RESULT = new Iteration( condition, corps);
+				:}
+			| UL_Retour Expression:expression UL_Point_Virgule
+				{:
+					RESULT = new Return( expression);
+				:}
+			;
 
-Instructions ::= 
-	Instructions:instructions Instruction:instruction
-		{:
-			instructions.add(instruction);
-			RESULT = instructions;
-		:}
-	|
-		{:
-			RESULT = new LinkedList<Instruction>();
-		:}
-	;
+Expressions ::= Expressions:expressions UL_Virgule Expression:expression
+				{:
+					expressions.add( expression );
+					RESULT = expressions;
+				:}
+            | Expression:expression
+            		{:
+					List<Expression> _expressions = new LinkedList<Expression>();
+					_expressions.add( expression );
+					RESULT = _expressions;
+				:}
+            ;
 
-Parameters ::= 
-	Parameters:parameters UL_Virgule Type:type Identifiant:identifiant
-		{:
-			Type _type = identifiant.getRight();
-			if (_type == null) {
-				_type = type;
-			} else {
-				_type = ((PartialType)_type).complete( type );
- 			}
-			parameters.add(new ParameterDeclaration(identifiant.getLeft(), _type));
-			RESULT = parameters;
-		:}
-	| Type:type Identifiant:identifiant
-		{:
-			Type _type = identifiant.getRight();
-			if (_type == null) {
-				_type = type;
-			} else {
-				_type = ((PartialType)_type).complete( type );
- 			}
-			List<ParameterDeclaration> parameters = new LinkedList<ParameterDeclaration>();
-			parameters.add(new ParameterDeclaration(identifiant.getLeft(), _type));
-			RESULT = parameters;
-		:}
-	;
+Affectable ::= UL_Identificateur:nom
+				{:
+					RESULT = new VariableAssignment( nom );
+				:}
+			| Affectable:tableau UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
+				{:
+					RESULT = new ArrayAssignment( tableau, indice);
+				:}
+			| UL_Parenthese_Ouvrante Affectable:affectable UL_Parenthese_Fermante
+				{:
+					RESULT = affectable;
+				:}
+			| Affectable:enregistrement UL_Point UL_Identificateur:etiquette
+				{:
+					RESULT = new FieldAssignment( enregistrement, etiquette);
+				:}
+			| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+             	{:
+					// TODO
+				:}
+			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+             	{:
+					// TODO
+				:}
+			;
 
-VarDeclaration ::=
-	Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
-		{:
-			Type _type = identifiant.getRight();
-			if (_type == null) {
-				_type = type;
-			} else {
-				_type = ((PartialType)_type).complete( type );
-			}
-			RESULT = new VariableDeclaration( identifiant.getLeft(), _type, valeur);
-		:}
-	;
-
-Instruction ::= 
-	VarDeclaration:declaration
-		{:
-			RESULT = declaration;
-		:}
-	| Affectable:affectable UL_Egal Expression:expression UL_Point_Virgule
-		{:
-			RESULT = new Assignment( affectable, expression);
-		:}
-	| UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall(object, method, parameters);
-		:}
-	| UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall(object, method, new LinkedList<Expression>());
-		:}
-	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall("this", method, parameters);
-		:}
-	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall("this", method, new LinkedList<Expression>());
-		:}
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante  UL_Point_Virgule
-     	{:
-			RESULT = new FunctionCall(nom, parameters);
-		:}
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante  UL_Point_Virgule
-     	{:
-			List<Expression> parameters = new LinkedList<Expression>();
-			RESULT = new FunctionCall(nom, parameters);
-		:}
-	| UL_Afficher Expression:expression UL_Point_Virgule
-		{:
-			RESULT = new Printer( expression );
-		:}
-	| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors UL_Sinon Bloc:sinon
-		{:
-			RESULT = new Conditional( condition, alors, sinon);
-		:}
-	| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors
-		{:
-			RESULT = new Conditional( condition, alors);
-		:}
-	| UL_Tant_Que UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:corps
-		{:
-			RESULT = new Iteration( condition, corps);
-		:}
-	| UL_Retour Expression:expression UL_Point_Virgule
-		{:
-			RESULT = new Return( expression);
-		:}
-	;
-
-Expressions ::=
-	Expressions:expressions UL_Virgule Expression:expression
-		{:
-			expressions.add( expression );
-			RESULT = expressions;
-		:}
-    | Expression:expression
-  		{:
-			List<Expression> _expressions = new LinkedList<Expression>();
-			_expressions.add( expression );
-			RESULT = _expressions;
-		:}
-    ;
-
-Affectable ::=
-	UL_Identificateur:nom
-		{:
-			RESULT = new VariableAssignment( nom );
-		:}
-	| Affectable:tableau UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
-		{:
-			RESULT = new ArrayAssignment( tableau, indice);
-		:}
-	| UL_Parenthese_Ouvrante Affectable:affectable UL_Parenthese_Fermante
-		{:
-			RESULT = affectable;
-		:}
-	| Affectable:enregistrement UL_Point UL_Identificateur:etiquette
-		{:
-			RESULT = new FieldAssignment( enregistrement, etiquette);
-		:}
-	| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
-		{:
-			// TODO
-		:}
-	| Affectable:enregistrement UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-		{:
-			// TODO
-		:}
-	/* EN ATTENTE DE REPONSE
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
-       	{:
-			// TODO
-		:}
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-       	{:
-			// TODO
-		:}
-	*/
-	;
-
-Expression ::=
-	/* Affectable:affectable UL_Egal Expression:expression
-		{:
-			RESULT = new Assignment( affectable, expression);
-		:}
-	| */ Expression:gauche UL_Double_Egal Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Equals, droite);
-		:}
-	| Expression:gauche UL_Exclamation_Egal Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Different, droite);
-		:}
-	| Expression:gauche UL_Inferieur Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Lesser, droite);
-		:}
-	| Expression:gauche UL_Superieur Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Greater, droite);
-		:}
-	| Expression:gauche UL_Inferieur_Egal Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.LesserOrEqual, droite);
-		:}
-	| Expression:gauche UL_Superieur_Egal Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.GreaterOrEqual, droite);
-		:}
-	| Expression:gauche UL_Double_Barre Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Or, droite);
-		:}
-    | Expression:gauche UL_Double_Esperluette Expression:droite
-       	{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.And, droite);
-		:}
-	| Expression:gauche UL_Plus Expression:droite
-		{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Add, droite);
-		:}
-    | Expression:gauche UL_Moins Expression:droite
-      	{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Substract, droite);
-		:}
-    | Expression:gauche UL_Asterisque Expression:droite
-      	{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Multiply, droite);
-		:}
-	| Expression:gauche UL_Oblique Expression:droite
-       	{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Divide, droite);
-		:}
-	| Expression:gauche UL_Pour_Cent Expression:droite
-       	{:
-			RESULT = new BinaryExpression( gauche, BinaryOperator.Modulo, droite);
-		:}
-    | UL_Moins Expression:expression
-       	{:
-			RESULT = new UnaryExpression( UnaryOperator.Opposite, expression);
-		:}
-    | UL_Point_Exclamation Expression:expression
-       	{:
-			RESULT = new UnaryExpression( UnaryOperator.Negate, expression);
-		:}
-	| Expression:expression UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
-		{:
-			RESULT = new ArrayAccess( expression, indice );
-		:}
-	| Expression:expression UL_Point UL_Identificateur:etiquette
-		{:
-			RESULT = new FieldAccess( expression, etiquette );
-		:}
-	| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
-		{:
-			RESULT = new MethodCall(object, method, parameters);
-		:}
-	| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-		{:
-			RESULT = new MethodCall(object, method, new LinkedList<Expression>());
-		:}
-	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall("this", method, parameters);
-		:}
-	| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
-	    {:
-		    RESULT = new MethodCall("this", method, new LinkedList<Expression>());
-		:}
-	| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
-		{:
-			RESULT = new ConditionalExpression( condition, alors, sinon);
-		:}
-	| UL_Parenthese_Ouvrante Expression:expression UL_Parenthese_Fermante
-       	{:
-			RESULT = expression;
-		:}
-	| UL_Parenthese_Ouvrante UL_Identificateur:type UL_Parenthese_Fermante Expression:expression
-       	{:
-			RESULT = new TypeCast( expression, type);
-		:}
-	| UL_Accolade_Ouvrante Expressions:expressions UL_Accolade_Fermante
-       	{:
-			RESULT = new Sequence(expressions);
-		:}
-	| UL_Identificateur:nom
-       	{:
-			RESULT = new IdentifierAccess(nom);
-		:}
-	// TODO : Should accept an expression as function
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
-       	{:
-			RESULT = new FunctionCall(nom, parameters);
-		:}
-	// TODO : Should accept an expression as function
-	| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-       	{:
-			List<Expression> parameters = new LinkedList<Expression>();
-			RESULT = new FunctionCall(nom, parameters);
-		:}
-	| UL_Nombre_Entier:entier
-       	{:
-			RESULT = new IntegerValue(entier);
-		:}
-	| UL_Vrai
-       	{:
-			RESULT = BooleanValue.True;
-		:}
-	| UL_Faux
-       	{:
-			RESULT = BooleanValue.False;
-		:}
-	| UL_Nul
-       	{:
-			RESULT = NullValue.Null;
-		:}
-	| UL_Caractere:caractere
-       	{:
-			RESULT = new CharacterValue(caractere);
-		:}
-	| UL_Chaine:chaine
-       	{:
-			RESULT = new StringValue(chaine);
-		:}
-	| UL_Nouveau Type:type UL_Crochet_Ouvrant Expression:taille UL_Crochet_Fermant
-       	{:
-			RESULT = new ArrayAllocation(type, taille);
-		:}
-	| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
-       	{:
-			RESULT = new ObjectInstantiation(type, parameters);
-		:}
-    ;
+Expression ::= /* Affectable:affectable UL_Egal Expression:expression
+				{:
+					RESULT = new Assignment( affectable, expression);
+				:}
+			| */ Expression:gauche UL_Double_Egal Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Equals, droite);
+				:}
+			| Expression:gauche UL_Exclamation_Egal Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Different, droite);
+				:}
+			| Expression:gauche UL_Inferieur Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Lesser, droite);
+				:}
+			| Expression:gauche UL_Superieur Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Greater, droite);
+				:}
+			| Expression:gauche UL_Inferieur_Egal Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.LesserOrEqual, droite);
+				:}
+			| Expression:gauche UL_Superieur_Egal Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.GreaterOrEqual, droite);
+				:}
+			| Expression:gauche UL_Double_Barre Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Or, droite);
+				:}
+            | Expression:gauche UL_Double_Esperluette Expression:droite
+             	{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.And, droite);
+				:}
+			| Expression:gauche UL_Plus Expression:droite
+				{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Add, droite);
+				:}
+            | Expression:gauche UL_Moins Expression:droite
+             	{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Substract, droite);
+				:}
+            | Expression:gauche UL_Asterisque Expression:droite
+             	{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Multiply, droite);
+				:}
+			| Expression:gauche UL_Oblique Expression:droite
+             	{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Divide, droite);
+				:}
+			| Expression:gauche UL_Pour_Cent Expression:droite
+             	{:
+					RESULT = new BinaryExpression( gauche, BinaryOperator.Modulo, droite);
+				:}
+            | UL_Moins Expression:expression
+             	{:
+					RESULT = new UnaryExpression( UnaryOperator.Opposite, expression);
+				:}
+            | UL_Point_Exclamation Expression:expression
+             	{:
+					RESULT = new UnaryExpression( UnaryOperator.Negate, expression);
+				:}
+			| Expression:expression UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
+				{:
+					RESULT = new ArrayAccess( expression, indice );
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette
+				{:
+					RESULT = new FieldAccess( expression, etiquette );
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+				{:
+					// TODO
+				:}
+			| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
+				{:
+					RESULT = new ConditionalExpression( condition, alors, sinon);
+				:}
+			| UL_Parenthese_Ouvrante Expression:expression UL_Parenthese_Fermante
+             	{:
+					RESULT = expression;
+				:}
+			| UL_Parenthese_Ouvrante UL_Identificateur:type UL_Parenthese_Fermante Expression:expression
+             	{:
+					RESULT = new TypeCast( expression, type);
+				:}
+			| UL_Accolade_Ouvrante Expressions:expressions UL_Accolade_Fermante
+             	{:
+					RESULT = new Sequence( expressions );
+				:}
+			| UL_Identificateur:nom
+             	{:
+					RESULT = new IdentifierAccess( nom );
+				:}
+			| // TODO : Should accept an expression as function
+				UL_Identificateur:nom	UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+             	{:
+					RESULT = new FunctionCall( nom, parametres );
+				:}
+			| // TODO : Should accept an expression as function
+				UL_Identificateur:nom	UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+             	{:
+					List<Expression> _parametres = new LinkedList<Expression>();
+					RESULT = new FunctionCall( nom, _parametres );
+				:}
+			| UL_Nombre_Entier:entier
+             	{:
+					RESULT = new IntegerValue( entier );
+				:}
+			| UL_Vrai
+             	{:
+					RESULT = BooleanValue.True;
+				:}
+			| UL_Faux
+             	{:
+					RESULT = BooleanValue.False;
+				:}
+			| UL_Nul
+             	{:
+					RESULT = NullValue.Null;
+				:}
+			| UL_Caractere:caractere
+             	{:
+					RESULT = new CharacterValue( caractere );
+				:}
+			| UL_Chaine:chaine
+             	{:
+					RESULT = new StringValue( chaine );
+				:}
+			| UL_Nouveau Type:type UL_Crochet_Ouvrant Expression:taille UL_Crochet_Fermant
+             	{:
+					RESULT = new ArrayAllocation( type, taille );
+				:}
+			| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+             	{:
+					RESULT = new PointerAllocation( type );
+				:}
+			| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+             	{:
+					// TODO
+				:}
+            ;
