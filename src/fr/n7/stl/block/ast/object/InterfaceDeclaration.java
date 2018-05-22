@@ -1,7 +1,6 @@
 package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
-import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
@@ -13,22 +12,18 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InterfaceDeclaration implements Instruction {
-	
-	/** Class name of the interface. */
-	private ClassName name;
+public class InterfaceDeclaration extends ProgramDeclaration {
 	
 	/** List of the methods signatures. */
 	private List<Signature> signatures = new LinkedList<Signature>();
 	
-	/** Extended class. */
-	private List<TypeInstantiation> extendedClass = new LinkedList<TypeInstantiation>();
 	
 	public InterfaceDeclaration(ClassName _name, List<Signature> _signatures) {
-		this.name = _name;
+		this.className = _name;
 		for (Signature s : _signatures) {
 			this.signatures.add(s);
 		}
+		this.extendedClass = new LinkedList<TypeInstantiation>();
 	}
 	
 	public InterfaceDeclaration(ClassName _declaration, List<TypeInstantiation> _Type_instantiations, List<Signature> _signatures) {

@@ -13,9 +13,9 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 public class Program implements ASTNode {
 
-    private List<ASTNode> declarations = new LinkedList<>();
+    private List<ProgramDeclaration> declarations = new LinkedList<>();
 
-    public Program(ASTNode declaration) {
+    public Program(ProgramDeclaration declaration) {
         this.declarations.add(declaration);
     }
 
@@ -23,7 +23,7 @@ public class Program implements ASTNode {
      *
      * @param declaration
      */
-    public void add(ASTNode declaration) {
+    public void add(ProgramDeclaration declaration) {
     	this.declarations.add(declaration);
     }
 
@@ -54,7 +54,7 @@ public class Program implements ASTNode {
     // @TODO
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-        for (ASTNode declaration: declarations) {
+        for (ProgramDeclaration declaration: declarations) {
             if (! declaration.resolve(scope))
                 return false;
         }

@@ -1,7 +1,6 @@
 package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
-import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
@@ -12,20 +11,16 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import java.util.List;
 
-public class ClassDeclaration implements Instruction {
+public class ClassDeclaration extends ProgramDeclaration {
 	
 	private ClassModifier modifier;
-	
-	private ClassName name;
-	
-	private List<TypeInstantiation> extension;
-	
+
 	private List<Definition> definitions;
 	
 	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<TypeInstantiation> _extension, List<Definition> _definitions) {
 		this.modifier = _modifier;
-		this.name = _name;
-		this.extension = _extension;
+		this.className = _name;
+		this.extendedClass = _extension;
 		this.definitions = _definitions;
 	}
 
