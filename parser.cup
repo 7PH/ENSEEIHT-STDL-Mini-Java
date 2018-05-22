@@ -145,7 +145,7 @@ Instructions ::= Instructions:instructions Instruction:instruction
 				{: RESULT = new LinkedList<Instruction>(); :}
 			;
 
-Parameters ::= Parameters:parameters UL_Virgule Type:type UL_Identificateur:identifiant
+Parameters ::= Parameters:parameters UL_Virgule Type:type Identifiant:identifiant
 				{:
 					Type _type = identifiant.getRight();
 					if (_type == null) {
@@ -358,7 +358,7 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				:}
 			| UL_Parenthese_Ouvrante UL_Identificateur:type UL_Parenthese_Fermante Expression:expression
              	{:
-					RESULT = new TypeConversion( expression, type);
+					RESULT = new TypeCast( expression, type);
 				:}
 			| UL_Accolade_Ouvrante Expressions:expressions UL_Accolade_Fermante
              	{:
