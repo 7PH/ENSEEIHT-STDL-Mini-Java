@@ -1,5 +1,6 @@
 package fr.n7.stl.block.ast.object;
 
+import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -22,16 +23,16 @@ public class ObjectInstantiation implements Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-        return false;
+    	throw new SemanticsUndefinedException("resolve method is undefined for ObjectInstantiation.");
     }
 
     @Override
     public Type getType() {
-        return null;
+    	throw new SemanticsUndefinedException("getType method is undefined for ObjectInstantiation.");
     }
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-        return null;
+    	throw new SemanticsUndefinedException("getCode method is undefined for ObjectInstantiation.");
     }
 }

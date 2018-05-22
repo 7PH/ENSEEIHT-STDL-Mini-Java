@@ -55,10 +55,8 @@ public class Signature implements Declaration {
 	@Override
 	public String toString() {
 		String _result = "";
-		
 		_result += this.type + " ";
 		_result += this.name + "(";
-		
 		boolean putComaFirst = false;
 		for (ParameterDeclaration p : this.parameters) {
 			if (putComaFirst) {
@@ -66,10 +64,7 @@ public class Signature implements Declaration {
 			}
 			_result += p;  
 		}
-		
 		_result += ")";
-		
-		
 		return _result;
 	}
 

@@ -1,5 +1,6 @@
 package fr.n7.stl.block.ast.object;
 
+import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -35,32 +36,32 @@ public class MethodCall implements Instruction, Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-        return false;
+    	throw new SemanticsUndefinedException("resolve method is undefined for MethodCall.");
     }
 
     @Override
     public Type getType() {
-        return null;
+    	throw new SemanticsUndefinedException("getType method is undefined for MethodCall.");
     }
 
     @Override
     public boolean checkType() {
-        return false;
+    	throw new SemanticsUndefinedException("checkType method is undefined for MethodCall.");
     }
 
     @Override
     public int allocateMemory(Register register, int offset) {
-        return 0;
+    	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodCall.");
     }
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-        return null;
+    	throw new SemanticsUndefinedException("getCode method is undefined for MethodCall.");
     }
 
     @Override
     public Type getReturnType() {
-        return null;
+    	throw new SemanticsUndefinedException("getReturnType method is undefined for MethodCall.");
     }
 
     @Override
