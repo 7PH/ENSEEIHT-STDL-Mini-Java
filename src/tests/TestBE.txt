@@ -1,0 +1,8 @@
+class Circle {
+    public Circle bar;
+    public Circle() { }
+    public Circle foo() { return bar; }
+}
+final class abc { }
+abstract class abc { }
+interface issou { }
