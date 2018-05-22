@@ -25,9 +25,11 @@ public class TypeInstantiation implements Type {
 
 	@Override
 	public boolean equalsTo(Type other) {
-        return
-                other instanceof TypeInstantiation
-                && ((TypeInstantiation) other).name.equals(name);
+        boolean b = false;
+        if (other instanceof TypeInstantiation) {
+        	b = ((TypeInstantiation) other).name.equals(name);
+        }
+        return b;
     }
 
 	@Override
