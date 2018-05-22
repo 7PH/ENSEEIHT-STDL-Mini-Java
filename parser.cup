@@ -157,6 +157,7 @@ Program ::=
 
 ProgramDeclaration ::=
     InterfaceDeclaration:decl
+        {: RESULT = decl; :}
     | ClassDeclaration:decl
         {: RESULT = decl; :}
     ;
@@ -173,7 +174,7 @@ InterfaceDeclaration ::=
     ;
 
 ClassDeclaration ::=
-    ClassModifier:modifier ClassName:className ClassExtension:classExtension UL_Accolade_Ouvrante InnerClassDefinitions:definitions UL_Accolade_Fermante
+    ClassModifier:modifier UL_Class ClassName:className ClassExtension:classExtension UL_Accolade_Ouvrante InnerClassDefinitions:definitions UL_Accolade_Fermante
         {: RESULT = new ClassDeclaration(modifier, className, classExtension, definitions); :}
     ;
 
@@ -224,7 +225,7 @@ GenericTypes ::=
     | GenericType:genericType
         {:
             RESULT = new LinkedList<ClassName>();
-            RESULT.add(genericType);
+            RESULT.add(new ClassName(genericType));
         :}
     ;
 
@@ -243,19 +244,19 @@ InnerClassDefinitions ::=
         {: RESULT = new LinkedList<>(); :}
     ;
 
-// @TODO add attribute with inline definition
+// @TODO abstract methods - add attribute with inline definition
 InnerClassDefinition ::=
-    AccessModifier:accessModifier DefinitionModifier:definitionModifier InnerClassDefinitionWithoutModifier:def
+    AccessModifier:accessModifier DefinitionModifier:definitionModifier InnerClassDefinitionWithoutModifier:definition
         {:
-            def.setAccess(accessModifier);
-            def.setModifier(definitionModifier);
-            RESULT = def;
+            //definition.setAccess(accessModifier);
+            //definition.setModifier(definitionModifier);
+            RESULT = definition;
         :}
     ;
 
-// @TODO abstract methods
 InnerClassDefinitionWithoutModifier ::=
     UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
+        {: RESULT = new Constructor(ident, parameters, body); :}
     | Type:type UL_Identificateur:ident UL_Point_Virgule
         {: RESULT = new AttributeDefinition(type, ident); :}
     | Type:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
