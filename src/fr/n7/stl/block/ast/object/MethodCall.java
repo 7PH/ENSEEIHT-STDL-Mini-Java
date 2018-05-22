@@ -17,8 +17,6 @@ import java.util.List;
 
 public class MethodCall implements Instruction, Expression {
 
-    private String identifier;
-
     private Expression objectIdentifier;
 
     private String method;
@@ -29,12 +27,6 @@ public class MethodCall implements Instruction, Expression {
 
     public MethodCall(Expression object, String method, List<Expression> parameters) {
         this.objectIdentifier = object;
-        this.method = method;
-        this.parameters = parameters;
-    }
-
-    public MethodCall(String identifier, String method, List<Expression> parameters) {
-        this.identifier = identifier;
         this.method = method;
         this.parameters = parameters;
     }
@@ -66,14 +58,14 @@ public class MethodCall implements Instruction, Expression {
     				b &= parameterType.compatibleWith(declaredType);
     				if (!b) {
     				Logger.error("Parameter " + parameterType.toString() + " use in "
-    							+ this.identifier + " method is not compatible with declared one : " + declaredParameters + ".");
+    							+ this.objectIdentifier + " method is not compatible with declared one : " + declaredParameters + ".");
     				}
     			} else {
-    				Logger.error("Parameter " + parameterType.toString() + " use in " + this.identifier + "method is an ErrorType.");
+    				Logger.error("Parameter " + parameterType.toString() + " use in " + this.objectIdentifier + "method is an ErrorType.");
     			}
     		}	
     	} else {
-    		Logger.error("Call of " + this.identifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
+    		Logger.error("Call of " + this.objectIdentifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
     	}
     	return b;
     }
@@ -95,6 +87,6 @@ public class MethodCall implements Instruction, Expression {
 
     @Override
     public String toString() {
-        return objectIdentifier + "." + method + "(" + parameters + ");";
+        return this.objectIdentifier + "." + this.method + "(" + this.parameters + ");";
     }
 }
