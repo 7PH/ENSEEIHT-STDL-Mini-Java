@@ -110,6 +110,13 @@ non terminal Integer                    AccessModifier;
 non terminal Integer                    TypeInstantiations;
 non terminal Integer                    TypeInstantiation;
 non terminal Integer                    DefinitionModifier;
+non terminal Integer                    ClassName;
+non terminal Integer                    GenericTypes;
+non terminal Integer                    GenericType;
+non terminal Integer                    GenericInstantiations;
+non terminal Integer                    InnerInterfaceDefinitions;
+non terminal Integer                    InnerInterfaceDefinition;
+non terminal Type                       NullableType;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -150,17 +157,35 @@ ProgramDeclaration ::=
     ;
 
 InterfaceDeclaration ::=
-    UL_Interface UL_Identificateur:ident UL_Accolade_Ouvrante /* @TODO */ UL_Accolade_Fermante
-    | UL_Interface UL_Identificateur:ident UL_Extends TypeInstantiations UL_Accolade_Ouvrante /* @TODO */ UL_Accolade_Fermante
+    UL_Interface ClassName UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
+    | UL_Interface ClassName UL_Extends TypeInstantiations UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
         {:
 			RESULT = 1;
 		:}
     ;
 
 ClassDeclaration ::=
-    UL_Final UL_Class UL_Identificateur:ident UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
-    | UL_Abstract UL_Class UL_Identificateur:ident UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
-    | UL_Class UL_Identificateur:ident UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+    UL_Final UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+    | UL_Abstract UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+    | UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
+        {: RESULT = 1; :}
+    ;
+
+ClassName ::=
+    UL_Identificateur UL_Inferieur GenericTypes UL_Superieur
+    | UL_Identificateur
+        {: RESULT = 1; :}
+    ;
+
+GenericTypes ::=
+    GenericTypes UL_Virgule GenericType
+    | GenericType
+        {: RESULT = 1; :}
+    ;
+
+GenericType ::=
+    UL_Identificateur
+    | UL_Identificateur UL_Extends GenericInstantiations
         {: RESULT = 1; :}
     ;
 
@@ -170,7 +195,7 @@ InnerClassDefinitions ::=
         {: RESULT = 1; :}
     ;
 
-// @TODO add methods/attribute
+// @TODO add attribute with inline definition
 InnerClassDefinition ::=
     AccessModifier DefinitionModifier UL_Identificateur UL_Parenthese_Ouvrante ParametersOrNot UL_Parenthese_Fermante Bloc:body
     | AccessModifier DefinitionModifier Type UL_Identificateur UL_Point_Virgule
@@ -179,8 +204,17 @@ InnerClassDefinition ::=
         {: RESULT = 1; :}
     ;
 
-// AccessModifier
-//  - (public|private)
+InnerInterfaceDefinitions ::=
+    InnerInterfaceDefinitions:defs InnerInterfaceDefinition:def UL_Point_Virgule
+    |
+        {: RESULT = 1; :};
+
+InnerInterfaceDefinition ::=
+    NullableType:nullable UL_Identificateur UL_Parenthese_Ouvrante ParametersOrNot UL_Parenthese_Fermante
+    |
+        {: RESULT = 1; :}
+    ;
+
 AccessModifier ::=
     UL_Public
         {: RESULT = 1; :}
@@ -188,8 +222,6 @@ AccessModifier ::=
         {: RESULT = 1; :}
     ;
 
-// DefinitionModifier
-//  - "static"? "final"?
 DefinitionModifier ::=
     UL_Static
     | UL_Final
@@ -198,8 +230,6 @@ DefinitionModifier ::=
         {: RESULT = 1; :}
     ;
 
-
-/** TYPES ***********************************/
 TypeInstantiations ::=
     TypeInstantiation
     | TypeInstantiations UL_Virgule TypeInstantiation
@@ -210,8 +240,13 @@ TypeInstantiation ::=
     | UL_Identificateur:ident UL_Inferieur TypeInstantiations UL_Superieur
         {: RESULT = 1; :}
     ;
-/********************************************/
 
+NullableType ::=
+    UL_Type_Vide
+        {: RESULT = AtomicType.VoidType; :}
+    | Type:type
+        {: RESULT = type; :}
+    ;
 
 // BLOCK
 Bloc ::= UL_Accolade_Ouvrante Instructions:instructions UL_Accolade_Fermante
