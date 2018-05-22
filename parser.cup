@@ -562,7 +562,7 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
 				{:
 					RESULT = new MethodCall("this", method, new LinkedList<Expression>() );
-				}
+				:}
 			| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
 				{:
 					RESULT = new ConditionalExpression( condition, alors, sinon );
