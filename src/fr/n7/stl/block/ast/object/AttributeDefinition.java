@@ -1,12 +1,14 @@
 package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 public class AttributeDefinition extends Definition {
 
@@ -14,9 +16,18 @@ public class AttributeDefinition extends Definition {
 	
 	private String name;
 	
+	private Expression valeur;
+	
 	public AttributeDefinition(Type _type, String _name) {
 		this.type = _type;
 		this.name = _name;
+		this.valeur = null;
+	}
+	
+	public AttributeDefinition(Type _type, String _name, Expression _valeur) {
+		this.type = _type;
+		this.name = _name;
+		this.valeur = _valeur;
 	}
 
 	@Override
@@ -46,7 +57,11 @@ public class AttributeDefinition extends Definition {
 
 	@Override
 	public boolean checkType() {
-    	throw new SemanticsUndefinedException("checkType method is undefined for AttributeDefinition.");
+		boolean b = this.valeur.getType().compatibleWith(this.type);
+		if (!b) {
+			Logger.error(this.valeur.toString() + " is not compatible with " + this.type.toString());
+		}
+		return b;
 	}
 
 	@Override

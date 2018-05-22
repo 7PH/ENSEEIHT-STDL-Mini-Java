@@ -8,15 +8,19 @@ import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 public class Constructor extends Definition {
 	
 	private String ident;
+	
 	private List<ParameterDeclaration> parameters;
+	
 	private Block body;
 	
 	public Constructor(String _ident, Block _body) {
@@ -43,7 +47,19 @@ public class Constructor extends Definition {
 
 	@Override
 	public boolean checkType() {
-    	throw new SemanticsUndefinedException("checkType method is undefined for Constructor.");
+		boolean b = this.body.checkType();
+		if (!b) {
+			Logger.error("Body of Constructor " + this.ident + this.parameters.toString() + " is not well typed.");
+		}
+		/* USELESS OR NOT ?
+		for (ParameterDeclaration p : this.parameters) {
+			b &= !(p.getType().equalsTo(AtomicType.ErrorType));
+			if (!b) {
+				Logger.error("Parameter : " + p.toString() + " (in Constructor " + this.ident + ") is considered as ErrorType");
+			}
+		}
+		*/
+		return b;
 	}
 
 	@Override

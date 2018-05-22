@@ -40,7 +40,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public boolean checkType() {
-		throw new SemanticsUndefinedException("checkType method not implemented yet in InterfaceDeclaration");
+		return true;
 	}
 
 	@Override
