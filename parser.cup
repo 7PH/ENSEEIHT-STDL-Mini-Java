@@ -193,12 +193,12 @@ ClassExtension ::=
 			inst.add(ext);
 			RESULT = inst;
 		:}
-    | UL_Extends TypeInstantiation:ext UL_Implements TypeInstantiation:impl
+    | UL_Extends TypeInstantiation:ext UL_Implements TypeInstantiations:impl
         {:
 			impl.add(ext);
 			RESULT = impl;
 		:}
-    | UL_Implements TypeInstantiation:impl
+    | UL_Implements TypeInstantiations:impl
         {:
 			RESULT = impl;
 		:}
