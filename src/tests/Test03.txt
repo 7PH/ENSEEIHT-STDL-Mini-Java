@@ -1,0 +1,5 @@
+class Circle {
+    public Circle foo;
+    public Circle() { }
+    public Circle bar() { return this.foo; }
+}
