@@ -28,6 +28,8 @@ public class ClassDeclaration extends ProgramDeclaration {
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
 		//if (! _scope.accepts(this)) return false;
+    	//_scope.register(this);
+    	//new scope + resolve des definitions
 		//TODO (work in progress by Loic)
 		throw new SemanticsUndefinedException("resolve method not implemented yet in ClassDeclaration");
 		
