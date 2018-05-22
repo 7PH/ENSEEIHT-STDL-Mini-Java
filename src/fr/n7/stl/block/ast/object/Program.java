@@ -7,6 +7,7 @@ import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
@@ -51,11 +52,13 @@ public class Program implements ASTNode {
     	throw new SemanticsUndefinedException("getCode method is undefined for Program.");
     }
 
-    // @TODO
+
     @Override
-    public boolean resolve(HierarchicalScope<Declaration> scope) {
+    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+    	
         for (ProgramDeclaration declaration: declarations) {
-            if (! declaration.resolve(scope))
+            if (! declaration.resolve(newScope))
                 return false;
         }
         return true;
