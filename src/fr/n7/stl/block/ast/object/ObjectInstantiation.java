@@ -28,7 +28,7 @@ public class ObjectInstantiation implements Expression {
 
     @Override
     public Type getType() {
-    	throw new SemanticsUndefinedException("getType method is undefined for ObjectInstantiation.");
+    	return this.type;
     }
 
     @Override

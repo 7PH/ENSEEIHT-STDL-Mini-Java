@@ -46,6 +46,7 @@ public class MethodCall implements Instruction, Expression {
 
     @Override
     public boolean checkType() {
+    	// TODO //
     	throw new SemanticsUndefinedException("checkType method is undefined for MethodCall.");
     }
 

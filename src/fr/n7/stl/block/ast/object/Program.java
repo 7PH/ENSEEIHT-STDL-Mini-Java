@@ -10,6 +10,7 @@ import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 public class Program implements ASTNode {
 
@@ -31,9 +32,13 @@ public class Program implements ASTNode {
 	 * @return True if the program is well typed, False if not.
 	 */
     boolean checkType() {
-    	throw new SemanticsUndefinedException("checktype method is undefined for Program.");
+    	boolean b = false;
+    	for (ProgramDeclaration pd : this.declarations) {
+    		b &= pd.checkType();
+    	}
+    	return b;
     }
-	
+    
 	/** Compute the size of the allocated memory. 
 	 * @param _register register associated to the address of the program.
 	 * @param _offset current offset for the address of the program.
