@@ -47,18 +47,20 @@ public class Constructor extends Definition {
 
 	@Override
 	public boolean checkType() {
-		boolean b = this.body.checkType();
+		boolean b = false;
+		if (this.getDefinitionModifier() != null) {
+			Logger.error("Constructor " + this.ident + " has a definition modifier.");
+		}
+		b &= this.body.checkType();
 		if (!b) {
 			Logger.error("Body of Constructor " + this.ident + this.parameters.toString() + " is not well typed.");
 		}
-		/* USELESS OR NOT ?
 		for (ParameterDeclaration p : this.parameters) {
 			b &= !(p.getType().equalsTo(AtomicType.ErrorType));
 			if (!b) {
 				Logger.error("Parameter : " + p.toString() + " (in Constructor " + this.ident + ") is considered as ErrorType");
 			}
 		}
-		*/
 		return b;
 	}
 
