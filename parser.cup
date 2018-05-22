@@ -105,7 +105,7 @@ non terminal AssignableExpression		Affectable;
 non terminal ProgramDeclaration			ProgramDeclaration;
 non terminal InterfaceDeclaration       InterfaceDeclaration;
 non terminal ClassDeclaration           ClassDeclaration;
-non terminal List<Definition>           InnerClassDefinitionWithoutModifier;
+non terminal Definition                 InnerClassDefinitionWithoutModifier;
 non terminal List<Definition>           InnerClassDefinitions;
 non terminal Definition                 InnerClassDefinition;
 non terminal AccessModifier             AccessModifier;
