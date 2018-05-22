@@ -29,7 +29,7 @@ public abstract class ProgramDeclaration implements Declaration {
 	public abstract String toString();
 	
 	public String getName() {
-		this.className.getName();
+		return this.className.getName();
 	}
 	
 	public Type getType() {
