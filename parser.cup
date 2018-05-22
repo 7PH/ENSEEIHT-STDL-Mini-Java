@@ -13,6 +13,7 @@ import java.util.*;
 
 // Elements du métamodèle pour la construction de l'arbre abstrait
 import fr.n7.stl.block.ast.*;
+import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.*;
 import fr.n7.stl.block.ast.expression.accessible.*;
 import fr.n7.stl.block.ast.expression.allocation.*;
@@ -89,7 +90,7 @@ terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux;
 terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
-non terminal Integer					Program;
+non terminal Program					Program;
 non terminal Block						Bloc;
 non terminal List<Instruction>			Instructions;
 non terminal Instruction				Instruction;
@@ -101,22 +102,22 @@ non terminal Pair<String,PartialType>	Identifiant;
 non terminal Type						Type, Atomique;
 non terminal Expression 				Expression;
 non terminal AssignableExpression		Affectable;
-non terminal Integer					ProgramDeclaration;
-non terminal Integer					InterfaceDeclaration;
-non terminal Integer					ClassDeclaration;
-non terminal Integer                    InnerClassDefinitions;
-non terminal Integer                    InnerClassDefinition;
-non terminal Integer                    AccessModifier;
-non terminal Integer                    TypeInstantiations;
-non terminal Integer                    TypeInstantiation;
-non terminal Integer                    DefinitionModifier;
-non terminal Integer                    ClassName;
-non terminal Integer                    GenericTypes;
-non terminal Integer                    GenericType;
-non terminal Integer                    GenericInstantiations;
-non terminal Integer                    InnerInterfaceDefinitions;
-non terminal Integer                    InnerInterfaceDefinition;
+non terminal ProgramDeclaration			ProgramDeclaration;
+non terminal InterfaceDeclaration       InterfaceDeclaration;
+non terminal ClassDeclaration           ClassDeclaration;
+non terminal List<Definition>           InnerClassDefinitions;
+non terminal Definition                 InnerClassDefinition;
+non terminal AccessModifier             AccessModifier;
+non terminal List<TypeInstantiation>    TypeInstantiations;
+non terminal TypeInstantiation          TypeInstantiation;
+non terminal DefinitionModifier         DefinitionModifier;
+non terminal ClassName                  ClassName;
+non terminal List<String>               GenericTypes;
+non terminal String                     GenericType;
+non terminal List<Signature>            InnerInterfaceDefinitions;
+non terminal Signature                  InnerInterfaceDefinition;
 non terminal Type                       NullableType;
+non terminal List<TypeInstantiation>    GenericInstantiations;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -142,51 +143,93 @@ precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 Program ::=
     Program:program ProgramDeclaration:decl
         {:
-			RESULT = 1;
+			program.add(decl);
+			RESULT = program;
 		:}
     | ProgramDeclaration:decl
         {:
-			RESULT = 1;
+			RESULT = new Program(decl);
 		:}
     ;
 
 ProgramDeclaration ::=
-    InterfaceDeclaration
-    | ClassDeclaration
-        {: RESULT = 1; :}
+    InterfaceDeclaration:decl
+    | ClassDeclaration:decl
+        {: RESULT = decl; :}
     ;
 
 InterfaceDeclaration ::=
-    UL_Interface ClassName UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
-    | UL_Interface ClassName UL_Extends TypeInstantiations UL_Accolade_Ouvrante InnerInterfaceDefinitions UL_Accolade_Fermante
+    UL_Interface ClassName:className UL_Accolade_Ouvrante InnerInterfaceDefinitions:definitions UL_Accolade_Fermante
         {:
-			RESULT = 1;
+            RESULT = new InterfaceDeclaration(className, definitions);
+        :}
+    | UL_Interface ClassName:className UL_Extends TypeInstantiations:typeInstantiations UL_Accolade_Ouvrante InnerInterfaceDefinitions:definitions UL_Accolade_Fermante
+        {:
+			RESULT = new InterfaceDeclaration(className, typeInstantiations, definitions);
 		:}
     ;
 
 ClassDeclaration ::=
-    UL_Final UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
-    | UL_Abstract UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
-    | UL_Class ClassName UL_Accolade_Ouvrante InnerClassDefinitions UL_Accolade_Fermante
-        {: RESULT = 1; :}
+    ClassModifier:modifier ClassName:className ClassExtension:classExtension UL_Accolade_Ouvrante InnerClassDefinitions:definitions UL_Accolade_Fermante
+        {:RESULT = new ClassDeclaration(modifier, className, classExtension, definitions); :}
+    ;
+
+ClassModifier ::=
+    UL_Final
+        {: RESULT = ClassModifier.Final; :}
+    | UL_Abstract
+        {: RESULT = ClassModifier.Abstract; :}
+    |
+        {: RESULT = null; :}
+    ;
+
+Extension ::=
+    UL_Extends TypeInstantiation:typeInstantiation
+        {:
+			List<TypeInstantiation> inst = new LinkedList<>();
+			inst.add(typeInstantiation);
+			RESULT = inst;
+		:}
+    | UL_Extends TypeInstantiation:typeInstantiations UL_Implements Instantiations:instImpls
+        {:
+			instImpls.add(typeInstantiations);
+			RESULT = instImpls;
+		:}
+    | UL_Implements Instantiations:typeInstantiations
+        {:
+			RESULT = typeInstantiations;
+		:}
+    |
+        {:
+			RESULT = null;
+		:}
     ;
 
 ClassName ::=
-    UL_Identificateur UL_Inferieur GenericTypes UL_Superieur
-    | UL_Identificateur
-        {: RESULT = 1; :}
+    UL_Identificateur:ident UL_Inferieur GenericTypes:genericTypes UL_Superieur
+        {: RESULT = new ClassName(ident, genericTypes); :}
+    | UL_Identificateur:ident
+        {: RESULT = new ClassName(ident); :}
     ;
 
 GenericTypes ::=
-    GenericTypes UL_Virgule GenericType
-    | GenericType
-        {: RESULT = 1; :}
+    GenericTypes:genericTypes UL_Virgule GenericType:genericType
+        {:
+            genericTypes.add(new ClassName(genericType));
+            RESULT = genericTypes;
+        :}
+    | GenericType:genericType
+        {:
+            RESULT = new LinkedList<>();
+            RESULT.add(genericType);
+        :}
     ;
 
 GenericType ::=
-    UL_Identificateur
-    | UL_Identificateur UL_Extends GenericInstantiations
-        {: RESULT = 1; :}
+    UL_Identificateur:ident
+        {: RESULT = ident; :}
+    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
+        {: RESULT = ident; :}
     ;
 
 InnerClassDefinitions ::=
@@ -231,14 +274,23 @@ DefinitionModifier ::=
     ;
 
 TypeInstantiations ::=
-    TypeInstantiation
-    | TypeInstantiations UL_Virgule TypeInstantiation
-        {: RESULT = 1; :}
-    ;
+    TypeInstantiation:typeInstantiation
+        {:
+			List<TypeInstantiation> typeInstantiations = new LinkedList<>();
+			typeInstantiations.add(typeInstantiation);
+			RESULT = typeInstantiations;
+        :}
+    | TypeInstantiations:typeInstantiations UL_Virgule TypeInstantiation:typeInstantiation
+        {:
+			typeInstantiations.add(typeInstantiation);
+			RESULT = typeInstantiations;
+		:};
+
 TypeInstantiation ::=
     UL_Identificateur:ident
-    | UL_Identificateur:ident UL_Inferieur TypeInstantiations UL_Superieur
-        {: RESULT = 1; :}
+        {: RESULT = new TypeInstantiation(ident); :}
+    | UL_Identificateur:ident UL_Inferieur TypeInstantiations:typeInstantiations UL_Superieur
+        {: RESULT = new TypeInstantiation(ident, typeInstantiations); :}
     ;
 
 NullableType ::=
