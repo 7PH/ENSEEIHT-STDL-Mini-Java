@@ -113,4 +113,14 @@ public class TypeInstantiation implements Type {
 		this.declaration = declaration;
 	}
 
+	public boolean contains(String attributeIdentificateur) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public AttributeDefinition get(String attributeIdentificateur) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
