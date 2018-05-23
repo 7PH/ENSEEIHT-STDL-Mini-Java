@@ -83,14 +83,14 @@ public class MethodDefinition extends Definition {
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
 		// Verify if the attribute is already in the scope
 		if (!_scope.accepts(this.signature)) {
-			Logger.error("Object " + this.signature.getName() + " is already defined in scope.");
+			Logger.error("Method " + this.signature.toString() + " is define twice.");
 			return false;
 		}
 		// Register it
 		_scope.register(this.signature);
 		// Resolve signature
 		if (!this.signature.getType().resolve(_scope)) {
-			Logger.error("Could not resolve " + this.getName() + " because signature type could not be resolved.");
+			Logger.error("Could not resolve methode " + this.getName() + " because its type could not be resolved.");
 			return false;
 		}
 		/* TODO : GESTION DES PARAMETRES ?

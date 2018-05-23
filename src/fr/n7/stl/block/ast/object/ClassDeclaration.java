@@ -45,10 +45,15 @@ public class ClassDeclaration extends ProgramDeclaration {
     		}
     	}
     	
+    	// TODO : Verifier ques les méthodes des intefaces implémentées ont été implémenté
+    	// TODO : Verifier ques les classes implémentées sont des interfaces.
+    	
     	// Verifier que les méthodes abstraites de la super classe ont été implémenté.
     	for (TypeInstantiation _super : this.extendedClass) {
     		//TODO
     	}
+    	
+    	
     	
 		return true;
     }
