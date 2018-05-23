@@ -114,7 +114,7 @@ non terminal TypeInstantiation          TypeInstantiation;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
 non terminal List<ClassName>            GenericTypes;
-non terminal String                     GenericType;
+non terminal ClassName                  GenericType;
 non terminal List<Signature>            InnerInterfaceDefinitions;
 non terminal Signature                  InnerInterfaceDefinition;
 non terminal Type                       NullableType;
@@ -219,22 +219,22 @@ ClassName ::=
 GenericTypes ::=
     GenericTypes:genericTypes UL_Virgule GenericType:genericType
         {:
-            genericTypes.add(new ClassName(genericType));
+            genericTypes.add(genericType);
             RESULT = genericTypes;
         :}
     | GenericType:genericType
         {:
             RESULT = new LinkedList<ClassName>();
-            RESULT.add(new ClassName(genericType));
+            RESULT.add(genericType);
         :}
     ;
 
 // @TODO
 GenericType ::=
     UL_Identificateur:ident
-        {: RESULT = ident; :}
+        {: RESULT = new ClassName(ident); :}
     | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
-        {: RESULT = ident; :}
+        {: RESULT = new ClassName(ident); :}
     ;
 
 InnerClassDefinitions ::=
@@ -244,12 +244,11 @@ InnerClassDefinitions ::=
         {: RESULT = new LinkedList<>(); :}
     ;
 
-// @TODO abstract methods - add attribute with inline definition
 InnerClassDefinition ::=
     AccessModifier:accessModifier DefinitionModifier:definitionModifier InnerClassDefinitionWithoutModifier:definition
         {:
-            //definition.setAccess(accessModifier);
-            //definition.setModifier(definitionModifier);
+            definition.setAccessModifier(accessModifier);
+            definition.setDefinitionModifier(definitionModifier);
             RESULT = definition;
         :}
     ;

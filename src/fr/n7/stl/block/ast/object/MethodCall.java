@@ -41,7 +41,11 @@ public class MethodCall implements Instruction, Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-    	throw new SemanticsUndefinedException("resolve method is undefined for MethodCall.");
+        boolean resolved = true;
+        for (Expression parameter: parameters)
+            resolved &= parameter.resolve(_scope);
+        // @TODO create new scope and resolve body
+        return resolved;
     }
 
     @Override
