@@ -33,7 +33,7 @@ public class Program implements ASTNode {
 	 * @return True if the program is well typed, False if not.
 	 */
     boolean checkType() {
-    	boolean b = false;
+    	boolean b = true;
     	for (ProgramDeclaration pd : this.declarations) {
     		b &= pd.checkType();
     	}
