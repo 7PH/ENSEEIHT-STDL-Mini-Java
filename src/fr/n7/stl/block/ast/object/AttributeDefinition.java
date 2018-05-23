@@ -88,10 +88,12 @@ public class AttributeDefinition extends Definition {
 		}
 		// Resolve type part
 		if (!this.type.resolve(_scope)) {
+    		Logger.error("Could not resolve attribute definition because of the type " + this.type.toString() + ".");
 			return false;
 		}
 		// Resolve value part
 		if (!this.value.resolve(_scope)) {
+    		Logger.error("Could not resolve attribute definition because of the value " + this.value.toString() + ".");
 			return false;
 		}
 		// Register the attribute

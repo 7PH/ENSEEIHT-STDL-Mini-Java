@@ -25,15 +25,16 @@ public class ObjectInstantiation implements Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	// Resolve type part
     	if (!this.type.resolve(_scope)) {
-    		Logger.error("Could not resolve object instantiation because the type " + this.type.toString() + " is unknown.");
+    		Logger.error("Could not resolve object instantiation because of the type " + this.type.toString() + ".");
     		return false;
     	}
     	
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
     	for (Expression e : parameters) {
     		if(!e.resolve(newScope)) {
-    			Logger.error("Could not resolve object insantiation because the constructor parameters could not be resolved.");
+    			Logger.error("Could not resolve object insantiation because the constructor parameter " + e.toString() + " could not be resolved.");
     			return false;
     		}
     	}

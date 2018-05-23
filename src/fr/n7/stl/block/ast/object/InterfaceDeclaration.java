@@ -37,12 +37,14 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	// Check if the interface is already register
     	if (! _scope.accepts(this)) {
 			Logger.error("Could not resolve interface " + this.getName() + " because this name is already taken.");
 			return false;
 		}			
-		
+		// Register it
     	_scope.register(this);
+    	// Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
     	
     	for (Signature s : signatures) {

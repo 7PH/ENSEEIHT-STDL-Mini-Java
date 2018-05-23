@@ -64,7 +64,8 @@ public class Program implements ASTNode {
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
     	// Resolve each declaration in it
         for (ProgramDeclaration declaration: declarations) {
-            if (! declaration.resolve(newScope))
+            if (!declaration.resolve(newScope))
+        		Logger.error("Could not resolve program because of the declaration " + declaration.toString() + ".");
                 return false;
         }
         return true;

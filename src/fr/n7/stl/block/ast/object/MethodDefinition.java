@@ -2,12 +2,15 @@ package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.Block;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 public class MethodDefinition extends Definition {
 
@@ -78,7 +81,38 @@ public class MethodDefinition extends Definition {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-    	throw new SemanticsUndefinedException("resolve method is undefined for MethodDefinition.");
+		// Verify if the attribute is already in the scope
+		if (!_scope.accepts(this.signature)) {
+			Logger.error("Object " + this.signature.getName() + " is already defined in scope.");
+			return false;
+		}
+		// Register it
+		_scope.register(this.signature);
+		// Resolve signature
+		if (!this.signature.getType().resolve(_scope)) {
+			Logger.error("Could not resolve " + this.getName() + " because signature type could not be resolved.");
+			return false;
+		}
+		/* TODO : GESTION DES PARAMETRES ?
+		for (ParameterDeclaration pd : this.signature.getParameters()) {
+			if (!pd.resolve(_scope))
+        		Logger.error("Could not resolve " + this.getName() + " because of the signature parameter " + pd.toString() + ".");
+                return false;
+		}
+		*/
+		// Resolve body if present
+		if (this.isAbstract()) {
+			if (!(this.body != null)) {
+				Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
+				return false;
+			}
+		}
+		// Resolve body
+		if (!this.body.resolve(_scope)) {
+			Logger.error("Could not resolve " + this.getName() + " because body could not be resolved.");
+			return false;
+		}
+		return true;
 	}
 	
 	@Override

@@ -13,53 +13,54 @@ import fr.n7.stl.util.Logger;
 
 public class AttributeAssignment implements AssignableExpression {
 	
-	private AssignableExpression objet;
+	private AssignableExpression object;
 	
-	private TypeInstantiation objetType;
+	private TypeInstantiation objectType;
 	
 	private String attributeIdentificateur;
 	
 	private AttributeDefinition attribute;
 
 	public AttributeAssignment(AssignableExpression _objet, String _attributeIdentificateur) {
-		this.objet = _objet;
+		this.object = _objet;
 		this.attributeIdentificateur = _attributeIdentificateur;
 	}
 
 	@Override
 	public Type getType() {
-		throw new SemanticsUndefinedException("getType method is undefined for AttrobuteAssignment.");
+		throw new SemanticsUndefinedException("getType method is undefined for AttributeAssignment.");
 	}
 
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-		throw new SemanticsUndefinedException("getCode method is undefined for AttrobuteAssignment.");
+		throw new SemanticsUndefinedException("getCode method is undefined for AttributeAssignment.");
 	}
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
 		// Verify objet resolve.
-		if (!(this.objet.resolve(_scope))) {
+		if (!(this.object.resolve(_scope))) {
+    		Logger.error("Could not resolve attribute assignment because the object " + this.object.toString() + ".");
 	    	return false;
 		}
 
 		// Get objet type and check that is a TypeInstantiation
-	    Type type = this.objet.getType();
+	    Type type = this.object.getType();
 
 	    if (!(type instanceof TypeInstantiation)) {
-	    	Logger.error(this.objet.toString() + " is not a TypeInstantiation.");
+	    	Logger.error(this.object.toString() + " is not a TypeInstantiation.");
 	    	return false;
 	    }
 
 	    // Verify that the TypeInstantiation contain the field
-	    this.objetType = (TypeInstantiation) type;
+	    this.objectType = (TypeInstantiation) type;
 
-	    if (!(this.objetType.contains(this.attributeIdentificateur))) {
-	    	Logger.error(this.objet.toString() + " does not contain " + this.attributeIdentificateur + " field.");
+	    if (!(this.objectType.contains(this.attributeIdentificateur))) {
+	    	Logger.error(this.object.toString() + " does not contain " + this.attributeIdentificateur + " field.");
 	    	return false;
 	    }
 
-	    this.attribute = this.objetType.get(this.attributeIdentificateur);
+	    this.attribute = this.objectType.get(this.attributeIdentificateur);
 
 	    return true;
 	}

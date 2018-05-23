@@ -35,7 +35,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 		}			
 		// Register it
     	_scope.register(this);
-    	// Define a new scope for him
+    	// Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
     	// Resolve for each definition in the new scope
     	for (Definition d : definitions) {
