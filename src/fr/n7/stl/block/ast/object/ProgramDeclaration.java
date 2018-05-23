@@ -32,6 +32,15 @@ public abstract class ProgramDeclaration implements Declaration {
 		return this.className.getName();
 	}
 	
+	/** Retourne la liste des types génériques déclarés.
+	 * Exemple : public class toto<A, B, C> 
+	 * getGenerics retourne [A,B,C]
+	 * @return La liste des ClassName generiques
+	 */
+	public List<ClassName> getGenerics() {
+		return this.className.getGenerics();
+	}
+	
 	public Type getType() {
 		throw new SemanticsUndefinedException("getType method not implemented yet in ProgramDeclaration");
 	}

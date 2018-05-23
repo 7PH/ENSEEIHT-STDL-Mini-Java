@@ -13,6 +13,7 @@ public class TypeInstantiation implements Type {
 
 	private String name;
 
+	/* Types génériques : <String> etc */
 	private List<TypeInstantiation> typeInstantiations = new LinkedList<>();
 
 	private Declaration declaration;
@@ -103,18 +104,37 @@ public class TypeInstantiation implements Type {
 	}
 
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> _scope) {		
 
-		/* Important. */
 		if (!_scope.contains(this.name)) {
 			Logger.error("Could not resolve TypeInstantiation because the name " + this.name + " is not defined.");
 			return false;
 		} else {
-			this.declaration = _scope.get(this.name);
-		}
-		//TODO
+			if (_scope.get(this.name) instanceof ProgramDeclaration) {
+				ProgramDeclaration _declaration = (ClassDeclaration) _scope.get(this.name);
+				this.declaration = _declaration;
 
-		throw new SemanticsUndefinedException("resolve method is undefined for TypeInstantiation.");
+				if (this.typeInstantiations.size() > 0) {
+					/* Verifier que cette classe accepte les types génériques. */
+					if (_declaration.getGenerics().size() == 0) {
+						Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
+						return true;
+					} else if (_declaration.getGenerics().size() == this.typeInstantiations.size() ) {						
+						return true;
+					} else {
+						Logger.error("Incorrect number of arguments for type " + this.name + ".");
+						return false;
+					}
+				} else {
+					return true;
+				}
+			} else {
+				Logger.error(this.name + " is not a class nor an interface and cannot be instantiated.");
+				return false;
+			}
+		}
+
+
 	}
 
 	@Override
