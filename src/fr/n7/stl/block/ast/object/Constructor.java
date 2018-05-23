@@ -47,7 +47,7 @@ public class Constructor extends Definition {
 
 	@Override
 	public boolean checkType() {
-		boolean b = false;
+		boolean b = true;
 		if (this.getDefinitionModifier() != null) {
 			Logger.error("Constructor " + this.ident + " has a definition modifier.");
 		}

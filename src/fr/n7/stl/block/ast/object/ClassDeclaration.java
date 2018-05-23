@@ -53,7 +53,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public boolean checkType() {
-		boolean b = false;
+		boolean b = true;
 		for (Definition d : this.definitions) {
 			b &= d.checkType();
 		}
