@@ -60,8 +60,9 @@ public class Program implements ASTNode {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	// Define a new scope
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
-    	
+    	// Resolve each declaration in it
         for (ProgramDeclaration declaration: declarations) {
             if (! declaration.resolve(newScope))
                 return false;

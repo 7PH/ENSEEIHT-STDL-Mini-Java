@@ -86,11 +86,11 @@ public class AttributeDefinition extends Definition {
 			Logger.error("Object " + this.name + " is already defined in scope.");
 			return false;
 		}
-		// Check for type part
+		// Resolve type part
 		if (!this.type.resolve(_scope)) {
 			return false;
 		}
-		// Check for value part
+		// Resolve value part
 		if (!this.value.resolve(_scope)) {
 			return false;
 		}

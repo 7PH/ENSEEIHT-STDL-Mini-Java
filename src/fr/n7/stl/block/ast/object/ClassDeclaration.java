@@ -37,7 +37,7 @@ public class ClassDeclaration extends ProgramDeclaration {
     	_scope.register(this);
     	// Define a new scope for him
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
-    	// Check for each definition in the new scope
+    	// Resolve for each definition in the new scope
     	for (Definition d : definitions) {
     		if (!d.resolve(newScope)) {
     			Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
