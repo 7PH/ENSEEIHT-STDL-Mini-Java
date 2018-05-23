@@ -131,13 +131,27 @@ public class TypeInstantiation implements Type {
 		this.declaration = declaration;
 	}
 
+	/** Say if the object contains this attribute.
+	 * @param attributeIdentificateur the searched attribute
+	 * @return true if contains, false if not
+	 */
 	public boolean contains(String attributeIdentificateur) {
-		// TODO Auto-generated method stub
+		// TODO :
+		// Get the objet : ClassDeclaration
+		//	Get the attribute list of it
+		//	  Check if attribute is present thanks to his name field
 		return false;
 	}
-
+	
+	/** Get an attribute of the object.
+	 * @param attributeIdentificateur the attribute we ask.
+	 * @return the attribute
+	 */
 	public AttributeDefinition get(String attributeIdentificateur) {
-		// TODO Auto-generated method stub
+		// TODO :
+		// Get the objet : ClassDeclaration
+		//	Get the attribute list of it
+		//	  Get the correct attribute thanks to his name field
 		return null;
 	}
 
