@@ -16,18 +16,18 @@ public class AttributeDefinition extends Definition {
 	
 	private String name;
 	
-	private Expression valeur;
+	private Expression value;
 	
 	public AttributeDefinition(Type _type, String _name) {
 		this.type = _type;
 		this.name = _name;
-		this.valeur = null;
+		this.value = null;
 	}
 	
 	public AttributeDefinition(Type _type, String _name, Expression _valeur) {
 		this.type = _type;
 		this.name = _name;
-		this.valeur = _valeur;
+		this.value = _valeur;
 	}
 
 	@Override
@@ -67,9 +67,9 @@ public class AttributeDefinition extends Definition {
 
 	@Override
 	public boolean checkType() {
-		boolean b = this.valeur.getType().compatibleWith(this.type);
+		boolean b = this.value.getType().compatibleWith(this.type);
 		if (!b) {
-			Logger.error(this.valeur.toString() + " is not compatible with " + this.type.toString());
+			Logger.error(this.value.toString() + " is not compatible with " + this.type.toString());
 		}
 		return b;
 	}
@@ -81,6 +81,21 @@ public class AttributeDefinition extends Definition {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-    	throw new SemanticsUndefinedException("resolve method is undefined for AttributeDefinition.");
+		// Verify if the attribute is already in the scope
+		if (!_scope.accepts(this)) {
+			Logger.error("Object " + this.name + " is already defined in scope.");
+			return false;
+		}
+		// Check for type part
+		if (!this.type.resolve(_scope)) {
+			return false;
+		}
+		// Check for value part
+		if (!this.value.resolve(_scope)) {
+			return false;
+		}
+		// Register the attribute
+		_scope.register(this);
+		return true;
 	}
 }

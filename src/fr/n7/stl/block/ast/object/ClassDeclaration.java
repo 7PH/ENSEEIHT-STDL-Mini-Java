@@ -28,14 +28,16 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    	// Verify if the class is in the scope
 		if (! _scope.accepts(this)) {
 			Logger.error("Could not resolve class " + this.getName() + " because this name is already taken.");
 			return false;
 		}			
-		
+		// Register it
     	_scope.register(this);
+    	// Define a new scope for him
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
-    	
+    	// Check for each definition in the new scope
     	for (Definition d : definitions) {
     		if (!d.resolve(newScope)) {
     			Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");

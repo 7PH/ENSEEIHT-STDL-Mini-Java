@@ -38,28 +38,30 @@ public class AttributeAssignment implements AssignableExpression {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		boolean b = true;
 		// Verify objet resolve.
 		if (!(this.objet.resolve(_scope))) {
-	    	b = false;
-	    	Logger.error(this.objet.toString() + " resolve failed.");
-		} else {
-			// Get objet type and check that is a TypeInstantiation
-		    Type type = this.objet.getType();
-		    if (!(type instanceof TypeInstantiation)) {
-		    	b = false;
-		    	Logger.error(this.objet.toString() + " is not a TypeInstantiation.");
-		    } else {
-			    // Verify that the TypeInstantiation contain the field
-			    this.objetType = (TypeInstantiation) type;
-			    if (!(this.objetType.contains(this.attributeIdentificateur))) {
-			    	b = false;
-			    	Logger.error(this.objet.toString() + " does not contain " + this.attributeIdentificateur + " field.");
-			    }
-			    this.attribute = this.objetType.get(this.attributeIdentificateur);
-		    }
+	    	return false;
 		}
-	    return b;
+
+		// Get objet type and check that is a TypeInstantiation
+	    Type type = this.objet.getType();
+
+	    if (!(type instanceof TypeInstantiation)) {
+	    	Logger.error(this.objet.toString() + " is not a TypeInstantiation.");
+	    	return false;
+	    }
+
+	    // Verify that the TypeInstantiation contain the field
+	    this.objetType = (TypeInstantiation) type;
+
+	    if (!(this.objetType.contains(this.attributeIdentificateur))) {
+	    	Logger.error(this.objet.toString() + " does not contain " + this.attributeIdentificateur + " field.");
+	    	return false;
+	    }
+
+	    this.attribute = this.objetType.get(this.attributeIdentificateur);
+
+	    return true;
 	}
 
 }
