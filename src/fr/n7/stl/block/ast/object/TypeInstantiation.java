@@ -35,26 +35,44 @@ public class TypeInstantiation implements Type {
 		}
 		return b;
 	}
-
+	
 	@Override
 	public boolean compatibleWith(Type _other) {
 		/* this compatible avec _other si :
 		 *  - this et _other sont de la même classe
-		 * 	- this extends _other
+		 * 	- this extends_other
 		 * 	- this implémente _other et _other est une interface
+		 *  - this est une interface et _other implémente 
 		 * /!\ Verifier les types génériques
 		 */
 
 		if (_other instanceof TypeInstantiation) {
 			TypeInstantiation _typeInst = (TypeInstantiation) _other;
 			
-			
 			if (_typeInst.getDeclaration() instanceof InterfaceDeclaration) {
-				/* C'est une interface. */
-				// TODO : Vérifier que this implémente _other et vérifier les types génériques.
+				/* _other est une interface. */				
+				InterfaceDeclaration _interface = (InterfaceDeclaration) _typeInst.getDeclaration();
+				
+				if (this.getDeclaration() instanceof InterfaceDeclaration) {
+					/* this est aussi une interface. */
+					// TODO : Vérifier que this extends _other et vérifier les types génériques.
+					
+				} else if (this.getDeclaration() instanceof ClassDeclaration) {
+					/* this est une classe */
+					ClassDeclaration thisClass = (ClassDeclaration) this.getDeclaration();
+					
+					// TODO : Vérifier que this implémente _other
+					
+				} else {
+					// TODO Cas erreur
+					
+					return false;
+				}
+				
 			} else if (_typeInst.getDeclaration() instanceof ClassDeclaration) {
-				/* C'est une classe. */
+				/* _other est une classe. */				
 				ClassDeclaration _classe = (ClassDeclaration) _typeInst.getDeclaration();
+				
 				if (this.getDeclaration().getName().equals(_classe.getName())) {
 					/* C'est la même classe. */
 					//TODO : Verifier les types génériques.
