@@ -229,12 +229,11 @@ GenericTypes ::=
         :}
     ;
 
-// @TODO
 GenericType ::=
     UL_Identificateur:ident
         {: RESULT = new ClassName(ident); :}
     | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
-        {: RESULT = new ClassName(ident); :}
+        {: RESULT = new ClassName(ident, genericInstantiations); :}
     ;
 
 InnerClassDefinitions ::=
