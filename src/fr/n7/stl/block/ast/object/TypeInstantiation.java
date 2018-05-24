@@ -29,12 +29,8 @@ public class TypeInstantiation implements Type {
 	}
 
 	@Override
-	public boolean equalsTo(Type other) {
-		boolean b = false;
-		if (other instanceof TypeInstantiation) {
-			b = ((TypeInstantiation) other).name.equals(this.name);
-		}
-		return b;
+	public boolean equalsTo(Type other) {		
+		return this.equals(other);
 	}
 	
 	@Override
@@ -47,6 +43,13 @@ public class TypeInstantiation implements Type {
 		 * /!\ Verifier les types génériques
 		 */
 
+		//La Declaration d'un TypeInstantiation est TOUJOURS un ProgramDeclaration ?
+		if (!(this.getDeclaration() instanceof ProgramDeclaration)) {
+			Logger.error("This message should not appear. A TypeInstantiation was initiated with a declaration that is not a ProgramDeclaration");
+			return false;
+		} 
+		ProgramDeclaration thisDeclaration = (ProgramDeclaration) this.getDeclaration();
+		
 		if (_other instanceof TypeInstantiation) {
 			TypeInstantiation _typeInst = (TypeInstantiation) _other;
 			
@@ -54,13 +57,13 @@ public class TypeInstantiation implements Type {
 				/* _other est une interface. */				
 				InterfaceDeclaration _interface = (InterfaceDeclaration) _typeInst.getDeclaration();
 				
-				if (this.getDeclaration() instanceof InterfaceDeclaration) {
+				if (thisDeclaration instanceof InterfaceDeclaration) {
 					/* this est aussi une interface. */
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
 					
-				} else if (this.getDeclaration() instanceof ClassDeclaration) {
+				} else if (thisDeclaration instanceof ClassDeclaration) {
 					/* this est une classe */
-					ClassDeclaration thisClass = (ClassDeclaration) this.getDeclaration();
+					ClassDeclaration thisClass = (ClassDeclaration) thisDeclaration;
 					
 					// TODO : Vérifier que this implémente _other
 					
@@ -74,18 +77,36 @@ public class TypeInstantiation implements Type {
 				/* _other est une classe. */				
 				ClassDeclaration _classe = (ClassDeclaration) _typeInst.getDeclaration();
 				
-				if (this.getDeclaration().getName().equals(_classe.getName())) {
+				if (thisDeclaration.getName().equals(_classe.getName())) {
 					/* C'est la même classe. */
-					//TODO : Verifier les types génériques.
+					
+					// Verifier les types génériques.					
+					if (_typeInst.getTypeInstantiations().size() != this.getTypeInstantiations().size()) {
+						Logger.error("TypeInstantiation " + this.toString() + " is not compatible with " + _typeInst.toString() + " because one or several generic types are missing.");
+						return false;
+					} else {
+						int i = 0;
+						for (TypeInstantiation _t : _typeInst.getTypeInstantiations()) {
+							if(!this.getTypeInstantiations().get(i).compatibleWith(_t)) {
+								Logger.error("TypeInstantiation " + this.toString() + " is not compatible with " + _typeInst.toString() + " because generic type " + this.getTypeInstantiations().get(i) + " is not compatible with " + _t.toString() + ".");
+								return false;
+							}
+						}
+					}
+					
 				} else {
 					/* Ce n'est pas la même classe. */
-					//TODO : Vérifier que this extends _other et vérifier les types génériques.
+					// TODO : Vérifier que this extends _other et vérifier les types génériques.
+					thisDeclaration.getExtendedClass().contains(_typeInst);
+					// et les types generiques de _classe ont été instantiés
 				}
 			}
 			
 		} else {
 			/* _other est un type atomique. */
-			//TODO
+			// TODO
+			Logger.error("Compatibility between AtomicTypes et instantiated types was not implemented.");
+			return false;
 
 		}
 
@@ -116,10 +137,12 @@ public class TypeInstantiation implements Type {
 
 				if (this.typeInstantiations.size() > 0) {
 					/* Verifier que cette classe accepte les types génériques. */
-					if (_declaration.getGenerics().size() == 0) {
+					if (_declaration.getClassName().getGenerics().size() == 0) {
 						Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
 						return true;
-					} else if (_declaration.getGenerics().size() == this.typeInstantiations.size() ) {						
+					} else if (_declaration.getGenerics().size() == this.typeInstantiations.size() ) {
+						// TODO : Verifier que les types generiques sont compatibles.
+						// ex : si déclaré MyClass<T extends X>
 						return true;
 					} else {
 						Logger.error("Incorrect number of arguments for type " + this.name + ".");
@@ -151,6 +174,10 @@ public class TypeInstantiation implements Type {
 		this.declaration = declaration;
 	}
 
+	public List<TypeInstantiation> getTypeInstantiations() {
+		return typeInstantiations;
+	}
+
 	/** Say if the object contains this attribute.
 	 * @param attributeIdentificateur the searched attribute
 	 * @return true if contains, false if not
@@ -173,6 +200,22 @@ public class TypeInstantiation implements Type {
 		//	Get the attribute list of it
 		//	  Get the correct attribute thanks to his name field
 		return null;
+	}
+	
+	@Override
+	public boolean equals(Object _o) {
+		if (!(_o instanceof TypeInstantiation)) {
+			return false;
+		} else {
+			TypeInstantiation _typeO = (TypeInstantiation) _o;
+			if (this.name.equals(_typeO) && this.typeInstantiations.equals(_typeO.getTypeInstantiations())) {
+				// TODO ? Do we need to check if it refers to the same declaration ?
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 	}
 
 }
