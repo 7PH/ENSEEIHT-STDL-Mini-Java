@@ -77,6 +77,8 @@ public class ClassDeclaration extends ProgramDeclaration {
     		Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
     		return false;
     	}
+
+    	// TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
     	
     	// Verify if every superclass abstract methods are implemented
     	if (this.extendedClass.size() != 0) {

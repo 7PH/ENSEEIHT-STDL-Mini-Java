@@ -25,13 +25,13 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 		for (Signature s : _signatures) {
 			this.signatures.add(s);
 		}
-		this.extendedClass = new LinkedList<TypeInstantiation>();
+		this.implementedClasses = new LinkedList<TypeInstantiation>();
 	}
 	
 	public InterfaceDeclaration(ClassName _declaration, List<TypeInstantiation> _Type_instantiations, List<Signature> _signatures) {
 		this(_declaration, _signatures);
 		for (TypeInstantiation i : _Type_instantiations) {
-			extendedClass.add(i);
+			implementedClasses.add(i);
 		}
 	}
 
@@ -41,16 +41,28 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
+
     	// Check if the interface is already register
     	if (! _scope.accepts(this)) {
 			Logger.error("Could not resolve interface " + this.getName() + " because this name is already taken.");
 			return false;
 		}			
+    	
 		// Register it
     	_scope.register(this);
+
+		// Check if the superclasses are well superinterface
+    	for (TypeInstantiation tp : this.implementedClasses) {
+    		if (tp.getDeclaration() instanceof ClassDeclaration) {
+    			Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
+				return false;
+    		}
+    	}
+    	
     	// Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
     	
+    	// Register all signatures
     	for (Signature s : signatures) {
     		if (! newScope.accepts(s)) {
     			Logger.error("Could not resolve interface " + this.getName() + " because the method " + s.toString() + " was defined twice.");
@@ -91,4 +103,6 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
         return _result + "\n}\n";
 	}
+
 }
+
