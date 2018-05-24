@@ -121,6 +121,7 @@ non terminal Type                       NullableType;
 non terminal List<TypeInstantiation>    GenericInstantiations;
 non terminal ClassModifier              ClassModifier;
 non terminal List<TypeInstantiation>    ClassExtension;
+non terminal List<TypeInstantiation>	ClassImplementation;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -174,8 +175,8 @@ InterfaceDeclaration ::=
     ;
 
 ClassDeclaration ::=
-    ClassModifier:modifier UL_Class ClassName:className ClassExtension:classExtension UL_Accolade_Ouvrante InnerClassDefinitions:definitions UL_Accolade_Fermante
-        {: RESULT = new ClassDeclaration(modifier, className, classExtension, definitions); :}
+    ClassModifier:modifier UL_Class ClassName:className ClassExtension:classExtension ClassImplementation:classImplementation UL_Accolade_Ouvrante InnerClassDefinitions:definitions UL_Accolade_Fermante
+        {: RESULT = new ClassDeclaration(modifier, className, classExtension, classImplementation, definitions); :}
     ;
 
 ClassModifier ::=
@@ -188,13 +189,11 @@ ClassModifier ::=
     ;
 
 ClassExtension ::=
-    UL_Extends TypeInstantiation:ext
+    UL_Extends TypeInstantiations:ext
         {:
-			List<TypeInstantiation> inst = new LinkedList<>();
-			inst.add(ext);
-			RESULT = inst;
+			RESULT = ext;
 		:}
-    | UL_Extends TypeInstantiation:ext UL_Implements TypeInstantiations:impl
+  /*  | UL_Extends TypeInstantiation:ext UL_Implements TypeInstantiations:impl
         {:
 			impl.add(ext);
 			RESULT = impl;
@@ -202,12 +201,23 @@ ClassExtension ::=
     | UL_Implements TypeInstantiations:impl
         {:
 			RESULT = impl;
-		:}
+		:}*/
     |
         {:
 			RESULT = null;
 		:}
     ;
+    
+ClassImplementation ::=
+    UL_Implements TypeInstantiations:impl
+        {:
+			RESULT = impl;
+		:}
+    |
+        {:
+			RESULT = null;
+		:}
+	;
 
 ClassName ::=
     UL_Identificateur:ident UL_Inferieur GenericTypes:genericTypes UL_Superieur
@@ -232,8 +242,8 @@ GenericTypes ::=
 GenericType ::=
     UL_Identificateur:ident
         {: RESULT = new ClassName(ident); :}
-    | UL_Identificateur:ident UL_Extends GenericInstantiations:genericInstantiations
-        {: RESULT = new ClassName(ident, genericInstantiations); :}
+    | UL_Identificateur:ident UL_Extends TypeInstantiations:typeInstantiations
+        {: RESULT = new ClassName(ident, typeInstantiations); :}
     ;
 
 InnerClassDefinitions ::=
@@ -346,10 +356,15 @@ Type ::= Atomique:atomique
 			{:
 				RESULT = atomique;
 			:}
-		| UL_Identificateur:nom
+		| ClassName:className
+			{:
+				RESULT = new TypeInstantiation(className.getName(), className.getGenerics());
+			:}
+/*		| UL_Identificateur:nom
 			{:
 				RESULT = new NamedType( nom );
 			:}
+*/
 		;
 
 Instructions ::= Instructions:instructions Instruction:instruction

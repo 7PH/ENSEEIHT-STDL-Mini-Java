@@ -24,7 +24,7 @@ public class TypeInstantiation implements Type {
 	}
 
 	public TypeInstantiation(String _name, List<TypeInstantiation> _Type_instantiations) {
-		this.name = _name;
+		this(_name);
 		this.typeInstantiations = _Type_instantiations;
 	}
 

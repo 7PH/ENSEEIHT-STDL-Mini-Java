@@ -15,6 +15,8 @@ public abstract class ProgramDeclaration implements Declaration {
 	protected ClassName className;
 	
 	protected List<TypeInstantiation> extendedClass;
+	
+	protected List<TypeInstantiation> implementedClasses;
 
     public abstract boolean resolve(HierarchicalScope<Declaration> _scope);
 

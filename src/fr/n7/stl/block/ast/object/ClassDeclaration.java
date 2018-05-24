@@ -19,10 +19,11 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<TypeInstantiation> _extension, List<Definition> _definitions) {
+	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<TypeInstantiation> _extension, List<TypeInstantiation> _implementation, List<Definition> _definitions) {
 		this.modifier = _modifier;
 		this.className = _name;
 		this.extendedClass = _extension;
+		this.implementedClasses = _implementation;
 		this.definitions = _definitions;
 	}
 
