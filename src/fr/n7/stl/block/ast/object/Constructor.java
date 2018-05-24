@@ -5,10 +5,12 @@ import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.util.Logger;
 
+import java.util.List;
+
 public class Constructor extends MethodDefinition {
 
-    public Constructor(String className, Block body) {
-        super(new Signature(new TypeInstantiation(className), ""), body);
+    public Constructor(String className, List<ParameterDeclaration> parameters, Block body) {
+        super(new Signature(new TypeInstantiation(className), "", parameters), body);
     }
 
     @Override
