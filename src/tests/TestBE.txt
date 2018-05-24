@@ -20,3 +20,4 @@ interface issou {
     int bar();
     Circle fooBar();
 }
+interface issou<T1 extends issou1 & issou2, T2> extends issou2<T2> { }
