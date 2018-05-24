@@ -35,7 +35,11 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 		}
 	}
 
-    @Override
+	public List<Signature> getSignatures() {
+		return signatures;
+	}
+
+	@Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
     	// Check if the interface is already register
     	if (! _scope.accepts(this)) {
