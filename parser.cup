@@ -113,12 +113,11 @@ non terminal List<TypeInstantiation>    TypeInstantiations;
 non terminal TypeInstantiation          TypeInstantiation;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
-non terminal List<ClassName>            GenericTypes;
-non terminal ClassName                  GenericType;
+non terminal List<GenericType>            GenericTypes;
+non terminal GenericType                  GenericType;
 non terminal List<Signature>            InnerInterfaceDefinitions;
 non terminal Signature                  InnerInterfaceDefinition;
 non terminal Type                       NullableType;
-non terminal List<TypeInstantiation>    GenericInstantiations;
 non terminal ClassModifier              ClassModifier;
 non terminal List<TypeInstantiation>    ClassExtension;
 non terminal List<TypeInstantiation>	ClassImplementation;
@@ -139,6 +138,7 @@ precedence left UL_Premier, UL_Second;
 precedence left UL_Double_Plus_Prefixe, UL_Double_Moins_Prefixe, UL_Moins_Unaire, UL_Esperluette, UL_Point_Exclamation;
 precedence nonassoc UL_Double_Plus, UL_Double_Moins;
 precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
+precedence left UL_Extends;
 /* Opérateur le plus prioritaire */
 
 /* Règles de grammaire attribuée pour la construction de l'arbre abstrait */
@@ -241,9 +241,9 @@ GenericTypes ::=
 
 GenericType ::=
     UL_Identificateur:ident
-        {: RESULT = new ClassName(ident); :}
+        {: RESULT = new GenericType(ident); :}
     | UL_Identificateur:ident UL_Extends TypeInstantiations:typeInstantiations
-        {: RESULT = new ClassName(ident, typeInstantiations); :}
+        {: RESULT = new GenericType(ident, typeInstantiations); :}
     ;
 
 InnerClassDefinitions ::=
@@ -356,9 +356,13 @@ Type ::= Atomique:atomique
 			{:
 				RESULT = atomique;
 			:}
-		| ClassName:className
+/*		| ClassName:className  // MyClass<T>  MyClass<Integer>
 			{:
 				RESULT = new TypeInstantiation(className.getName(), className.getGenerics());
+			:}*/
+		| TypeInstantiation:typeInstantiation
+			{:
+				RESULT = typeInstantiation;
 			:}
 /*		| UL_Identificateur:nom
 			{:

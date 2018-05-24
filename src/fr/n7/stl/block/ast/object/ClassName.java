@@ -6,23 +6,23 @@ public class ClassName {
 	
 	private String className;
 	
-	private List<ClassName> generics;	
+	private List<GenericType> genericTypes;	
 	
 	public ClassName(String _ident) {
 		this.className = _ident;
 	}
 	
-	public ClassName(String _ident, List<ClassName> _generics) {
+	public ClassName(String _ident, List<GenericType> _generics) {
 		this(_ident);
-		this.generics = _generics;
+		this.genericTypes = _generics;
 	}
 	
 	public String getName() {
 		return this.className;
 	}
 	
-	public List<ClassName> getGenerics() {
-		return this.generics;
+	public List<GenericType> getGenerics() {
+		return this.genericTypes;
 	}
 
 }

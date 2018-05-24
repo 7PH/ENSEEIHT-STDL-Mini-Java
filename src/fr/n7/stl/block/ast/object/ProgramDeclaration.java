@@ -39,7 +39,7 @@ public abstract class ProgramDeclaration implements Declaration {
 	 * getGenerics retourne [A,B,C]
 	 * @return La liste des ClassName generiques
 	 */
-	public List<ClassName> getGenerics() {
+	public List<GenericType> getGenerics() {
 		return this.className.getGenerics();
 	}
 	
