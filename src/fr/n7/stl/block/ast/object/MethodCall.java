@@ -6,6 +6,7 @@ import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
@@ -41,11 +42,25 @@ public class MethodCall implements Instruction, Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
-        boolean resolved = true;
-        for (Expression parameter: parameters)
-            resolved &= parameter.resolve(_scope);
-        // @TODO create new scope and resolve body
-        return resolved;
+    	
+    	//TODO : Miss objectIdentifier ?
+    	
+        for (Expression parameter: parameters) {
+            if (!parameter.resolve(_scope)) {
+            	Logger.error("The parameter " + parameter.toString() + " in " + this.method + " call on " + this.identifier + " could not be resolved.");
+            	return false;
+            }
+        }
+        
+        // Define a new scope for it
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+
+    	if (!this.methodDefinition.resolve(newScope)) {
+        	Logger.error("The method " + this.methodDefinition.getName() + " call could not be resolved.");
+        	return false;    		
+    	}
+    	
+        return true;
     }
 
     @Override

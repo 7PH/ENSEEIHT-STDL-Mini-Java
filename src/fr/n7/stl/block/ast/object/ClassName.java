@@ -1,12 +1,13 @@
 package fr.n7.stl.block.ast.object;
 
+/*
 import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.scope.Declaration;
-import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;*/
 
 import java.util.List;
 
-public class ClassName implements ASTNode {
+public class ClassName /* implements ASTNode */ {
 	
 	private String className;
 	
@@ -28,12 +29,12 @@ public class ClassName implements ASTNode {
 	public List<GenericType> getGenerics() {
 		return this.genericTypes;
 	}
-
+	/*
     @Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
         return false;
     }
-
+	 */
     @Override
     public String toString() {
 	    return className;
