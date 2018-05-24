@@ -45,7 +45,7 @@ public class TypeInstantiation implements Type {
 
 		//La Declaration d'un TypeInstantiation est TOUJOURS un ProgramDeclaration ?
 		if (!(this.getDeclaration() instanceof ProgramDeclaration)) {
-			Logger.error("This message should not appear. A TypeInstantiation was initiated with a declaration that is not a ProgramDeclaration");
+			Logger.error("This message should not appear. compatibleWith method was called on a TypeInstantiation that was initiated with a declaration that is not a ProgramDeclaration");
 			return false;
 		} 
 		ProgramDeclaration thisDeclaration = (ProgramDeclaration) this.getDeclaration();
@@ -182,11 +182,17 @@ public class TypeInstantiation implements Type {
 	 * @param attributeIdentificateur the searched attribute
 	 * @return true if contains, false if not
 	 */
-	public boolean contains(String attributeIdentificateur) {
-		// TODO :
-		// Get the objet : ClassDeclaration
-		//	Get the attribute list of it
-		//	  Check if attribute is present thanks to his name field
+	public boolean contains(String attributeIdentificateur) {		
+		if (this.getDeclaration() instanceof InterfaceDeclaration) {			
+			Logger.error("Interface " + this.name + " does not contain attribute " + attributeIdentificateur + " because " + this.name + " is an interface.");
+			return false;
+		} else if (this.getDeclaration() instanceof ClassDeclaration) {
+			ClassDeclaration _classe = (ClassDeclaration) this.getDeclaration();
+			// TODO : check if attribute is present
+		} else {
+			Logger.error("This message should not appear. Contains method was called on a TypeInstantiation that was initiated with a declaration that is not a ProgramDeclaration");
+			return false;
+		}
 		return false;
 	}
 	
