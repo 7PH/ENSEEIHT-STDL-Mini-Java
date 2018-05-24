@@ -160,13 +160,13 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public String toString() {
-		String _result = "interface" + this.className.toString() + " { \n";
+		String _result = "class " + this.className.toString() + " { \n";
 		
 		for (Definition d : this.definitions) {
 			_result += d.toString() + "\n";
 		}		
 		
-		return _result + "\n }";
+		return _result + "\n}\n";
 	}
 
 }

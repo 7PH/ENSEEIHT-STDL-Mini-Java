@@ -14,20 +14,19 @@ import fr.n7.stl.util.Logger;
 
 public class MethodDefinition extends Definition {
 
-	private Signature signature;
+	protected Signature signature;
+
+    protected Block body;
+
+    protected boolean abstractArgument;
+
+    protected Register register;
+
+    protected int offset;
 	
-	private Block body;
-	
-	private boolean abstractArgument;
-	
-	private Register register;
-	
-    private int offset;
-	
-	public MethodDefinition(Signature _signature, Block _body, boolean _abstractArgument) {
+	public MethodDefinition(Signature _signature, Block _body) {
 		this.signature = _signature;
 		this.body = _body;
-		this.abstractArgument = _abstractArgument;
 	}
 
 	/** Get the method signature.

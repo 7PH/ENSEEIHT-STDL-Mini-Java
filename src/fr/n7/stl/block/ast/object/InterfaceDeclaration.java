@@ -83,12 +83,12 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public String toString() {
-		String _result = "interface" + this.className.toString() + " { \n";
+		String _result = "interface " + this.className.toString() + " { \n";
 		
 		for (Signature s : this.signatures) {
 			_result += s.toString() + "; \n";
-		}		
-		
-		return _result + "\n }";
+		}
+
+        return _result + "\n}\n";
 	}
 }

@@ -73,6 +73,9 @@ public class Program implements ASTNode {
 
     @Override
     public String toString() {
-        throw new SemanticsUndefinedException("toString method is undefined for Program.");
+        StringBuilder s = new StringBuilder();
+        for (ProgramDeclaration programDeclaration: declarations)
+            s.append(programDeclaration);
+        return s.toString();
     }
 }
