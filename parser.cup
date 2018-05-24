@@ -113,8 +113,8 @@ non terminal List<TypeInstantiation>    TypeInstantiations;
 non terminal TypeInstantiation          TypeInstantiation;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
-non terminal List<GenericType>            GenericTypes;
-non terminal GenericType                  GenericType;
+non terminal List<GenericType>          GenericTypes;
+non terminal GenericType                GenericType;
 non terminal List<Signature>            InnerInterfaceDefinitions;
 non terminal Signature                  InnerInterfaceDefinition;
 non terminal Type                       NullableType;
@@ -234,7 +234,7 @@ GenericTypes ::=
         :}
     | GenericType:genericType
         {:
-            RESULT = new LinkedList<ClassName>();
+            RESULT = new LinkedList<GenericType>();
             RESULT.add(genericType);
         :}
     ;
