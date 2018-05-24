@@ -54,13 +54,12 @@ class Driver {
 
     private static void verbose(Parser parser) {
         System.out.println("===============================================");
-        System.out.println("content     : " + parser.block.toString());
-        System.out.println("name        : " + parser.name);
-        System.out.println("resolve     : " + (parser.resolve ? "OK   " : "ERROR") + " (" + parser.resolveTimeMs + "ms)");
-        System.out.println("getType     : " + (parser.checkType ? "OK   " : "ERROR") + " (" + parser.checkTypeTimeMs + "ms)");
-        System.out.println("===============================================");
-        System.out.println("TAM         : ");
-        System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
+        System.out.println("content     : " + parser.program.toString());
+        //System.out.println("resolve     : " + (parser.resolve ? "OK   " : "ERROR") + " (" + parser.resolveTimeMs + "ms)");
+        //System.out.println("getType     : " + (parser.checkType ? "OK   " : "ERROR") + " (" + parser.checkTypeTimeMs + "ms)");
+        //System.out.println("===============================================");
+        //System.out.println("TAM         : ");
+        //System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
         System.out.println("===============================================");
     }
 
@@ -72,10 +71,10 @@ class Driver {
         String tamCode = parser.fragment == null ? "" : parser.fragment.toString();
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("TAM", tamCode);
-        jsonObject.put("code", parser.block.toString());
-        jsonObject.put("resolve", parser.resolve);
-        jsonObject.put("checkType", parser.checkType);
+        jsonObject.put("code", parser.program.toString());
+        //jsonObject.put("resolve", parser.resolve);
+        //jsonObject.put("checkType", parser.checkType);
+        //jsonObject.put("TAM", tamCode);
         System.out.print(jsonObject);
     }
 

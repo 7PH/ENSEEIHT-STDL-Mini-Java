@@ -35,9 +35,10 @@ parser code {:
 
     public String name;
 
-    public Block block;
+    public Program program;
 
-    public boolean resolve, checkType;
+    public boolean resolve = false;
+    public boolean checkType = false;
 
     public double
         resolveTimeMs,
@@ -64,7 +65,7 @@ init with {:
     } catch (IOException e) {
         e.printStackTrace();
     }
-    lexer = new Lexer(f,fis);
+    lexer = new Lexer(f, fis);
 :};
 
 /* Expression qui permet de progresser dans l'analyse lexicale. */
@@ -90,7 +91,8 @@ terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux;
 terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
-non terminal Program					Program;
+non terminal Program                    Driver;
+non terminal Program                    Program;
 non terminal Block						Bloc;
 non terminal List<Instruction>			Instructions;
 non terminal Instruction				Instruction;
@@ -142,9 +144,18 @@ precedence left UL_Crochet_Ouvrant, UL_Point, UL_Parenthese_Ouvrante;
 precedence left UL_Extends;
 /* Opérateur le plus prioritaire */
 
+
+
 /* Règles de grammaire attribuée pour la construction de l'arbre abstrait */
 // Program
 //  - ($InterfaceDeclaration|$ClassDeclaration)+
+Driver ::= Program:program
+    {:
+        System.out.println(program);
+
+        RESULT = program;
+    :};
+
 Program ::=
     Program:program ProgramDeclaration:decl
         {:
