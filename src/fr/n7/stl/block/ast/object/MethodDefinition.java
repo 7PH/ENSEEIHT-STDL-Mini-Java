@@ -6,6 +6,7 @@ import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
@@ -116,7 +117,20 @@ public class MethodDefinition extends Definition {
 	
 	@Override
     public boolean checkType() {
-        return this.body.checkType();
+        boolean ok = true;
+
+        // body?
+        ok &= this.body.checkType();
+
+        // parameters ok?
+        for (ParameterDeclaration p : this.signature.getParameters()) {
+            if (p.getType().equalsTo(AtomicType.ErrorType)) {
+                Logger.error("Error in parameter " + p + " of " + this.getName());
+                ok = false;
+            }
+        }
+
+        return ok;
     }
 
 	@Override
