@@ -45,23 +45,10 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     	// Verify if the class is in the scope
 		if (! scope.accepts(this)) {
-			Logger.error("Could not resolve class " + this.getName() + " because this name is already taken.");
+			Logger.error("Could not redefine class " + this.getName() + ".");
 			return false;
 		}
 
-		// Register it
-    	scope.register(this);
-
-        // Define a new scope for methods/attributes
-        HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
-
-        // Resolve for each definition in the new scope
-        for (Definition definition: definitions) {
-            if (! definition.resolve(newScope)) {
-                Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
-                return false;
-            }
-        }
 
 		// Verify that implementedClass contains only interfaces
     	for (TypeInstantiation tp: implementedClasses) {
@@ -92,10 +79,18 @@ public class ClassDeclaration extends ProgramDeclaration {
         	return false;
         }
 
+        // resolves extends
+        for (TypeInstantiation extended: extendedClass) {
+		    if (! extended.resolve(scope)) {
+		        Logger.error(getName() + " extends class " + extended + " which contains error");
+                return false;
+            }
+        }
+
     	// TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
     	
     	// Verify if every superclass abstract methods are implemented
-		if (this.extendedClass.size() != 0) {
+		if (this.extendedClass.size() > 0) {
     		TypeInstantiation tp = this.extendedClass.get(0);
     		// Check if the superclass is well a simple class
     		if (tp.getDeclaration() instanceof InterfaceDeclaration) {
@@ -116,7 +111,21 @@ public class ClassDeclaration extends ProgramDeclaration {
     			}
     		}
     	}
-    	
+
+        // Register it
+        scope.register(this);
+
+        // Define a new scope for methods/attributes
+        HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
+
+        // Resolve for each definition in the new scope
+        for (Definition definition: definitions) {
+            if (! definition.resolve(newScope)) {
+                Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
+                return false;
+            }
+        }
+
     	// Verify if a method is abstract and accord it with class modifier
 		for (Definition definition: definitions) {
 			if (definition instanceof MethodDefinition) {
@@ -130,8 +139,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 			    Logger.error("ClassDeclaration: Wrong kind of definition for: " + definition);
             }
 		}
-    	
-		return true;
+
+        return true;
     }
 
 	private List<Signature> getClassSignatures() {

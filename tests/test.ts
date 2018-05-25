@@ -186,6 +186,16 @@ describe('# Resolve/Checktype tests', function () {
         done();
     });
 
+    it('-> forbidden overload 3', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {
+                int fun(String foo);
+                String fun(String bar);
+            }`,
+            { resolve: false, checkType: true });
+        done();
+    });
+
     it('-> interface implementation', function(done: () => any) {
         TAM.ensureResult(
             `interface abc {}
@@ -200,10 +210,20 @@ describe('# Resolve/Checktype tests', function () {
     it('-> unexisting interface implementation', function(done: () => any) {
         TAM.ensureResult(
             `class issou implements abc {}`,
-        {
-            resolve: false,
-            checkType: true
-        });
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> self reference', function(done: () => any) {
+        TAM.ensureResult(
+            `class abs extends abc { }`,
+            {
+                resolve: false,
+                checkType: true
+            });
         done();
     });
 });
