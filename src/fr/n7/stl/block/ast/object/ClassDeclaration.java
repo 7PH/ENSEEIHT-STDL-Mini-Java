@@ -43,6 +43,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 	@Override
     public boolean resolve(HierarchicalScope<Declaration> _scope) {
 
+	    Logger.error("This is an error. Remove me in ClassDeclaration");
+
     	// Verify if the class is in the scope
 		if (! _scope.accepts(this)) {
 			Logger.error("Could not resolve class " + this.getName() + " because this name is already taken.");
@@ -51,32 +53,34 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 		// Register it
     	_scope.register(this);
-    	
-    	// Verify thar implementedClass contains only interfaces
-    	for (TypeInstantiation tp : this.implementedClasses) {
-    		if (tp.getDeclaration() instanceof ClassDeclaration) {
-    			Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
-    			return false;
-    		}
-    	}
-    	
-    	// Verify that each interface method is implemented
-    	for (TypeInstantiation tp : this.implementedClasses) {
-    		InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
-    		List<Signature> classSignatures = getClassSignatures();
-    		for (Signature s : interfaceDeclaration.getSignatures()) {
-    			if (!classSignatures.contains(s)) {
-    				Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + s.getName().split(" ")[0] + ".");
-    				return false;
-    			}
-    		}
-    	}
+
+
+		// @TODO null pointer exception here
+        // Verify thar implementedClass contains only interfaces
+    	//for (TypeInstantiation tp : implementedClasses) {
+    	//	if (tp.getDeclaration() instanceof ClassDeclaration) {
+    	//		Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
+    	//		return false;
+    	//	}
+    	//}
+
+        // Verify that each interface method is implemented
+        //for (TypeInstantiation tp : this.implementedClasses) {
+        //	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
+        //	List<Signature> classSignatures = getClassSignatures();
+        //	for (Signature s : interfaceDeclaration.getSignatures()) {
+        //		if (!classSignatures.contains(s)) {
+        //			Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + s.getName().split(" ")[0] + ".");
+        //			return false;
+        //		}
+        //	}
+        //}
     	
     	// Verify that there is no more one superclass
-    	if (this.extendedClass.size() > 1 ) {
-    		Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
-    		return false;
-    	}
+        //if (this.extendedClass.size() > 1 ) {
+        //	Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
+        //	return false;
+        //}
 
     	// TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
     	
@@ -108,6 +112,7 @@ public class ClassDeclaration extends ProgramDeclaration {
     		if (d instanceof MethodDefinition) {
     			if (((MethodDefinition) d).isAbstract() && !(this.isAbstract())) {
     				Logger.error("You declared " + d.getName() + " as abstract but its class " + this.getName() + " is not declared as abstract.");
+    			    return false;
     			}
     		}
     	}
@@ -117,7 +122,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     	// Resolve for each definition in the new scope
     	for (Definition d : definitions) {
-    		if (!d.resolve(newScope)) {
+    		if (! d.resolve(newScope)) {
     			Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
     			return false;
     		}

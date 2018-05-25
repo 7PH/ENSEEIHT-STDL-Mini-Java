@@ -22,7 +22,6 @@ public class Logger {
 
     public static void error(String message) {
         errors.add(message);
-        flush();
     }
 
     public static void warning(String message) {
@@ -31,6 +30,19 @@ public class Logger {
 
     public static void info(String message) {
         infos.add(message);
+    }
+
+    public static String getAll() {
+        StringBuilder m = new StringBuilder();
+
+        for (String info: infos)
+            m.append("Info: ").append(info).append("\n");
+        for (String warning: warnings)
+            m.append("Warning: ").append(warning).append("\n");
+        for (String error: errors)
+            m.append("Error: ").append(error).append("\n");
+
+        return m.toString();
     }
 
     public static void flush() {
