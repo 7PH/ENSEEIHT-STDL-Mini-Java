@@ -159,10 +159,30 @@ describe('# Resolve/Checktype tests', function () {
                 int fun(String param, int param2);
                 int fun(int param, String param2);
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> forbidden overload 1', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {
+                int fun();
+                int fun();
+            }`,
+            { resolve: false, checkType: true });
+        done();
+    });
+
+    it('-> forbidden overload 2', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {
+                int fun(String foo);
+                int fun(String bar);
+            }`,
+            { resolve: false, checkType: true });
         done();
     });
 
