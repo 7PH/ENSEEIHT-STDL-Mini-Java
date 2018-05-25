@@ -15,20 +15,26 @@ public class Constructor extends MethodDefinition {
 
     @Override
     public boolean checkType() {
-        boolean b = true;
+        boolean ok = true;
+
         if (this.getDefinitionModifier() != null) {
-            Logger.error("Constructor " + this.getName() + " has a definition modifier.");
+            Logger.error("Constructor " + this.getName() + " cannot have a static/final modifier");
+            ok = false;
         }
-        b &= this.body.checkType();
-        if (!b) {
-            Logger.error("Body of Constructor " + this.getName() + this.signature.getParameters().toString() + " is not well typed.");
-        }
-        for (ParameterDeclaration p : this.signature.getParameters()) {
-            b &= !(p.getType().equalsTo(AtomicType.ErrorType));
-            if (!b) {
-                Logger.error("Parameter : " + p.toString() + " (in Constructor " + this.getName() + ") is considered as ErrorType");
-            }
-        }
-        return b;
+
+        // @TODO delete this note
+        // no need to display a second error.
+        // if an instruction within the body is not well typed,
+        // it will show an error in the Logger. no need to display it twice here.
+        // so i've deleted the 'if' block there
+        // {deleted code}
+        ok &= body.checkType();
+
+        // @TODO delete this note
+        // no need to check parameters in MethodDefinition and here
+        // factorized in MethodDefinition
+        // {deleted code}
+
+        return ok;
     }
 }
