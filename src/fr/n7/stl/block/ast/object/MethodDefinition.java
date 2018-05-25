@@ -102,13 +102,13 @@ public class MethodDefinition extends Definition {
 		*/
 		// Resolve body if present
 		if (this.isAbstract()) {
-			if (!(this.body != null)) {
+			if (this.body == null) {
 				Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
 				return false;
 			}
 		}
 		// Resolve body
-		if (!this.body.resolve(_scope)) {
+		if (! this.body.resolve(_scope)) {
 			Logger.error("Could not resolve " + this.getName() + " because body could not be resolved.");
 			return false;
 		}
