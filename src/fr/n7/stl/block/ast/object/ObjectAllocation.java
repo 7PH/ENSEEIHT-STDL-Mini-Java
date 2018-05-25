@@ -12,13 +12,13 @@ import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
-public class ObjectInstantiation implements Expression {
+public class ObjectAllocation implements Expression {
 
     private Type type;
 
     private List<Expression> parameters;
 
-    public ObjectInstantiation(Type type, List<Expression> parameters) {
+    public ObjectAllocation(Type type, List<Expression> parameters) {
         this.type = type;
         this.parameters = parameters;
     }
@@ -49,7 +49,7 @@ public class ObjectInstantiation implements Expression {
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-    	throw new SemanticsUndefinedException("getCode method is undefined for ObjectInstantiation.");
+    	throw new SemanticsUndefinedException("getCode method is undefined for ObjectAllocation.");
     }
 
     @Override

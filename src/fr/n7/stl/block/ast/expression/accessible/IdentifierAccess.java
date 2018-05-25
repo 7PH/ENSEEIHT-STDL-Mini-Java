@@ -8,6 +8,7 @@ import fr.n7.stl.block.ast.expression.AbstractUse;
 import fr.n7.stl.block.ast.instruction.declaration.ConstantDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
+import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
@@ -26,10 +27,10 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
 	
 	/**
 	 * Creates a variable use expression ABSTRACT Syntax Tree node.
-	 * @param _name Name of the used variable.
+	 * @param name Name of the used variable.
 	 */
-	public IdentifierAccess(String _name) {
-		super(_name);
+	public IdentifierAccess(String name) {
+		super(name);
 	}
 
 	/*
@@ -37,23 +38,24 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
 	 */
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		if (scope.knows(this.name)) {
-			Declaration _declaration = scope.get(this.name);
-			if (_declaration instanceof VariableDeclaration) {
-				this.expression = new VariableUse((VariableDeclaration) _declaration);
+			Declaration declaration = scope.get(this.name);
+			if (declaration instanceof VariableDeclaration) {
+				this.expression = new VariableUse((VariableDeclaration) declaration);
 				return true;
-			} else if (_declaration instanceof ParameterDeclaration) {
-                expression = new ParameterUse((ParameterDeclaration) _declaration, null);
+			} else if (declaration instanceof ParameterDeclaration) {
+                expression = new ParameterUse((ParameterDeclaration) declaration, null);
                 return true;
-			} else {
-                if (_declaration instanceof ConstantDeclaration) {
-                    // TODO : refactor the management of Constants
-                    this.expression = new ConstantUse((ConstantDeclaration) _declaration);
-                    return true;
-                } else {
-                    Logger.error("The declaration for " + this.name + " is of the wrong kind.");
-                    return false;
-                }
-			}
+			} else if (declaration instanceof ConstantDeclaration) {
+                // TODO : refactor the management of Constants
+                this.expression = new ConstantUse((ConstantDeclaration) declaration);
+                return true;
+            } else if (declaration instanceof ClassDeclaration) {
+                this.expression = new ObjectUse((ClassDeclaration) declaration);
+                return true;
+            } else {
+                Logger.error("The declaration for " + this.name + " is of the wrong kind.");
+                return false;
+            }
 		} else {
 			Logger.error("The identifier " + this.name + " has not been found.");
 			return false;	

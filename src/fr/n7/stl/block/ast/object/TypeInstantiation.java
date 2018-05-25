@@ -23,9 +23,9 @@ public class TypeInstantiation implements Type {
 		this.name = name;
 	}
 
-	public TypeInstantiation(String _name, List<TypeInstantiation> _Type_instantiations) {
-		this(_name);
-		this.typeInstantiations = _Type_instantiations;
+	public TypeInstantiation(String name, List<TypeInstantiation> instantiations) {
+		this(name);
+		this.typeInstantiations = instantiations;
 	}
 
 	@Override

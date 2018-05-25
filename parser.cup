@@ -86,7 +86,7 @@ terminal			UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
 terminal			UL_Definition_Constante, UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
 terminal String		UL_Identificateur, UL_Chaine, UL_Caractere;
 terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
-terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
+terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract;
 
 /* Non terminaux avec type renvoyé par actions sémantiques (RESULT = ...) */
 non terminal Program                    Driver;
@@ -668,6 +668,7 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				{:
 					RESULT = new MethodCall( expression, etiquette, new LinkedList<Expression>() );
 				:}
+			/*
 			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
 				{:
 				   RESULT = new MethodCall("this", method, parameters );
@@ -676,7 +677,8 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				{:
 					RESULT = new MethodCall("this", method, new LinkedList<Expression>());
 				:}
-			| Expression:object UL_Point UL_Identificateur:method UL_Point_Virgule
+				*/
+			| Expression:object UL_Point UL_Identificateur:method
 				{:
 				    RESULT = new AttributeAccess(object, method);
 				:}

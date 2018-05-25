@@ -15,10 +15,10 @@ public abstract class AbstractIdentifier implements Expression {
 	
 	/**
 	 * Creates a variable related expression ABSTRACT Syntax Tree node.
-	 * @param _name Name of the variable.
+	 * @param name Name of the variable.
 	 */
-	public AbstractIdentifier(String _name) {
-		this.name = _name;
+	public AbstractIdentifier(String name) {
+		this.name = name;
 	}
 
 
