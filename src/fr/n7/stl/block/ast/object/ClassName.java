@@ -1,9 +1,8 @@
 package fr.n7.stl.block.ast.object;
 
-/*
 import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.scope.Declaration;
-import fr.n7.stl.block.ast.scope.HierarchicalScope;*/
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
 
 import java.util.List;
 
