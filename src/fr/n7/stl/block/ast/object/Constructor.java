@@ -2,7 +2,6 @@ package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.Block;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
-import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.util.Logger;
 
 import java.util.List;
