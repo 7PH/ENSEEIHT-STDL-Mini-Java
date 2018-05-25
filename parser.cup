@@ -517,21 +517,21 @@ Expressions ::= Expressions:expressions UL_Virgule Expression:expression
 				:}
             ;
 
-Affectable ::= UL_Identificateur:nom
+Affectable ::= UL_Identificateur:name
 				{:
-					RESULT = new VariableAssignment( nom );
+					RESULT = new VariableAssignment(name);
 				:}
 			| Affectable:tableau UL_Crochet_Ouvrant Expression:indice UL_Crochet_Fermant
 				{:
-					RESULT = new ArrayAssignment( tableau, indice);
+					RESULT = new ArrayAssignment(tableau, indice);
 				:}
 			| UL_Parenthese_Ouvrante Affectable:affectable UL_Parenthese_Fermante
 				{:
 					RESULT = affectable;
 				:}
-			| Affectable:objet UL_Point UL_Identificateur:attribute
+			| Affectable:object UL_Point UL_Identificateur:attribute
 				{:
-					RESULT = new AttributeAssignment( objet, attribute);
+					RESULT = new AttributeAssignment(object, attribute);
 				:}
 			;
 
@@ -603,26 +603,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				{:
 					RESULT = new ArrayAccess( expression, indice );
 				:}
-			| Expression:expression UL_Point UL_Identificateur:etiquette
-				{:
-					RESULT = new FieldAccess( expression, etiquette );
-				:}
-			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
-				{:
-					RESULT = new MethodCall( expression, etiquette, parametres );
-				:}
-			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-				{:
-					RESULT = new MethodCall( expression, etiquette, new LinkedList<Expression>() );
-				:}
-			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
-				{:
-				   RESULT = new MethodCall("this", method, parameters );
-				:}
-			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
-				{:
-					RESULT = new MethodCall("this", method, new LinkedList<Expression>());
-				:}
 			| Expression:condition UL_Point_Interrogation Expression:alors UL_Deux_Points Expression:sinon
 				{:
 					RESULT = new ConditionalExpression( condition, alors, sinon );
@@ -675,6 +655,26 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 			| UL_Chaine:chaine
              	{:
 					RESULT = new StringValue( chaine );
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+				{:
+					RESULT = new MethodCall( expression, etiquette, parametres );
+				:}
+			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+				{:
+					RESULT = new MethodCall( expression, etiquette, new LinkedList<Expression>() );
+				:}
+			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
+				{:
+				   RESULT = new MethodCall("this", method, parameters );
+				:}
+			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
+				{:
+					RESULT = new MethodCall("this", method, new LinkedList<Expression>());
+				:}
+			| Expression:object UL_Point UL_Identificateur:method UL_Point_Virgule
+				{:
+				    RESULT = new AttributeAccess(object, method);
 				:}
 			| UL_Nouveau Type:type UL_Crochet_Ouvrant Expression:taille UL_Crochet_Fermant
              	{:

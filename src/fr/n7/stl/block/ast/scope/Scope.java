@@ -39,5 +39,6 @@ public interface Scope <D extends Declaration> {
 	 */
 	public void register(D declaration);
 
+	public void register(D declaration, String... aliases);
 	
 }

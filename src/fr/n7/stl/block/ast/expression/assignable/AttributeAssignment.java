@@ -1,7 +1,11 @@
-package fr.n7.stl.block.ast.object;
+package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.AbstractAttribute;
+import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.expression.assignable.AssignableExpression;
+import fr.n7.stl.block.ast.object.AttributeDefinition;
+import fr.n7.stl.block.ast.object.TypeInstantiation;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
@@ -9,22 +13,17 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-public class AttributeAssignment implements AssignableExpression {
-	
-	private AssignableExpression object;
+public class AttributeAssignment extends AbstractAttribute implements AssignableExpression {
 	
 	private TypeInstantiation objectType;
 	
-	private String attributeIdentificateur;
-	
 	private AttributeDefinition attribute;
 
-	public AttributeAssignment(AssignableExpression _objet, String _attributeIdentificateur) {
-		this.object = _objet;
-		this.attributeIdentificateur = _attributeIdentificateur;
-	}
+    public AttributeAssignment(Expression object, String name) {
+        super(object, name);
+    }
 
-	@Override
+    @Override
 	public Type getType() {
 		throw new SemanticsUndefinedException("getType method is undefined for AttributeAssignment.");
 	}
@@ -37,8 +36,8 @@ public class AttributeAssignment implements AssignableExpression {
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		// Verify objet resolve.
-		if (! this.object.resolve(scope)) {
-    		Logger.error("Could not resolve attribute assignment because the object " + this.object.toString() + ".");
+		if (! object.resolve(scope)) {
+    		Logger.error("Could not resolve attribute assignment because of: " + this.object.toString() + ".");
 	    	return false;
 		}
 
@@ -53,14 +52,18 @@ public class AttributeAssignment implements AssignableExpression {
 	    // Verify that the TypeInstantiation contain the field
 	    this.objectType = (TypeInstantiation) type;
 
-	    if (!(this.objectType.contains(this.attributeIdentificateur))) {
-	    	Logger.error(this.object.toString() + " does not contain " + this.attributeIdentificateur + " field.");
-	    	return false;
-	    }
+        //if (!(this.objectType.contains(this.attrName))) {
+        //	Logger.error(this.object.toString() + " does not contain " + this.attrName + " field.");
+        //	return false;
+        //}
 
-	    this.attribute = this.objectType.get(this.attributeIdentificateur);
+        //this.attribute = this.objectType.get(this.attrName);
 
 	    return true;
 	}
 
+	@Override
+    public String toString() {
+	    return object + "." + name;
+    }
 }

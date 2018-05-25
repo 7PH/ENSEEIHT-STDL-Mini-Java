@@ -170,8 +170,13 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 			throw new IllegalArgumentException();
 		}
 	}
-	
-	/**
+
+    @Override
+    public void register(FieldDeclaration declaration, String... aliases) {
+        throw new IllegalArgumentException();
+    }
+
+    /**
 	 * Build a sequence type by erasing the names of the fields.
 	 * @return Sequence type extracted from record fields.
 	 */

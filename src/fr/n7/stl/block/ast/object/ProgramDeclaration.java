@@ -25,7 +25,7 @@ public abstract class ProgramDeclaration implements Declaration {
             Logger.error(this.getName() + " has already been declared");
             return false;
         }
-        scope.register(this);
+        scope.register(this, "this");
 
         for (TypeInstantiation extended: extendedClass) {
             if (! extended.resolve(scope)) {

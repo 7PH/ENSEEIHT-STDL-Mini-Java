@@ -63,14 +63,23 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
 	 */
 	@Override
 	public void register(Declaration declaration) {
-		if (this.accepts(declaration)) {
-			this.declarations.put(declaration.getName(), declaration);
-		} else {
-			throw new IllegalArgumentException();
-		}
+        if (this.accepts(declaration)) {
+            this.declarations.put(declaration.getName(), declaration);
+        } else {
+            throw new IllegalArgumentException();
+        }
 	}
 
-	/* (non-Javadoc)
+    @Override
+    public void register(Declaration declaration, String... aliases) {
+        register(declaration);
+
+        for (String alias: aliases)
+            if (! contains(alias))
+                declarations.put(alias, declaration);
+    }
+
+    /* (non-Javadoc)
 	 * @see fr.n7.stl.block.ast.scope.HierarchicalScope#knows(java.lang.String)
 	 */
 	@Override
