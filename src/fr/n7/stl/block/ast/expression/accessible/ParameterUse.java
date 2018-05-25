@@ -15,7 +15,7 @@ public class ParameterUse extends AbstractUse {
     private ParameterDeclaration parameterDeclaration;
 
     /**
-     * Creates a variable use expression Abstract Syntax Tree node.
+     * Creates a variable use expression ABSTRACT Syntax Tree node.
      * @param parameterDeclaration Name of the used variable.
      */
     ParameterUse(ParameterDeclaration parameterDeclaration, Expression value) {

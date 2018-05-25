@@ -14,7 +14,7 @@ public abstract class AbstractIdentifier implements Expression {
 	protected String name;
 	
 	/**
-	 * Creates a variable related expression Abstract Syntax Tree node.
+	 * Creates a variable related expression ABSTRACT Syntax Tree node.
 	 * @param _name Name of the variable.
 	 */
 	public AbstractIdentifier(String _name) {

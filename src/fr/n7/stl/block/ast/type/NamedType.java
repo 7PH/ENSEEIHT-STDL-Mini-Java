@@ -9,7 +9,7 @@ import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.util.Logger;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a named type.
+ * Implementation of the ABSTRACT Syntax Tree node for a named type.
  * 
  * @author Marc Pantel
  *

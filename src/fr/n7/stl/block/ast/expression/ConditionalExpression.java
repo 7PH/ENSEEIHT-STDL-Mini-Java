@@ -11,7 +11,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for a conditional expression.
+ * ABSTRACT Syntax Tree node for a conditional expression.
  * @author Marc Pantel
  *
  */
@@ -33,7 +33,7 @@ public class ConditionalExpression implements Expression {
 	protected Expression elseExpression;
 	
 	/**
-	 * Builds a binary expression Abstract Syntax Tree node from the left and right sub-expressions
+	 * Builds a binary expression ABSTRACT Syntax Tree node from the left and right sub-expressions
 	 * and the binary operation.
 	 * @param _else : Expression for the left parameter.
 	 * @param _condition : Binary Operator.

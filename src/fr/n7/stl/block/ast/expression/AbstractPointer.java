@@ -20,8 +20,8 @@ public abstract class AbstractPointer implements Expression {
 	protected Expression pointer;
 	
 	/**
-	 * Construction for the implementation of a pointer content access expression Abstract Syntax Tree node.
-	 * @param _pointer Abstract Syntax Tree for the pointer expression in a pointer content access expression.
+	 * Construction for the implementation of a pointer content access expression ABSTRACT Syntax Tree node.
+	 * @param _pointer ABSTRACT Syntax Tree for the pointer expression in a pointer content access expression.
 	 */
 	public AbstractPointer(Expression _pointer) {
 		this.pointer = _pointer;

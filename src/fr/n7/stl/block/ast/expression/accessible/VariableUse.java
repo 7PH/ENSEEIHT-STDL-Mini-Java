@@ -10,7 +10,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a variable use expression.
+ * Implementation of the ABSTRACT Syntax Tree node for a variable use expression.
  * @author Marc Pantel
  */
 public class VariableUse extends AbstractUse {
@@ -18,7 +18,7 @@ public class VariableUse extends AbstractUse {
 	protected VariableDeclaration declaration;
 	
 	/**
-	 * Creates a variable use expression Abstract Syntax Tree node.
+	 * Creates a variable use expression ABSTRACT Syntax Tree node.
 	 * @param declaration Name of the used variable.
 	 */
 	VariableUse(VariableDeclaration declaration) {

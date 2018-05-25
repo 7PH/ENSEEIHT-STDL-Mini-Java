@@ -12,7 +12,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import org.apache.commons.text.*;
 
 /**
- * Implementation of the Abstract Syntax Tree node for an integer constant expression.
+ * Implementation of the ABSTRACT Syntax Tree node for an integer constant expression.
  * @author Marc Pantel
  *
  */

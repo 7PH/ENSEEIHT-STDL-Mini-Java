@@ -7,7 +7,7 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 
 /**
- * Abstract Syntax Tree node for a formal parameter in a function declaration.
+ * ABSTRACT Syntax Tree node for a formal parameter in a function declaration.
  * @author Marc Pantel
  */
 public class ParameterDeclaration implements Declaration {

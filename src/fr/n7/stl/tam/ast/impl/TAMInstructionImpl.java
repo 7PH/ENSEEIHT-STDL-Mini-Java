@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Abstract class that gathers the common attributes for all TAM instructions.
+ * ABSTRACT class that gathers the common attributes for all TAM instructions.
  * @author Marc Pantel
  *
  */

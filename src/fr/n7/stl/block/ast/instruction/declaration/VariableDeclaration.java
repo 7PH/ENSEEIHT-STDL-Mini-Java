@@ -14,7 +14,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for a variable declaration instruction.
+ * ABSTRACT Syntax Tree node for a variable declaration instruction.
  * @author Marc Pantel
  *
  */
@@ -47,7 +47,7 @@ public class VariableDeclaration implements Declaration, Instruction {
 	protected int offset;
 	
 	/**
-	 * Creates a variable declaration instruction node for the Abstract Syntax Tree.
+	 * Creates a variable declaration instruction node for the ABSTRACT Syntax Tree.
 	 * @param _name Name of the declared variable.
 	 * @param _type AST node for the type of the declared variable.
 	 * @param _value AST node for the initial value of the declared variable.

@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Abstract Syntax Tree node for an expression building a sequence of values.
+ * ABSTRACT Syntax Tree node for an expression building a sequence of values.
  * @author Marc Pantel
  *
  */
@@ -27,7 +27,7 @@ public class Sequence implements Expression {
 	protected List<Expression> values;
 
 	/**
-	 * Builds an Abstract Syntax Tree node for an expression building a sequence of values.
+	 * Builds an ABSTRACT Syntax Tree node for an expression building a sequence of values.
 	 * @param _values : List of AST nodes of the expressions computing the values in the sequence.
 	 */
 	public Sequence(List<Expression> _values) {

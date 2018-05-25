@@ -7,7 +7,7 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a couple type.
+ * Implementation of the ABSTRACT Syntax Tree node for a couple type.
  * @author Marc Pantel
  *
  */

@@ -25,9 +25,9 @@ public abstract class AbstractArray implements Expression {
 	protected Expression index;
 	
 	/**
-	 * Construction for the implementation of an array element access expression Abstract Syntax Tree node.
-	 * @param _array Abstract Syntax Tree for the array part in an array element access expression.
-	 * @param _index Abstract Syntax Tree for the index part in an array element access expression.
+	 * Construction for the implementation of an array element access expression ABSTRACT Syntax Tree node.
+	 * @param _array ABSTRACT Syntax Tree for the array part in an array element access expression.
+	 * @param _index ABSTRACT Syntax Tree for the index part in an array element access expression.
 	 */
 	public AbstractArray(Expression _array, Expression _index) {
 		this.array = _array;

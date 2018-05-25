@@ -4,7 +4,7 @@
 package fr.n7.stl.block.ast.scope;
 
 /**
- * Interface to mark a node in the Abstract Syntax Tree as a Hierarchical Scope in the language.
+ * Interface to mark a node in the ABSTRACT Syntax Tree as a Hierarchical Scope in the language.
  * @author Marc Pantel
  *
  */

@@ -7,7 +7,7 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 
 /**
- * Abstract Syntax Tree node for a field in a record.
+ * ABSTRACT Syntax Tree node for a field in a record.
  * @author Marc Pantel
  *
  */

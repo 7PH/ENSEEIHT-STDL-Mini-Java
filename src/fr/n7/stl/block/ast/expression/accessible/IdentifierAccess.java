@@ -16,7 +16,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a variable use expression.
+ * Implementation of the ABSTRACT Syntax Tree node for a variable use expression.
  * @author Marc Pantel
  * TODO : Should also hold a function and not only a variable.
  */
@@ -25,7 +25,7 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
 	protected AbstractUse expression;
 	
 	/**
-	 * Creates a variable use expression Abstract Syntax Tree node.
+	 * Creates a variable use expression ABSTRACT Syntax Tree node.
 	 * @param _name Name of the used variable.
 	 */
 	public IdentifierAccess(String _name) {

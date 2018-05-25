@@ -18,7 +18,7 @@ import fr.n7.stl.util.Logger;
 import java.util.List;
 
 /**
- * Represents a Block node in the Abstract Syntax Tree node for the Bloc language.
+ * Represents a Block node in the ABSTRACT Syntax Tree node for the Bloc language.
  * Declares the various semantics attributes for the node.
  * 
  * A block contains declarations. It is thus a Scope even if a separate SymbolTable is used in

@@ -14,7 +14,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for an expression whose computation assigns a variable.
+ * ABSTRACT Syntax Tree node for an expression whose computation assigns a variable.
  * @author Marc Pantel
  *
  */
@@ -23,7 +23,7 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	protected VariableDeclaration declaration;
 
 	/**
-	 * Creates a variable assignment expression Abstract Syntax Tree node.
+	 * Creates a variable assignment expression ABSTRACT Syntax Tree node.
 	 * @param _name Name of the assigned variable.
 	 */
 	public VariableAssignment(String _name) {

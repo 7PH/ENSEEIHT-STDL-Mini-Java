@@ -9,15 +9,15 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for accessing a field in a record.
+ * Implementation of the ABSTRACT Syntax Tree node for accessing a field in a record.
  * @author Marc Pantel
  *
  */
 public class FieldAccess extends AbstractField implements Expression {
 
 	/**
-	 * Construction for the implementation of a record field access expression Abstract Syntax Tree node.
-	 * @param _record Abstract Syntax Tree for the record part in a record field access expression.
+	 * Construction for the implementation of a record field access expression ABSTRACT Syntax Tree node.
+	 * @param _record ABSTRACT Syntax Tree for the record part in a record field access expression.
 	 * @param _name Name of the field in the record field access expression.
 	 */
 	public FieldAccess(Expression _record, String _name) {

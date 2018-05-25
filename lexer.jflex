@@ -110,9 +110,9 @@ Identificateur = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "["          		{ return symbolFactory.newSymbol("Crochet Ouvrant", UL_Crochet_Ouvrant); }
   "]"          		{ return symbolFactory.newSymbol("Crochet Fermant", UL_Crochet_Fermant); }
   "const"			{ return symbolFactory.newSymbol("Définition Constante", UL_Definition_Constante); }
-  "typedef"			{ return symbolFactory.newSymbol("Définition Type", UL_Definition_Type); }
-  "struct"			{ return symbolFactory.newSymbol("Enregistrement", UL_Enregistrement); }
-  "enum"			{ return symbolFactory.newSymbol("Enumération", UL_Enumeration); }
+//  "typedef"			{ return symbolFactory.newSymbol("Définition Type", UL_Definition_Type); }
+//  "struct"			{ return symbolFactory.newSymbol("Enregistrement", UL_Enregistrement); }
+//  "enum"			{ return symbolFactory.newSymbol("Enumération", UL_Enumeration); }
   "int"				{ return symbolFactory.newSymbol("Type Entier", UL_Type_Entier); }
   "character"		{ return symbolFactory.newSymbol("Type Caractère", UL_Type_Caractere); }
   "String"			{ return symbolFactory.newSymbol("Type Chaîne", UL_Type_Chaine); }
@@ -125,8 +125,8 @@ Identificateur = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "null"			{ return symbolFactory.newSymbol("Nul", UL_Nul); }
   "true"			{ return symbolFactory.newSymbol("Vrai", UL_Vrai); }
   "false"			{ return symbolFactory.newSymbol("Faux", UL_Faux); }
-  "fst"				{ return symbolFactory.newSymbol("Premier", UL_Premier); }
-  "snd"				{ return symbolFactory.newSymbol("Second", UL_Second); }
+//  "fst"				{ return symbolFactory.newSymbol("Premier", UL_Premier); }
+//  "snd"				{ return symbolFactory.newSymbol("Second", UL_Second); }
   "while"			{ return symbolFactory.newSymbol("Tant que", UL_Tant_Que); }
   "return"			{ return symbolFactory.newSymbol("Return", UL_Retour); }
 "class" { return symbolFactory.newSymbol("Classe", UL_Class); }

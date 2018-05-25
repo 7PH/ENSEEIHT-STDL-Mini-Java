@@ -8,7 +8,7 @@ import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a field in a record.
+ * Implementation of the ABSTRACT Syntax Tree node for a field in a record.
  * @author Marc Pantel
  *
  */

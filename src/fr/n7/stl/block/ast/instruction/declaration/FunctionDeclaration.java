@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Abstract Syntax Tree node for a function declaration.
+ * ABSTRACT Syntax Tree node for a function declaration.
  * @author Marc Pantel
  */
 public class FunctionDeclaration implements Instruction, Declaration {

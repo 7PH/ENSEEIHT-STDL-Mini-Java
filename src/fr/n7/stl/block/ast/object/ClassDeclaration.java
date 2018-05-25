@@ -33,11 +33,11 @@ public class ClassDeclaration extends ProgramDeclaration {
 	}
 	
 	public boolean isAbstract() {
-		return (this.modifier == ClassModifier.Abstract);
+		return this.modifier == ClassModifier.ABSTRACT;
 	}
 
 	public boolean isFinal() {
-		return (this.modifier == ClassModifier.Final);
+		return (this.modifier == ClassModifier.FINAL);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
 /**
- * Implementation of the Abstract Syntax Tree node for an unary operation expression.
+ * Implementation of the ABSTRACT Syntax Tree node for an unary operation expression.
  * @author Marc Pantel
  *
  */
@@ -23,7 +23,7 @@ public class UnaryExpression implements Expression {
 	private Expression parameter;
 	
 	/**
-	 * Builds a unary expression Abstract Syntax Tree node from the parameter sub-expression
+	 * Builds a unary expression ABSTRACT Syntax Tree node from the parameter sub-expression
 	 * and the unary operation.
 	 * @param _operator : Unary Operator.
 	 * @param _parameter : Expression for the parameter.

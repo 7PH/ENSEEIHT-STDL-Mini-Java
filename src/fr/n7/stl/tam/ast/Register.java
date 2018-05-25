@@ -28,7 +28,7 @@ public enum Register {
 	 */
 	HT, 
 	/**
-	 * Static Link register (points to the current frame in the call stack).
+	 * STATIC Link register (points to the current frame in the call stack).
 	 */
 	LB, 
 	/**

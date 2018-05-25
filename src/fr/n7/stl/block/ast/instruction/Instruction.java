@@ -10,7 +10,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Represents an Instruction node in the Abstract Syntax Tree node for the Bloc language.
+ * Represents an Instruction node in the ABSTRACT Syntax Tree node for the Bloc language.
  * Declares the various semantics attributes for the node.
  * @author Marc Pantel
  *

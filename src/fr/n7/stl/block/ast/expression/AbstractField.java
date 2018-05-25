@@ -22,8 +22,8 @@ public abstract class AbstractField implements Expression {
 	protected RecordType recordType;
 	
 	/**
-	 * Construction for the implementation of a record field access expression Abstract Syntax Tree node.
-	 * @param _record Abstract Syntax Tree for the record part in a record field access expression.
+	 * Construction for the implementation of a record field access expression ABSTRACT Syntax Tree node.
+	 * @param _record ABSTRACT Syntax Tree for the record part in a record field access expression.
 	 * @param _name Name of the field in the record field access expression.
 	 */
 	public AbstractField(Expression _record, String _name) {

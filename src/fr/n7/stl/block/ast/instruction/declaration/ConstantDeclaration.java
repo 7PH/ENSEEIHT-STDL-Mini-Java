@@ -11,7 +11,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a constant declaration instruction.
+ * Implementation of the ABSTRACT Syntax Tree node for a constant declaration instruction.
  * @author Marc Pantel
  *
  */

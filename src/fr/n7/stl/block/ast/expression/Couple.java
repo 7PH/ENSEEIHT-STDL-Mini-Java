@@ -12,7 +12,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for building a couple value.
+ * ABSTRACT Syntax Tree node for building a couple value.
  * @author Marc Pantel
  *
  */

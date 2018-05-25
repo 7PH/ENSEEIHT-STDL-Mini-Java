@@ -13,7 +13,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import java.util.Optional;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a conditional instruction.
+ * Implementation of the ABSTRACT Syntax Tree node for a conditional instruction.
  * @author Marc Pantel
  *
  */

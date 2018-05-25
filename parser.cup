@@ -83,7 +83,7 @@ terminal			UL_Inferieur, UL_Superieur;
 terminal			UL_Inferieur_Egal, UL_Superieur_Egal;
 terminal			UL_Double_Egal, UL_Exclamation_Egal;
 terminal			UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
-terminal			UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
+terminal			UL_Definition_Constante, UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
 terminal String		UL_Identificateur, UL_Chaine, UL_Caractere;
 terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
 terminal            UL_Extends, UL_Class, UL_Implements, UL_Interface, UL_Public, UL_Private, UL_Final, UL_Static, UL_Abstract, UL_This;
@@ -190,9 +190,9 @@ ClassDeclaration ::=
 
 ClassModifier ::=
     UL_Final
-        {: RESULT = ClassModifier.Final; :}
+        {: RESULT = ClassModifier.FINAL; :}
     | UL_Abstract
-        {: RESULT = ClassModifier.Abstract; :}
+        {: RESULT = ClassModifier.ABSTRACT; :}
     |
         {: RESULT = null; :}
     ;
@@ -293,18 +293,18 @@ InnerInterfaceDefinition ::=
 
 AccessModifier ::=
     UL_Public
-        {: RESULT = AccessModifier.Public; :}
+        {: RESULT = AccessModifier.PUBLIC; :}
     | UL_Private
-        {: RESULT = AccessModifier.Private; :}
+        {: RESULT = AccessModifier.PRIVATE; :}
     ;
 
 DefinitionModifier ::=
     UL_Static
-        {: RESULT = DefinitionModifier.Static; :}
+        {: RESULT = DefinitionModifier.STATIC; :}
     | UL_Final
-        {: RESULT = DefinitionModifier.Final; :}
+        {: RESULT = DefinitionModifier.FINAL; :}
     | UL_Static UL_Final
-        {: RESULT = DefinitionModifier.Static_Final; :}
+        {: RESULT = DefinitionModifier.STATIC_FINAL; :}
     |
         {: RESULT = null; :}
     ;

@@ -10,7 +10,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node  for an expression extracting the second component in a couple.
+ * Implementation of the ABSTRACT Syntax Tree node  for an expression extracting the second component in a couple.
  * @author Marc Pantel
  */
 public class Second implements Expression {
@@ -22,7 +22,7 @@ public class Second implements Expression {
     private CoupleType targetType;
 
     /**
-	 * Builds an Abstract Syntax Tree node for an expression extracting the second component of a couple.
+	 * Builds an ABSTRACT Syntax Tree node for an expression extracting the second component of a couple.
 	 * @param _target : AST node for the expression whose value must whose second element is extracted by the expression.
 	 */
 	public Second(Expression _target) {

@@ -10,16 +10,16 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for accessing an array element.
+ * Implementation of the ABSTRACT Syntax Tree node for accessing an array element.
  * @author Marc Pantel
  *
  */
 public class ArrayAccess extends AbstractArray implements AccessibleExpression {
 
 	/**
-	 * Construction for the implementation of an array element access expression Abstract Syntax Tree node.
-	 * @param _array Abstract Syntax Tree for the array part in an array element access expression.
-	 * @param _index Abstract Syntax Tree for the index part in an array element access expression.
+	 * Construction for the implementation of an array element access expression ABSTRACT Syntax Tree node.
+	 * @param _array ABSTRACT Syntax Tree for the array part in an array element access expression.
+	 * @param _index ABSTRACT Syntax Tree for the index part in an array element access expression.
 	 */
 	public ArrayAccess(Expression _array, Expression _index) {
 		super(_array, _index);

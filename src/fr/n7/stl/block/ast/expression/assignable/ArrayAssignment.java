@@ -12,15 +12,15 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for an expression whose computation assigns a cell in an array.
+ * ABSTRACT Syntax Tree node for an expression whose computation assigns a cell in an array.
  * @author Marc Pantel
  */
 public class ArrayAssignment extends AbstractArray implements AssignableExpression {
 
 	/**
-	 * Construction for the implementation of an array element assignment expression Abstract Syntax Tree node.
-	 * @param _array Abstract Syntax Tree for the array part in an array element assignment expression.
-	 * @param _index Abstract Syntax Tree for the index part in an array element assignment expression.
+	 * Construction for the implementation of an array element assignment expression ABSTRACT Syntax Tree node.
+	 * @param _array ABSTRACT Syntax Tree for the array part in an array element assignment expression.
+	 * @param _index ABSTRACT Syntax Tree for the index part in an array element assignment expression.
 	 */
 	public ArrayAssignment(AssignableExpression _array, Expression _index) {
 		super(_array, _index);

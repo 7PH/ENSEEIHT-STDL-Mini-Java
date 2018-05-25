@@ -7,15 +7,15 @@ import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for an expression whose computation assigns a field in a record.
+ * ABSTRACT Syntax Tree node for an expression whose computation assigns a field in a record.
  * @author Marc Pantel
  *
  */
 public class FieldAssignment extends AbstractField implements AssignableExpression {
 
 	/**
-	 * Construction for the implementation of a record field assignment expression Abstract Syntax Tree node.
-	 * @param record Abstract Syntax Tree for the record part in a record field assignment expression.
+	 * Construction for the implementation of a record field assignment expression ABSTRACT Syntax Tree node.
+	 * @param record ABSTRACT Syntax Tree for the record part in a record field assignment expression.
 	 * @param name Name of the field in the record field assignment expression.
 	 */
 	public FieldAssignment(AssignableExpression record, String name) {

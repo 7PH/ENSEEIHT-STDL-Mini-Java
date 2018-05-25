@@ -14,7 +14,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a conditional instruction.
+ * Implementation of the ABSTRACT Syntax Tree node for a conditional instruction.
  * @author Marc Pantel
  *
  */

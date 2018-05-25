@@ -18,7 +18,7 @@ import static fr.n7.stl.block.ast.type.AtomicType.*;
 
 
 /**
- * Implementation of the Abstract Syntax Tree node for a printer instruction.
+ * Implementation of the ABSTRACT Syntax Tree node for a printer instruction.
  * @author Marc Pantel
  *
  */

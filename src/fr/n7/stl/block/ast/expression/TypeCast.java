@@ -12,7 +12,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Abstract Syntax Tree node for an expression extracting the first component in a couple.
+ * ABSTRACT Syntax Tree node for an expression extracting the first component in a couple.
  * @author Marc Pantel
  *
  */
@@ -32,7 +32,7 @@ public class TypeCast implements Expression {
     protected Expression target;
 
     /**
-     * Builds an Abstract Syntax Tree node for an expression extracting the first component of a couple.
+     * Builds an ABSTRACT Syntax Tree node for an expression extracting the first component of a couple.
      * @param _target : AST node for the expression whose value must whose first element is extracted by the expression.
      */
     public TypeCast(Expression _target, String _type) {

@@ -1,15 +1,15 @@
 package fr.n7.stl.block.ast.object;
 
 public enum ClassModifier {
-	Final,
-	Abstract;
+    FINAL,
+    ABSTRACT;
 	
 	@Override
 	public String toString() {
 		switch(this) {
-			case Final :
+			case FINAL:
 				return "final";
-			case Abstract :
+			case ABSTRACT:
 				return "abstract";
 			default :
 				throw new IllegalArgumentException( "The default case should never be triggered.");

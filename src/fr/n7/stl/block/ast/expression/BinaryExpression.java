@@ -9,7 +9,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
 /**
- * Abstract Syntax Tree node for a binary expression.
+ * ABSTRACT Syntax Tree node for a binary expression.
  * @author Marc Pantel
  *
  */
@@ -36,7 +36,7 @@ public class BinaryExpression implements Expression {
 	protected BinaryOperator operator;
 	
 	/**
-	 * Builds a binary expression Abstract Syntax Tree node from the left and right sub-expressions
+	 * Builds a binary expression ABSTRACT Syntax Tree node from the left and right sub-expressions
 	 * and the binary operation.
 	 * @param _left : Expression for the left parameter.
 	 * @param _operator : Binary Operator.

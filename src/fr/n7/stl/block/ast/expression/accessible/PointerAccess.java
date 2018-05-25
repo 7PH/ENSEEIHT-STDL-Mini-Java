@@ -9,15 +9,15 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a pointer access expression.
+ * Implementation of the ABSTRACT Syntax Tree node for a pointer access expression.
  * @author Marc Pantel
  *
  */
 public class PointerAccess extends AbstractPointer implements Expression {
 
 	/**
-	 * Construction for the implementation of a pointer content access expression Abstract Syntax Tree node.
-	 * @param _pointer Abstract Syntax Tree for the pointer expression in a pointer content access expression.
+	 * Construction for the implementation of a pointer content access expression ABSTRACT Syntax Tree node.
+	 * @param _pointer ABSTRACT Syntax Tree for the pointer expression in a pointer content access expression.
 	 */
 	public PointerAccess(Expression _pointer) {
 		super(_pointer);

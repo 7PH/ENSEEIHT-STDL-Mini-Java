@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Implementation of the Abstract Syntax Tree node for a sequence type.
+ * Implementation of the ABSTRACT Syntax Tree node for a sequence type.
  * @author Marc Pantel
  *
  */
