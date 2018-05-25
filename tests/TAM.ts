@@ -52,8 +52,8 @@ export class TAM {
 
     public static parseAndExecute(fileName: string): TAMResult {
         let parsed: TAMResult = TAM.parse(fileName);
-        if (parsed.resolve && parsed.checkType)
-            parsed.output = TAM.executeTam(parsed.TAM);
+        //if (parsed.resolve && parsed.checkType)
+        //    parsed.output = TAM.executeTam(parsed.TAM);
         return parsed;
     }
 

@@ -56,6 +56,7 @@ class Driver {
 
     private static Parser execute(Parser parser) throws Exception {
         parser.resolve = parser.program.resolve(new SymbolTable());
+        parser.checkType = parser.program.checkType();
         return parser;
     }
 
