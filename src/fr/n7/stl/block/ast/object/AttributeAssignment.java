@@ -4,8 +4,6 @@ import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.assignable.AssignableExpression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
-import fr.n7.stl.block.ast.type.NamedType;
-import fr.n7.stl.block.ast.type.RecordType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
@@ -37,9 +35,9 @@ public class AttributeAssignment implements AssignableExpression {
 	}
 
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		// Verify objet resolve.
-		if (!(this.object.resolve(_scope))) {
+		if (! this.object.resolve(scope)) {
     		Logger.error("Could not resolve attribute assignment because the object " + this.object.toString() + ".");
 	    	return false;
 		}
@@ -47,7 +45,7 @@ public class AttributeAssignment implements AssignableExpression {
 		// Get objet type and check that is a TypeInstantiation
 	    Type type = this.object.getType();
 
-	    if (!(type instanceof TypeInstantiation)) {
+	    if (! (type instanceof TypeInstantiation)) {
 	    	Logger.error(this.object.toString() + " is not a TypeInstantiation.");
 	    	return false;
 	    }

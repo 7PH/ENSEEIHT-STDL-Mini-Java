@@ -46,8 +46,8 @@ public abstract class AbstractArray implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-	    return array.resolve(_scope) && index.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+	    return array.resolve(scope) && index.resolve(scope);
 	}
 	
 	/**

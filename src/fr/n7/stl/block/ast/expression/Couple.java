@@ -50,9 +50,9 @@ public class Couple implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		boolean _first = this.first.resolve(_scope);
-		boolean _second = this.second.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		boolean _first = this.first.resolve(scope);
+		boolean _second = this.second.resolve(scope);
 		return _first && _second;
 	}
 

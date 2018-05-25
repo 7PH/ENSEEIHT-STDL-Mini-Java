@@ -12,7 +12,7 @@ public enum AccessModifier {
 			case PRIVATE:
 				return "private";
 			default :
-				throw new IllegalArgumentException( "The default case should never be triggered."); 
+				throw new IllegalArgumentException("The default case should never be triggered.");
 		}
 	}
 }

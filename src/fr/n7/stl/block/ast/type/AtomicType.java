@@ -27,25 +27,25 @@ public enum AtomicType implements Type {
 	 * @see fr.n7.stl.block.ast.Type#equalsTo(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean equalsTo(Type _other) {
-		return this == _other;
+	public boolean equalsTo(Type other) {
+		return this == other;
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.n7.stl.block.ast.Type#compatibleWith(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean compatibleWith(Type _other) {
-		if (this.equalsTo(_other)) {
+	public boolean compatibleWith(Type other) {
+		if (this.equalsTo(other)) {
 			return true;
-		} else if (_other instanceof NamedType) {
-            return compatibleWith(((NamedType) _other).getType());
+		} else if (other instanceof NamedType) {
+            return compatibleWith(((NamedType) other).getType());
         } else {
 			switch (this) {
 				case NullType :
-				    return ((_other != ErrorType) && (_other != VoidType));
+				    return ((other != ErrorType) && (other != VoidType));
 				case IntegerType:
-				    return (_other == FloatingType);
+				    return (other == FloatingType);
 				default:
 				    return false;
 			}
@@ -56,13 +56,13 @@ public enum AtomicType implements Type {
 	 * @see fr.n7.stl.block.ast.Type#merge(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public Type merge(Type _other) {
-		if (this.compatibleWith(_other)) {
-			return _other;
-		} else if (_other.compatibleWith(this)) {
+	public Type merge(Type other) {
+		if (this.compatibleWith(other)) {
+			return other;
+		} else if (other.compatibleWith(this)) {
             return this;
         } else if (this == AtomicType.Wildcard) {
-            return _other;
+            return other;
         } else {
             return ErrorType;
         }
@@ -109,7 +109,7 @@ public enum AtomicType implements Type {
 	 * @see fr.n7.stl.block.ast.type.Type#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return true;
 	}
 

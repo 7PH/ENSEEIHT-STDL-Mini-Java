@@ -36,7 +36,7 @@ public enum NullValue implements Value {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return true;
 	}
 

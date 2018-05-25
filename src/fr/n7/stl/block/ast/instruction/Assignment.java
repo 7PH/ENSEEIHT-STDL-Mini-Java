@@ -44,8 +44,8 @@ public class Assignment implements Instruction, Expression {
 	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return value.resolve(_scope) && assignable.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return value.resolve(scope) && assignable.resolve(scope);
 	}
 
 	/* (non-Javadoc)

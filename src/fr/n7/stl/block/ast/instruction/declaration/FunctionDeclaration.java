@@ -102,15 +102,15 @@ public class FunctionDeclaration implements Instruction, Declaration {
 	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		if (! _scope.accepts(this)) return false;
-		if (! type.resolve(_scope)) return false;
-        _scope.register(this);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		if (! scope.accepts(this)) return false;
+		if (! type.resolve(scope)) return false;
+        scope.register(this);
 
-		HierarchicalScope<Declaration> funScope = new SymbolTable(_scope);
+		HierarchicalScope<Declaration> funScope = new SymbolTable(scope);
 		int i = 0;
 		for (ParameterDeclaration parameterDeclaration: parameters) {
-            parameterDeclaration.getType().resolve(_scope);
+            parameterDeclaration.getType().resolve(scope);
             funScope.register(parameterDeclaration);
             parameterDeclaration.setOffset(i);
             parameterDeclaration.setFunctionDeclaration(this);

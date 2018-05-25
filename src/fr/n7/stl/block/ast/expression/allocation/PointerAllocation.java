@@ -41,8 +41,8 @@ public class PointerAllocation implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return ! _scope.contains(name) && element.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return ! scope.contains(name) && element.resolve(scope);
 	}
 
 	/* (non-Javadoc)

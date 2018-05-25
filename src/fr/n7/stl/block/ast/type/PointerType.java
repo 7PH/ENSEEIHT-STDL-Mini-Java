@@ -24,18 +24,18 @@ public class PointerType implements Type {
      * @see fr.n7.stl.block.ast.Type#equalsTo(fr.n7.stl.block.ast.Type)
      */
     @Override
-    public boolean equalsTo(Type _other) {
-        return _other instanceof PointerType
-                && element.equalsTo(((PointerType) _other).element);
+    public boolean equalsTo(Type other) {
+        return other instanceof PointerType
+                && element.equalsTo(((PointerType) other).element);
     }
 
     /* (non-Javadoc)
      * @see fr.n7.stl.block.ast.Type#compatibleWith(fr.n7.stl.block.ast.Type)
      */
     @Override
-    public boolean compatibleWith(Type _other) {
-        return _other instanceof PointerType
-                && element.compatibleWith(((PointerType) _other).element);
+    public boolean compatibleWith(Type other) {
+        return other instanceof PointerType
+                && element.compatibleWith(((PointerType) other).element);
     }
 
     /* (non-Javadoc)
@@ -68,8 +68,8 @@ public class PointerType implements Type {
      * @see fr.n7.stl.block.ast.type.Type#resolve(fr.n7.stl.block.ast.scope.Scope)
      */
     @Override
-    public boolean resolve(HierarchicalScope<Declaration> _scope) {
-        return this.element.resolve(_scope);
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
+        return this.element.resolve(scope);
     }
 
 }

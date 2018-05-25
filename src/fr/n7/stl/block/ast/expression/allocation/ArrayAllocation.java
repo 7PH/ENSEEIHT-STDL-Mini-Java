@@ -49,10 +49,10 @@ public class ArrayAllocation implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return (element != null || _scope.knows(name))
-				&& element.resolve(_scope)
-                && size.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return (element != null || scope.knows(name))
+				&& element.resolve(scope)
+                && size.resolve(scope);
 	}
 
 	/* (non-Javadoc)

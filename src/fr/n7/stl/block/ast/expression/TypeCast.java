@@ -51,10 +51,10 @@ public class TypeCast implements Expression {
      * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
      */
     @Override
-    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
         targetType = new NamedType(type);
-        targetType.resolve(_scope);
-        return target.resolve(_scope);
+        targetType.resolve(scope);
+        return target.resolve(scope);
     }
 
     /* (non-Javadoc)

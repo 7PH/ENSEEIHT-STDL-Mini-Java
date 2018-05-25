@@ -35,9 +35,9 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
 	/*
 	 * @TODO resolve? on VariableUse case
 	 */
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		if (_scope.knows(this.name)) {
-			Declaration _declaration = _scope.get(this.name);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		if (scope.knows(this.name)) {
+			Declaration _declaration = scope.get(this.name);
 			if (_declaration instanceof VariableDeclaration) {
 				this.expression = new VariableUse((VariableDeclaration) _declaration);
 				return true;

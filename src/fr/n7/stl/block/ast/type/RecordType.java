@@ -71,12 +71,12 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.Type#equalsTo(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean equalsTo(Type _other) {
-        if (_other instanceof NamedType)
-            return equalsTo(((NamedType) _other).getType());
+	public boolean equalsTo(Type other) {
+        if (other instanceof NamedType)
+            return equalsTo(((NamedType) other).getType());
 
-        if (_other instanceof RecordType) {
-            RecordType recordType = (RecordType) _other;
+        if (other instanceof RecordType) {
+            RecordType recordType = (RecordType) other;
             if (recordType.fields.size() != fields.size()) return false;
 
             int i = 0;
@@ -97,8 +97,8 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.Type#compatibleWith(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean compatibleWith(Type _other) {
-        return equalsTo(_other);
+	public boolean compatibleWith(Type other) {
+        return equalsTo(other);
     }
 
     /* (non-Javadoc)
@@ -123,13 +123,13 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.Scope#get(java.lang.String)
 	 */
 	@Override
-	public FieldDeclaration get(String _name) {
+	public FieldDeclaration get(String name) {
 		boolean _found = false;
 		Iterator<FieldDeclaration> _iter = this.fields.iterator();
 		FieldDeclaration _current = null;
 		while (_iter.hasNext() && (! _found)) {
 			_current = _iter.next();
-			_found = _found || _current.getName().contentEquals(_name);
+			_found = _found || _current.getName().contentEquals(name);
 		}
 		if (_found) {
 			return _current;
@@ -142,11 +142,11 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.Scope#contains(java.lang.String)
 	 */
 	@Override
-	public boolean contains(String _name) {
+	public boolean contains(String name) {
 		boolean _result = false;
 		Iterator<FieldDeclaration> _iter = this.fields.iterator();
 		while (_iter.hasNext() && (! _result)) {
-			_result = _result || _iter.next().getName().contentEquals(_name);
+			_result = _result || _iter.next().getName().contentEquals(name);
 		}
 		return _result;
 	}
@@ -155,17 +155,17 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.Scope#accepts(fr.n7.stl.block.ast.Declaration)
 	 */
 	@Override
-	public boolean accepts(FieldDeclaration _declaration) {
-		return ! this.contains(_declaration.getName());
+	public boolean accepts(FieldDeclaration declaration) {
+		return ! this.contains(declaration.getName());
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.n7.stl.block.ast.Scope#register(fr.n7.stl.block.ast.Declaration)
 	 */
 	@Override
-	public void register(FieldDeclaration _declaration) {
-		if (this.accepts(_declaration)) {
-			this.fields.add(_declaration);
+	public void register(FieldDeclaration declaration) {
+		if (this.accepts(declaration)) {
+			this.fields.add(declaration);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -215,12 +215,12 @@ public class RecordType implements Type, Declaration, Scope<FieldDeclaration> {
 	 * @see fr.n7.stl.block.ast.type.Type#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		boolean _result = true;
 		for (FieldDeclaration f : this.fields)
-			_result = _result && f.getType().resolve(_scope);
+			_result = _result && f.getType().resolve(scope);
 
-        if (_scope.contains(name))
+        if (scope.contains(name))
             return false;
 
 

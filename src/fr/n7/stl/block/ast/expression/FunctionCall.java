@@ -68,13 +68,13 @@ public class FunctionCall implements Expression, Instruction {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-	    if (! _scope.knows(name)) return false;
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+	    if (! scope.knows(name)) return false;
 	    for (Expression expression: arguments) {
-	        if (! expression.resolve(_scope))
+	        if (! expression.resolve(scope))
 	            return false;
         }
-		this.function = (FunctionDeclaration) _scope.get(name);
+		this.function = (FunctionDeclaration) scope.get(name);
         return true;
 	}
 

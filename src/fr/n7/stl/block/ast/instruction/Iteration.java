@@ -40,8 +40,8 @@ public class Iteration implements Instruction {
 	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return condition.resolve(_scope) && body.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return condition.resolve(scope) && body.resolve(scope);
 	}
 
 	/* (non-Javadoc)

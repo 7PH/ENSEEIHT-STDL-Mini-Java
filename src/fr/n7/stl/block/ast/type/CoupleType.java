@@ -30,10 +30,10 @@ public class CoupleType implements Type {
 	 * @see fr.n7.block.ast.Type#equalsTo(fr.n7.block.ast.Type)
 	 */
 	@Override
-	public boolean equalsTo(Type _other) {
-		if (_other instanceof CoupleType) {
-			return this.first.equalsTo(((CoupleType) _other).first)
-					&& this.second.equalsTo(((CoupleType) _other).second);
+	public boolean equalsTo(Type other) {
+		if (other instanceof CoupleType) {
+			return this.first.equalsTo(((CoupleType) other).first)
+					&& this.second.equalsTo(((CoupleType) other).second);
 		} else {
 			return false;
 		}
@@ -43,12 +43,12 @@ public class CoupleType implements Type {
 	 * @see fr.n7.block.ast.Type#compatibleWith(fr.n7.block.ast.Type)
 	 */
 	@Override
-	public boolean compatibleWith(Type _other) {
-		if (_other instanceof CoupleType) {
-			return this.first.compatibleWith(((CoupleType) _other).first)
-					&& this.second.compatibleWith(((CoupleType) _other).second);
-		} else if (_other instanceof NamedType) {
-		    return compatibleWith(((NamedType)_other).getType());
+	public boolean compatibleWith(Type other) {
+		if (other instanceof CoupleType) {
+			return this.first.compatibleWith(((CoupleType) other).first)
+					&& this.second.compatibleWith(((CoupleType) other).second);
+		} else if (other instanceof NamedType) {
+		    return compatibleWith(((NamedType) other).getType());
         } else {
 			return false;
 		}
@@ -58,11 +58,11 @@ public class CoupleType implements Type {
 	 * @see fr.n7.block.ast.Type#merge(fr.n7.block.ast.Type)
 	 */
 	@Override
-	public Type merge(Type _other) {
-		if (_other instanceof CoupleType) {
+	public Type merge(Type other) {
+		if (other instanceof CoupleType) {
 			return new CoupleType( 
-					this.first.merge(((CoupleType) _other).first),
-					this.second.merge(((CoupleType) _other).second));
+					this.first.merge(((CoupleType) other).first),
+					this.second.merge(((CoupleType) other).second));
 		} else {
 			return AtomicType.ErrorType;
 		}
@@ -104,9 +104,9 @@ public class CoupleType implements Type {
 	 * @see fr.n7.stl.block.ast.type.Type#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		boolean _first = first.resolve(_scope);
-		boolean _second = second.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		boolean _first = first.resolve(scope);
+		boolean _second = second.resolve(scope);
 		return _first && _second;
 	}
 

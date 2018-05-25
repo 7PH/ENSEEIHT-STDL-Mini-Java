@@ -7,9 +7,9 @@ public interface ASTNode {
 
     /**
      * Inherited Semantics attribute to transmit the scope, fill it and modify the AST
-     * @param _scope Inherited Scope that should contain the declarations used in the Expression
+     * @param scope Inherited Scope that should contain the declarations used in the Expression
      * @return Synthesized Semantics attribute that indicates if the identifier used in the
      * expression have been previously defined.
      */
-    public boolean resolve(HierarchicalScope<Declaration> _scope);
+    public boolean resolve(HierarchicalScope<Declaration> scope);
 }

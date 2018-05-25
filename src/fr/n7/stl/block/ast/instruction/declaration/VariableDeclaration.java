@@ -102,11 +102,11 @@ public class VariableDeclaration implements Declaration, Instruction {
 	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
     @Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-	    if (! _scope.accepts(this)) return false;
-	    if (! type.resolve(_scope)) return false;
-	    if (! value.resolve(_scope)) return false;
-	    _scope.register(this);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+	    if (! scope.accepts(this)) return false;
+	    if (! type.resolve(scope)) return false;
+	    if (! value.resolve(scope)) return false;
+	    scope.register(this);
 	    return true;
 	}
 

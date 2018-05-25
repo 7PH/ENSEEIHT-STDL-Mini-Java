@@ -39,8 +39,8 @@ public abstract class AbstractPointer implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return pointer.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return pointer.resolve(scope);
 	}
 
 	/**

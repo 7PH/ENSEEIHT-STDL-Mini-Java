@@ -45,8 +45,8 @@ public class UnaryExpression implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return this.parameter.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return this.parameter.resolve(scope);
 	}
 	
 	/* (non-Javadoc)

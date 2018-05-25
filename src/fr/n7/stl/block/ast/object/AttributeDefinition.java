@@ -18,16 +18,16 @@ public class AttributeDefinition extends Definition {
 	
 	private Expression value;
 	
-	public AttributeDefinition(Type _type, String _name) {
-		this.type = _type;
-		this.name = _name;
+	public AttributeDefinition(Type type, String name) {
+		this.type = type;
+		this.name = name;
 		this.value = null;
 	}
 	
-	public AttributeDefinition(Type _type, String _name, Expression _valeur) {
-		this.type = _type;
-		this.name = _name;
-		this.value = _valeur;
+	public AttributeDefinition(Type type, String name, Expression value) {
+		this.type = type;
+		this.name = name;
+		this.value = value;
 	}
 
 	@Override
@@ -41,37 +41,43 @@ public class AttributeDefinition extends Definition {
 	}
 	
 	@Override
-    public int allocateMemory(Register _register, int _offset) {
+    public int allocateMemory(Register register, int _offset) {
     	throw new SemanticsUndefinedException("allocateMemory method is undefined for AttributeDefinition.");
     }
 
 	@Override
-    public Fragment getCode(TAMFactory _factory) {
+    public Fragment getCode(TAMFactory factory) {
     	throw new SemanticsUndefinedException("getCode method is undefined for AttributeDefinition.");
     }
 
     @Override
     public String toString() {
-    	String _result = "";
+    	String result = "";
     	
-    	if (this.getAccessModifier() != null) {
-    		_result += this.getAccessModifier();
-    	}
-    	if (this.getDefinitionModifier() != null) {
-    		_result += this.getDefinitionModifier();
-    	}
-    	_result += this.type + " " + this.name + ";"; 
-    	
-    	return _result;
+    	if (this.getAccessModifier() != null)
+    		result += this.getAccessModifier();
+
+    	if (this.getDefinitionModifier() != null)
+    		result += this.getDefinitionModifier();
+
+    	result += this.type + " " + this.name;
+
+    	if (value != null)
+    	    result += " = " + value;
+
+    	result += ";";
+
+    	return result;
     }
 
 	@Override
 	public boolean checkType() {
-		boolean b = this.value.getType().compatibleWith(this.type);
-		if (!b) {
-			Logger.error(this.value.toString() + " is not compatible with " + this.type.toString());
+        boolean ok = true;
+		if (value != null && ! value.getType().compatibleWith(type)) {
+			Logger.error(value.toString() + " is not compatible with " + type.toString());
+            ok = false;
 		}
-		return b;
+		return ok;
 	}
 
 	@Override
@@ -80,24 +86,24 @@ public class AttributeDefinition extends Definition {
 	}
 
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		// Verify if the attribute is already in the scope
-		if (!_scope.accepts(this)) {
+		if (!scope.accepts(this)) {
 			Logger.error("Object " + this.name + " is already defined in scope.");
 			return false;
 		}
 		// Resolve type part
-		if (!this.type.resolve(_scope)) {
+		if (!this.type.resolve(scope)) {
     		Logger.error("Could not resolve attribute definition because of the type " + this.type.toString() + ".");
 			return false;
 		}
 		// Resolve value part
-		if (!this.value.resolve(_scope)) {
+		if (!this.value.resolve(scope)) {
     		Logger.error("Could not resolve attribute definition because of the value " + this.value.toString() + ".");
 			return false;
 		}
 		// Register the attribute
-		_scope.register(this);
+		scope.register(this);
 		return true;
 	}
 }

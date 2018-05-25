@@ -38,9 +38,9 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	 * @see fr.n7.stl.block.ast.expression.AbstractIdentifier#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		if (_scope.knows(this.name)) {
-			Declaration _declaration = _scope.get(this.name);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		if (scope.knows(this.name)) {
+			Declaration _declaration = scope.get(this.name);
 			if (_declaration instanceof VariableDeclaration) {
 				this.declaration = ((VariableDeclaration) _declaration);
 				return true;

@@ -54,8 +54,8 @@ public class Second implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		return target.resolve(_scope);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		return target.resolve(scope);
 	}
 
 	/* (non-Javadoc)

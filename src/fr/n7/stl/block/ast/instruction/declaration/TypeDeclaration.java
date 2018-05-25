@@ -50,10 +50,10 @@ public class TypeDeclaration implements Declaration, Instruction {
 	@Override
     /**
      */
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
-		if (! _scope.accepts(this)) return false;
-		if (! type.resolve(_scope)) return false;
-		_scope.register(this);
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+		if (! scope.accepts(this)) return false;
+		if (! type.resolve(scope)) return false;
+		scope.register(this);
 		return true;
 	}
 

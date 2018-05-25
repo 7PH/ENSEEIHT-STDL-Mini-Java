@@ -41,19 +41,19 @@ public class MethodCall implements Instruction, Expression {
     }
 
     @Override
-    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
     	
     	//TODO : Miss objectIdentifier ?
     	
         for (Expression parameter: parameters) {
-            if (!parameter.resolve(_scope)) {
+            if (!parameter.resolve(scope)) {
             	Logger.error("The parameter " + parameter.toString() + " in " + this.method + " call on " + this.identifier + " could not be resolved.");
             	return false;
             }
         }
         
         // Define a new scope for it
-    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
+    	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
     	if (!this.methodDefinition.resolve(newScope)) {
         	Logger.error("The method " + this.methodDefinition.getName() + " call could not be resolved.");

@@ -95,13 +95,10 @@ public class MethodDefinition extends Definition {
 		// Resolve signature
         resolved &= signature.getType().resolve(scope);
 
-		/* TODO : GESTION DES PARAMETRES ?
-		for (ParameterDeclaration pd : this.signature.getParameters()) {
-			if (!pd.resolve(scope))
-        		Logger.error("Could not resolve " + this.getName() + " because of the signature parameter " + pd.toString() + ".");
-                return false;
-		}
-		*/
+        // @TODO Do something with parameters?
+        //for (ParameterDeclaration parameter: signature.getParameters()) {
+        //	resolved &= parameter.resolve(scope);
+        //}
 
 		// abstract => ! body
 		if (isAbstract() && body != null) {

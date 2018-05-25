@@ -34,7 +34,7 @@ public class TypeInstantiation implements Type {
 	}
 	
 	@Override
-	public boolean compatibleWith(Type _other) {
+	public boolean compatibleWith(Type other) {
 		/* this compatible avec _other si :
 		 *  - this et _other sont de la même classe
 		 * 	- this extends_other
@@ -50,8 +50,8 @@ public class TypeInstantiation implements Type {
 		} 
 		ProgramDeclaration thisDeclaration = (ProgramDeclaration) this.getDeclaration();
 		
-		if (_other instanceof TypeInstantiation) {
-			TypeInstantiation _typeInst = (TypeInstantiation) _other;
+		if (other instanceof TypeInstantiation) {
+			TypeInstantiation _typeInst = (TypeInstantiation) other;
 			
 			if (_typeInst.getDeclaration() instanceof InterfaceDeclaration) {
 				/* _other est une interface. */				
@@ -115,7 +115,7 @@ public class TypeInstantiation implements Type {
 	}
 
 	@Override
-	public Type merge(Type _other) {
+	public Type merge(Type other) {
 		throw new SemanticsUndefinedException("merge method is undefined for TypeInstantiation.");
 	}
 
@@ -125,14 +125,14 @@ public class TypeInstantiation implements Type {
 	}
 
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {		
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 
-		if (!_scope.contains(this.name)) {
+		if (!scope.contains(this.name)) {
 			Logger.error("Could not resolve TypeInstantiation because the name " + this.name + " is not defined.");
 			return false;
 		} else {
-			if (_scope.get(this.name) instanceof ProgramDeclaration) {
-				ProgramDeclaration _declaration = (ClassDeclaration) _scope.get(this.name);
+			if (scope.get(this.name) instanceof ProgramDeclaration) {
+				ProgramDeclaration _declaration = (ClassDeclaration) scope.get(this.name);
 				this.declaration = _declaration;
 
 				if (this.typeInstantiations.size() > 0) {

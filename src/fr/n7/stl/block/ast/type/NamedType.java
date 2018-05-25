@@ -36,11 +36,11 @@ public class NamedType implements Type {
 	 * @see fr.n7.stl.block.ast.Type#equalsTo(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean equalsTo(Type _other) {
-		if (_other instanceof NamedType) {
-			return (this.declaration.getName().equals(((NamedType) _other).declaration.getName()));
+	public boolean equalsTo(Type other) {
+		if (other instanceof NamedType) {
+			return (this.declaration.getName().equals(((NamedType) other).declaration.getName()));
 		} else {
-			return (this.declaration.getType().equalsTo(_other));
+			return (this.declaration.getType().equalsTo(other));
 		}
 	}
 
@@ -50,7 +50,7 @@ public class NamedType implements Type {
 	 * @see fr.n7.stl.block.ast.Type#compatibleWith(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public boolean compatibleWith(Type _other) {
+	public boolean compatibleWith(Type other) {
 		/*
 		if (_other instanceof NamedType) {
 			return (this.declaration.getName().equals(((NamedType) _other).declaration.getName()));
@@ -58,7 +58,7 @@ public class NamedType implements Type {
 			return (this.declaration.getType().compatibleWith(_other));
 		}
 		*/
-		return declaration.getType().compatibleWith(_other);
+		return declaration.getType().compatibleWith(other);
 	}
 
 	/*
@@ -67,15 +67,15 @@ public class NamedType implements Type {
 	 * @see fr.n7.stl.block.ast.Type#merge(fr.n7.stl.block.ast.Type)
 	 */
 	@Override
-	public Type merge(Type _other) {
-		if (_other instanceof NamedType) {
-			if (this.declaration.getName().equals(((NamedType) _other).declaration.getName())) {
+	public Type merge(Type other) {
+		if (other instanceof NamedType) {
+			if (this.declaration.getName().equals(((NamedType) other).declaration.getName())) {
 				return this;
 			} else {
 				return AtomicType.ErrorType;
 			}
 		} else {
-			return (this.declaration.getType().merge(_other));
+			return (this.declaration.getType().merge(other));
 		}
 	}
 
@@ -128,12 +128,12 @@ public class NamedType implements Type {
 	 * @see fr.n7.stl.block.ast.type.Type#resolve(fr.n7.stl.block.ast.scope.Scope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 	    if (this.declaration == null) {
-			if (_scope.contains(this.name)) {
+			if (scope.contains(this.name)) {
 
 				try {
-					TypeDeclaration _declaration = (TypeDeclaration) _scope.get(this.name);
+					TypeDeclaration _declaration = (TypeDeclaration) scope.get(this.name);
 					this.declaration = _declaration;
 					return true;
 				} catch (ClassCastException e) {

@@ -54,10 +54,10 @@ public class Sequence implements Expression {
 	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
 	 */
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		boolean _result = true;
 		for (Expression _value : this.values) {
-			_result = _result && _value.resolve(_scope);
+			_result = _result && _value.resolve(scope);
 		}
 		return _result;
 	}
