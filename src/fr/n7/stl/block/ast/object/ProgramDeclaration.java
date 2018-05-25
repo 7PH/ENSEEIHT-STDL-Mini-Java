@@ -31,7 +31,7 @@ public abstract class ProgramDeclaration implements Declaration {
 	public abstract String toString();
 	
 	public String getName() {
-		return this.className.getName();
+	    return className.getName();
 	}
 	
 	/*/!\ Not the same as getName ! Both are needed. */

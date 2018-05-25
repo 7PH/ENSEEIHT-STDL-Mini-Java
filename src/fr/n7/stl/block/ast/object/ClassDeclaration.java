@@ -20,12 +20,12 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassModifier _modifier, ClassName _name, List<TypeInstantiation> _extension, List<TypeInstantiation> _implementation, List<Definition> _definitions) {
-		this.modifier = _modifier;
-		this.className = _name;
-		this.extendedClass = _extension;
-		this.implementedClasses = _implementation;
-		this.definitions = _definitions;
+	public ClassDeclaration(ClassModifier modifier, ClassName name, List<TypeInstantiation> extension, List<TypeInstantiation> implementation, List<Definition> definitions) {
+		this.modifier = modifier;
+		this.className = name;
+		this.extendedClass = extension;
+		this.implementedClasses = implementation;
+		this.definitions = definitions;
 	}
 
 	public List<Definition> getDefinitions() {
@@ -41,16 +41,27 @@ public class ClassDeclaration extends ProgramDeclaration {
 	}
 
 	@Override
-    public boolean resolve(HierarchicalScope<Declaration> _scope) {
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
 
     	// Verify if the class is in the scope
-		if (! _scope.accepts(this)) {
+		if (! scope.accepts(this)) {
 			Logger.error("Could not resolve class " + this.getName() + " because this name is already taken.");
 			return false;
 		}
 
 		// Register it
-    	_scope.register(this);
+    	scope.register(this);
+
+        // Define a new scope for methods/attributes
+        HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
+
+        // Resolve for each definition in the new scope
+        for (Definition definition: definitions) {
+            if (! definition.resolve(newScope)) {
+                Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
+                return false;
+            }
+        }
 
 		// Verify that implementedClass contains only interfaces
     	for (TypeInstantiation tp: implementedClasses) {
@@ -62,7 +73,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
         // Verify that each interface method is implemented
         for (TypeInstantiation tp: this.implementedClasses) {
-    	    if (! tp.resolve(_scope))
+    	    if (! tp.resolve(scope))
     	        return false;
 
         	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
@@ -107,25 +118,18 @@ public class ClassDeclaration extends ProgramDeclaration {
     	}
     	
     	// Verify if a method is abstract and accord it with class modifier
-		for (Definition d : this.definitions) {
-			if (d instanceof MethodDefinition) {
-				if (((MethodDefinition) d).isAbstract() && !(this.isAbstract())) {
-					Logger.error("You declared " + d.getName() + " as abstract but its class " + this.getName() + " is not declared as abstract.");
+		for (Definition definition: definitions) {
+			if (definition instanceof MethodDefinition) {
+				if (((MethodDefinition) definition).isAbstract() && ! isAbstract()) {
+					Logger.error("Non abstract class" + getName() + " cannot contain abstract method " + definition.getName() + ".");
 				    return false;
 				}
-			}
+			} else if (definition instanceof AttributeDefinition) {
+                // ok
+            } else {
+			    Logger.error("ClassDeclaration: Wrong kind of definition for: " + definition);
+            }
 		}
-
-    	// Define a new scope for it
-    	HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
-
-    	// Resolve for each definition in the new scope
-    	for (Definition d : definitions) {
-    		if (! d.resolve(newScope)) {
-    			Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
-    			return false;
-    		}
-    	}
     	
 		return true;
     }
@@ -169,7 +173,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public String toString() {
-		String result = "class " + this.className.toString();
+		String result = "class " + className.toString();
 
 		if (extendedClass.size() > 0)
 		    result += " extends " + extendedClass.get(0);

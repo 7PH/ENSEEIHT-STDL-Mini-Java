@@ -36,6 +36,6 @@ public class ClassName implements ASTNode {
 	
     @Override
     public String toString() {
-	    return className;
+	    return className + "<" + genericTypes + ">";
     }
 }

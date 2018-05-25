@@ -129,20 +129,20 @@ public class TypeInstantiation implements Type {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (! scope.contains(this.name)) {
-			Logger.error("Can't implement unknown interface " + name);
+		if (! scope.knows(name)) {
+			Logger.error("TypeInstantiation: Unknown reference to " + name);
 			return false;
 		} else {
 			if (scope.get(this.name) instanceof ProgramDeclaration) {
-				ProgramDeclaration _declaration = (ProgramDeclaration) scope.get(this.name);
-				this.declaration = _declaration;
+				ProgramDeclaration declaration = (ProgramDeclaration) scope.get(this.name);
+				this.declaration = declaration;
 
 				if (this.typeInstantiations.size() > 0) {
 					/* Verifier que cette classe accepte les types génériques. */
-					if (_declaration.getClassName().getGenerics().size() == 0) {
+					if (declaration.getClassName().getGenerics().size() == 0) {
 						Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
 						return true;
-					} else if (_declaration.getGenerics().size() == this.typeInstantiations.size() ) {
+					} else if (declaration.getGenerics().size() == this.typeInstantiations.size() ) {
 						for (int i = 0; i < this.typeInstantiations.size(); i++) {
 							// TODO : Verifier que les types generiques sont compatibles.
 							// ex : si déclaré MyClass<T extends X>

@@ -1,6 +1,5 @@
 package fr.n7.stl.block.ast.object;
 
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -15,67 +14,64 @@ public class Signature implements Declaration {
 
 	/** Method name. */
 	private String name;
-	
+
 	/** Method parameters. */
 	private List<ParameterDeclaration> parameters;
 	
-	public Signature(Type _type, String _name) {
-		this.type = _type;
-		this.name = _name;
-		this.parameters = new LinkedList<ParameterDeclaration>();
-	}
-	
-	public Signature(Type _type, String _name, List<ParameterDeclaration> _parameters) {
-		this.type = _type;
-		this.name = _name;
-		this.parameters = _parameters;
+	public Signature(Type type, String name, List<ParameterDeclaration> parameters) {
+		this.type = type;
+		this.name = name;
+		this.parameters = parameters;
 	}
 	
 	/** Get signature name.
 	 * @return the name of the signature followed by the parameters types.
 	 */
 	public String getName() {
-		String _params = "";
-		boolean first = true;
-		for (ParameterDeclaration p : this.parameters) {
-			if (!first) {
-				_params += " ";
-				first = false;
-			}
-			_params += p.getType().toString();
-		}
-		
-        return this.name + " " + _params;
+		String name = this.name + "(";
+
+		if (parameters.size() > 0) {
+            for (ParameterDeclaration p : this.parameters)
+                name += p.getType() + ", ";
+
+            // only for beauty purpose
+            name = name.substring(0, name.length() - 1);
+        }
+
+        name += ")";
+
+        return name;
     }
 	
 	/** Get signature type.
 	 * @return the type of the signature
 	 */
     public Type getType() {
-        return this.type;
+        return type;
     }
 
     /** Get signature parameters
      * @return the parameters of the signature
      */
     public List<ParameterDeclaration> getParameters() {
-        return this.parameters;
+        return parameters;
     }
     
 	@Override
 	public String toString() {
-		String _result = "";
-		_result += this.type + " ";
-		_result += this.name + "(";
-		boolean putComaFirst = false;
-		for (ParameterDeclaration p : this.parameters) {
-			if (putComaFirst) {
-				_result += ", ";
-			}
-			_result += p;  
-		}
-		_result += ")";
-		return _result;
+        String name = type + " " + this.name + "(";
+
+        if (parameters.size() > 0) {
+            for (ParameterDeclaration p : this.parameters)
+                name += p + ", ";
+
+            // only for beauty purpose
+            name = name.substring(0, name.length() - 2);
+        }
+
+        name += ")";
+
+        return name;
 	}
 
 }

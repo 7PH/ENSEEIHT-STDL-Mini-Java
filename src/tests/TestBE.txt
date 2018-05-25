@@ -1,4 +1,7 @@
-class Point {
-    private int x;
-    private int y;
+class Circle<T> {
+    public Circle foo() { }
+    public Circle foo(int a) { }
+    public Circle foo(int a, int b) { }
+    public Circle foo(Circle a, Point b) { }
+    public Circle foo(Circle<T> a, Point b) { }
 }
