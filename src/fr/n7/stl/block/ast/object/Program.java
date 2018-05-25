@@ -36,7 +36,7 @@ public class Program implements ASTNode {
     	boolean b = true;
     	for (ProgramDeclaration pd : this.declarations) {
     		b &= pd.checkType();
-    	}
+        }
     	return b;
     }
     
@@ -65,7 +65,7 @@ public class Program implements ASTNode {
     	// Resolve each declaration in it
         for (ProgramDeclaration declaration: declarations) {
             if (! declaration.resolve(newScope)) {
-                Logger.error("Could not resolve program because of the declaration " + declaration.toString() + ".");
+                Logger.error("Could not resolve program because of the declaration " + declaration.getName() + ".");
                 return false;
             }
         }

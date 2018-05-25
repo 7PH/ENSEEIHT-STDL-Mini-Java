@@ -62,14 +62,14 @@ export class TAM {
         const result: TAMResult = TAM.parseAndExecute(fileName);
         const logger: string = result.logger.trim();
 
-        if (logger.length > 0)
-            throw new Error("Error: " + logger);
+        //if (logger.length > 0)
+        //    throw new Error("Error: " + logger);
 
         if (expected.resolve !== result.resolve)
-            throw new Error("Resolve expected to be " + expected.resolve + " but is " + result.resolve);
+            throw new Error("Resolve expected to be " + expected.resolve + " but is " + result.resolve + " \n " + logger);
 
         if (expected.checkType !== result.checkType)
-            throw new Error("CheckType expected to be " + expected.checkType + " but is " + result.checkType);
+            throw new Error("CheckType expected to be " + expected.checkType + " but is " + result.checkType + " \n " + logger);
 
         if (expected.output != null && result.output == null)
             throw new Error("Output expected to be " + expected.output + " but is null");

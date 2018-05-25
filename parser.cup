@@ -212,7 +212,7 @@ ClassExtension ::=
 		:}*/
     |
         {:
-			RESULT = null;
+			RESULT = new LinkedList<TypeInstantiation>();
 		:}
     ;
 
@@ -223,7 +223,7 @@ ClassImplementation ::=
 		:}
     |
         {:
-			RESULT = null;
+			RESULT = new LinkedList<TypeInstantiation>();
 		:}
 	;
 

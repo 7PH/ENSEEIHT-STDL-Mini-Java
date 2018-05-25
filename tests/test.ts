@@ -83,7 +83,16 @@ describe('# Grammar tests', function () {
 
 describe('# Resolve/Checktype tests', function () {
     this.slow(SLOW_TEST_MS);
-
+    
+    it('-> class', function(done: () => any) {
+        TAM.ensureResult(
+            `class abc {} class foo {}`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
     
     it('-> duplicate class', function(done: () => any) {
         TAM.ensureResult(
