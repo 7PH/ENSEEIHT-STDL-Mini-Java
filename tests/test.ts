@@ -83,7 +83,8 @@ describe('# Grammar tests', function () {
 
 describe('# Resolve/Checktype tests', function () {
     this.slow(SLOW_TEST_MS);
-    
+
+    // SIMPLE TEST ABOUT CLASS
     it('-> class', function(done: () => any) {
         TAM.ensureResult(
             `class abc {} class foo {}`,
@@ -93,10 +94,45 @@ describe('# Resolve/Checktype tests', function () {
         });
         done();
     });
-    
+
     it('-> duplicate class', function(done: () => any) {
         TAM.ensureResult(
             `class abc {} class abc {}`,
+        {
+            resolve: false,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class declaration with inner declarations', function(done: () => any) {
+        TAM.ensureResult(
+            `public class Point {
+                private int x;
+                private int y;
+                
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    // SIMPLE TEST ABOUT INTERFACE
+    it('-> interface', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {} interface foo {}`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+    
+    it('-> duplicate interface', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {} interface abc {}`,
         {
             resolve: false,
             checkType: true
@@ -126,6 +162,27 @@ describe('# Resolve/Checktype tests', function () {
             }`,
         {
             resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> interface implementation', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {}
+            class issou implements abc {}`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> unexisting interface implementation', function(done: () => any) {
+        TAM.ensureResult(
+            `class issou implements abc {}`,
+        {
+            resolve: false,
             checkType: true
         });
         done();
