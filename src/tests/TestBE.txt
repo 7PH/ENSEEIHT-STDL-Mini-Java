@@ -1,1 +1,2 @@
-class abs extends abc { }
+interface abc {}
+interface foo {}

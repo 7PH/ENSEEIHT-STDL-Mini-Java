@@ -19,20 +19,14 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	/** List of the methods signatures. */
 	private List<Signature> signatures;
 	
-	public InterfaceDeclaration(ClassName _name, List<Signature> _signatures) {
-		this.className = _name;
-		this.signatures= new LinkedList<Signature>();
-		for (Signature s : _signatures) {
-			this.signatures.add(s);
-		}
-		this.implementedClasses = new LinkedList<TypeInstantiation>();
+	public InterfaceDeclaration(ClassName name, List<Signature> signatures) {
+		this(name, new LinkedList<>(), signatures);
 	}
 	
-	public InterfaceDeclaration(ClassName _declaration, List<TypeInstantiation> _Type_instantiations, List<Signature> _signatures) {
-		this(_declaration, _signatures);
-		for (TypeInstantiation i : _Type_instantiations) {
-			implementedClasses.add(i);
-		}
+	public InterfaceDeclaration(ClassName name, List<TypeInstantiation> extendedClass, List<Signature> signatures) {
+		this.className = name;
+		this.signatures = signatures;
+        this.extendedClass = extendedClass;
 	}
 
 	public List<Signature> getSignatures() {
@@ -41,31 +35,29 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-
-    	// Check if the interface is already register
-    	if (! scope.accepts(this)) {
-			Logger.error("Could not resolve interface " + this.getName() + " because this name is already taken.");
-			return false;
-		}			
-    	
-		// Register it
-    	scope.register(this);
+        if (! super.resolve(scope))
+            return false;
 
 		// Check if the superclasses are well superinterface
-    	for (TypeInstantiation tp: this.implementedClasses) {
+    	for (TypeInstantiation tp: extendedClass) {
     		if (tp.getDeclaration() instanceof ClassDeclaration) {
     			Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
 				return false;
     		}
     	}
-    	
+
+    	if (implementedClasses.size() > 0) {
+    	    Logger.error("Interface " + getName() + " cannot implements another");
+    	    return false;
+        }
+
     	// Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
     	// Register all signatures
     	for (Signature signature: signatures) {
     		if (! newScope.accepts(signature)) {
-    			Logger.error("Methods " + signature.getName() + " is defined twice in " + getName() + ".");
+    			Logger.error("Method " + signature.getName() + " is defined twice in " + getName() + ".");
     			return false;
     		}
     		newScope.register(signature);
@@ -96,13 +88,20 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public String toString() {
-		String _result = "interface " + this.className.toString() + " { \n";
-		
-		for (Signature s : this.signatures) {
-			_result += s.toString() + "; \n";
-		}
+		String result = "interface " + className;
 
-        return _result + "\n}\n";
+		if (extendedClass.size() > 0) {
+		    result += " extends ";
+            for (TypeInstantiation extended: extendedClass)
+                result += extended + ", ";
+            result = result.substring(0, result.length() - 2);
+		}
+        result += " {" + "\n";
+		
+		for (Signature s : this.signatures)
+			result += s.toString() + "; \n";
+
+        return result + "\n}\n";
 	}
 
 }

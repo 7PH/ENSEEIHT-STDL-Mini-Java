@@ -219,7 +219,27 @@ describe('# Resolve/Checktype tests', function () {
 
     it('-> self reference', function(done: () => any) {
         TAM.ensureResult(
-            `class abs extends abc { }`,
+            `class abc extends abc { }`,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> class implementing a class', function(done: () => any) {
+        TAM.ensureResult(
+            `class foo { } class bar implements foo { }`,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> class implementing a class', function(done: () => any) {
+        TAM.ensureResult(
+            `class foo { } interface bar extends foo { }`,
             {
                 resolve: false,
                 checkType: true

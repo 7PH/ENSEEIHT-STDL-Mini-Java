@@ -1,5 +1,6 @@
 package fr.n7.stl.block.ast.object;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
@@ -9,16 +10,39 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 public abstract class ProgramDeclaration implements Declaration {
 	
 	protected ClassName className;
 	
-	protected List<TypeInstantiation> extendedClass;
+	protected List<TypeInstantiation> extendedClass = new LinkedList<>();
 	
-	protected List<TypeInstantiation> implementedClasses;
+	protected List<TypeInstantiation> implementedClasses = new LinkedList<>();
 
-    public abstract boolean resolve(HierarchicalScope<Declaration> _scope);
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
+        if (! scope.accepts(this)) {
+            Logger.error(this.getName() + " has already been declared");
+            return false;
+        }
+        scope.register(this);
+
+        for (TypeInstantiation extended: extendedClass) {
+            if (! extended.resolve(scope)) {
+                Logger.error("Could not resolve extended class " + extended + " from " + getName());
+                return false;
+            }
+        }
+
+        for (TypeInstantiation implemented: implementedClasses) {
+            if (! implemented.resolve(scope)) {
+                Logger.error("Could not resolve implemented class " + implemented + " from " + getName());
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 	public abstract boolean checkType();
 
@@ -59,4 +83,5 @@ public abstract class ProgramDeclaration implements Declaration {
 	public List<TypeInstantiation> getImplementedClasses() {
 		return implementedClasses;
 	}
+
 }

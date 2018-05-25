@@ -42,13 +42,13 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
+        if (! super.resolve(scope))
+            return false;
 
-    	// Verify if the class is in the scope
-		if (! scope.accepts(this)) {
-			Logger.error("Could not redefine class " + this.getName() + ".");
-			return false;
-		}
-
+        if (extendedClass.size() > 0 && extendedClass.get(0).getDeclaration().getName().equals(this.getName())) {
+            Logger.error(this.getName() + " cannot extend self");
+            return false;
+        }
 
 		// Verify that implementedClass contains only interfaces
     	for (TypeInstantiation tp: implementedClasses) {
@@ -62,6 +62,11 @@ public class ClassDeclaration extends ProgramDeclaration {
         for (TypeInstantiation tp: this.implementedClasses) {
     	    if (! tp.resolve(scope))
     	        return false;
+
+    	    if (! (tp.getDeclaration() instanceof InterfaceDeclaration)) {
+    	        Logger.error("Class " + getName() + " cannot implements " + tp + ". This is not an interface.");
+    	        return false;
+            }
 
         	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
         	List<Signature> classSignatures = getClassSignatures();
@@ -79,16 +84,8 @@ public class ClassDeclaration extends ProgramDeclaration {
         	return false;
         }
 
-        // resolves extends
-        for (TypeInstantiation extended: extendedClass) {
-		    if (! extended.resolve(scope)) {
-		        Logger.error(getName() + " extends class " + extended + " which contains error");
-                return false;
-            }
-        }
-
     	// TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
-    	
+
     	// Verify if every superclass abstract methods are implemented
 		if (this.extendedClass.size() > 0) {
     		TypeInstantiation tp = this.extendedClass.get(0);
@@ -111,9 +108,6 @@ public class ClassDeclaration extends ProgramDeclaration {
     			}
     		}
     	}
-
-        // Register it
-        scope.register(this);
 
         // Define a new scope for methods/attributes
         HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
