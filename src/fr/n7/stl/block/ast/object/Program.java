@@ -62,12 +62,11 @@ public class Program implements ASTNode {
     public boolean resolve(HierarchicalScope<Declaration> scope) {
         // Define a new scope
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
+
     	// Resolve each declaration in it
         for (ProgramDeclaration declaration: declarations) {
-            if (! declaration.resolve(newScope)) {
-                Logger.error("Could not resolve program because of the declaration " + declaration.getName() + ".");
+            if (! declaration.resolve(newScope))
                 return false;
-            }
         }
 
         return true;

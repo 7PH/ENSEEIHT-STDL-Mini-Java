@@ -62,7 +62,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 
         // Verify that each interface method is implemented
         for (TypeInstantiation tp: this.implementedClasses) {
-    	    tp.resolve(_scope);
+    	    if (! tp.resolve(_scope))
+    	        return false;
 
         	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
         	List<Signature> classSignatures = getClassSignatures();

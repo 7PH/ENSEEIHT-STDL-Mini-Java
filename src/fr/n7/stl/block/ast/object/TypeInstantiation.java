@@ -130,7 +130,7 @@ public class TypeInstantiation implements Type {
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		if (! scope.contains(this.name)) {
-			Logger.error("Could not resolve TypeInstantiation because the name " + this.name + " is not defined.");
+			Logger.error("Can't implement unknown interface " + name);
 			return false;
 		} else {
 			if (scope.get(this.name) instanceof ProgramDeclaration) {
@@ -161,8 +161,6 @@ public class TypeInstantiation implements Type {
 				return false;
 			}
 		}
-
-
 	}
 
 	@Override

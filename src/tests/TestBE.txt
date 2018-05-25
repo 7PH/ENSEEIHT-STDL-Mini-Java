@@ -1,2 +1,2 @@
 interface abc { }
-class issou implements abc { }
+class issou implements abc2 { }
