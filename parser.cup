@@ -110,7 +110,7 @@ non terminal List<Definition>           InnerClassDefinitions;
 non terminal Definition                 InnerClassDefinition;
 non terminal AccessModifier             AccessModifier;
 non terminal List<TypeInstantiation>    TypeInstantiations;
-non terminal List<TypeInstantiation>    TypeInstantiations2;
+non terminal List<TypeInstantiation>    TypeInstantiationsWithEsperluette;
 non terminal TypeInstantiation          TypeInstantiation;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
@@ -251,7 +251,7 @@ GenericTypes ::=
 GenericType ::=
     UL_Identificateur:ident
         {: RESULT = new GenericType(ident); :}
-    | UL_Identificateur:ident UL_Extends TypeInstantiations2:typeInstantiations
+    | UL_Identificateur:ident UL_Extends TypeInstantiationsWithEsperluette:typeInstantiations
         {: RESULT = new GenericType(ident, typeInstantiations); :}
     ;
 
@@ -322,14 +322,14 @@ TypeInstantiations ::=
 			RESULT = typeInstantiations;
 		:};
 
-TypeInstantiations2 ::=
+TypeInstantiationsWithEsperluette ::=
     TypeInstantiation:typeInstantiation
         {:
 			List<TypeInstantiation> typeInstantiations = new LinkedList<>();
 			typeInstantiations.add(typeInstantiation);
 			RESULT = typeInstantiations;
         :}
-    | TypeInstantiations2:typeInstantiations UL_Esperluette TypeInstantiation:typeInstantiation
+    | TypeInstantiationsWithEsperluette:typeInstantiations UL_Esperluette TypeInstantiation:typeInstantiation
         {:
 			typeInstantiations.add(typeInstantiation);
 			RESULT = typeInstantiations;

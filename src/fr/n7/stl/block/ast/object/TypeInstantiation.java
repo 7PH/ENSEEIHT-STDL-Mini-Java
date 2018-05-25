@@ -6,6 +6,7 @@ import java.util.List;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.Scope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
@@ -17,7 +18,6 @@ public class TypeInstantiation implements Type {
 	private List<TypeInstantiation> typeInstantiations = new LinkedList<>();
 
 	private Declaration declaration;
-
 
 	public TypeInstantiation(String name) {
 		this.name = name;
@@ -182,8 +182,8 @@ public class TypeInstantiation implements Type {
 	 * @param attributeIdentificateur the searched attribute
 	 * @return true if contains, false if not
 	 */
-	public boolean contains(String attributeIdentificateur) {		
-		if (this.getDeclaration() instanceof InterfaceDeclaration) {			
+	public boolean contains(String attributeIdentificateur) {
+		if (this.getDeclaration() instanceof InterfaceDeclaration) {
 			Logger.error("Interface " + this.name + " does not contain attribute " + attributeIdentificateur + " because " + this.name + " is an interface.");
 			return false;
 		} else if (this.getDeclaration() instanceof ClassDeclaration) {
@@ -195,7 +195,7 @@ public class TypeInstantiation implements Type {
 		}
 		return false;
 	}
-	
+
 	/** Get an attribute of the object.
 	 * @param attributeIdentificateur the attribute we ask.
 	 * @return the attribute
