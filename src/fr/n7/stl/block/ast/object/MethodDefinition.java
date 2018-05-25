@@ -80,39 +80,39 @@ public class MethodDefinition extends Definition {
     }
 
 	@Override
-	public boolean resolve(HierarchicalScope<Declaration> _scope) {
+	public boolean resolve(HierarchicalScope<Declaration> scope) {
+        boolean resolved = true;
+
 		// Verify if the attribute is already in the scope
-		if (!_scope.accepts(this.signature)) {
-			Logger.error("Method " + this.signature.toString() + " is define twice.");
-			return false;
+		if (! scope.accepts(signature)) {
+			Logger.error("Method " + signature.toString() + " has already been defined");
+            resolved = false;
 		}
+
 		// Register it
-		_scope.register(this.signature);
+		scope.register(signature);
+
 		// Resolve signature
-		if (!this.signature.getType().resolve(_scope)) {
-			Logger.error("Could not resolve methode " + this.getName() + " because its type could not be resolved.");
-			return false;
-		}
+        resolved &= signature.getType().resolve(scope);
+
 		/* TODO : GESTION DES PARAMETRES ?
 		for (ParameterDeclaration pd : this.signature.getParameters()) {
-			if (!pd.resolve(_scope))
+			if (!pd.resolve(scope))
         		Logger.error("Could not resolve " + this.getName() + " because of the signature parameter " + pd.toString() + ".");
                 return false;
 		}
 		*/
-		// Resolve body if present
-		if (this.isAbstract()) {
-			if (this.body == null) {
-				Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
-				return false;
-			}
+
+		// abstract => ! body
+		if (isAbstract() && body != null) {
+            Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
+            resolved = false;
 		}
-		// Resolve body
-		if (! this.body.resolve(_scope)) {
-			Logger.error("Could not resolve " + this.getName() + " because body could not be resolved.");
-			return false;
-		}
-		return true;
+
+		if (body != null)
+    		resolved &= body.resolve(scope);
+
+		return resolved;
 	}
 	
 	@Override
