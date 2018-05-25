@@ -247,3 +247,189 @@ describe('# Resolve/Checktype tests', function () {
         done();
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe('# Resolve/Checktype tests PART II : we begin serious tests', function () {
+    this.slow(SLOW_TEST_MS);
+
+    it('-> class w/ instantiation of our type', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ attribute assignment', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment() {
+                    p1 = null;
+                    p2 = null;
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ attribute assignment & ParameterUse in Constructor', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment(Point p) {
+                    p1 = p;
+                    p2 = null;
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ object instantiation w/out constructor', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment() {
+                    p1 = new Point();
+                }
+            }`,
+        {
+            resolve: false, // Miss Point constructor
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ instantiation of our type', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    x = a;
+                    y = b;
+                }
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment(int a, int b, int c, int d) {
+                    p1 = new Point(a, b);
+                    p2 = new Point(c, d);
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ instantiation of our type', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    x = a;
+                    y = b;
+                }
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment(int a, int b, int c, int d) {
+                    p1 = new Point(a, b);
+                    p2 = new Point(c, "d");
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: false // "d" is String != int
+        });
+        done();
+    });
+
+    it('-> class w/ instantiation of our type & This', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment(int a, int b, int c, int d) {
+                    this.p1 = new Point(a, b);
+                    this.p2 = new Point(c, d);
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+});
