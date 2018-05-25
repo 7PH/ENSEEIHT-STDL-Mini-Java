@@ -432,4 +432,135 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
         });
         done();
     });
+    
+    it('-> class w/ constant', function(done: () => any) {
+        TAM.ensureResult(
+            `class Color {
+                public final static String ROUGE = "rouge";
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ bad constructor', function(done: () => any) {
+        TAM.ensureResult(
+            `class Color {
+                public final static String ROUGE = "rouge";
+            }
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class PointColore {
+                private String color;
+
+                public Segment(int a, int b, int c, int d) {
+                    this.p1 = new Point(a, b);
+                    this.p2 = new Point(c, d);
+                }
+            }`,
+        {
+            resolve: false,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ bad constructor', function(done: () => any) {
+        TAM.ensureResult(
+            `class Color {
+                public final static String ROUGE = "rouge";
+            }
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class PointColore {
+                private String color;
+
+                public PointColore(Point p1, Point p2, String c) {
+                    this.p1 = p1;
+                    this.p2 = p2;
+                    this.color = c;
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ superclass attribute use', function(done: () => any) {
+        TAM.ensureResult(
+            `class Color {
+                public final static String ROUGE = "rouge";
+            }
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class PointColore {
+                private String color;
+
+                public PointColore(Point p1, Point p2, String c) {
+                    this.p1 = p1;
+                    this.p2 = p2;
+                    this.color = c;
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> class w/ superclass attribute use (w/ a little subtility)', function(done: () => any) {
+        TAM.ensureResult(
+            `class Color {
+                public final static String ROUGE = "rouge";
+            }
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class PointColore {
+                private String color;
+
+                public PointColore(Point p1, Point p2, String color) {
+                    this.p1 = p1;
+                    this.p2 = p2;
+                    this.color = color;
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
 });
