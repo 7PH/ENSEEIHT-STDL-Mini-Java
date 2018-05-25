@@ -98,7 +98,7 @@ non terminal Instruction				Declaration;
 non terminal List<Expression>			Expressions;
 non terminal List<ParameterDeclaration>	Parameters;
 non terminal List<ParameterDeclaration> ParametersOrNot;
-non terminal Pair<String,PartialType>	Identifiant;
+non terminal Pair<String, PartialType>	Identifiant;
 non terminal Type						Type, Atomique;
 non terminal Expression 				Expression;
 non terminal AssignableExpression		Affectable;
@@ -148,8 +148,7 @@ precedence left UL_Extends;
 //  - ($InterfaceDeclaration|$ClassDeclaration)+
 Driver ::= Program:program
     {:
-        System.out.println(program);
-
+        this.parser.program = program;
         RESULT = program;
     :};
 
@@ -281,13 +280,13 @@ InnerClassDefinitionWithoutModifier ::=
     ;
 
 InnerInterfaceDefinitions ::=
-    InnerInterfaceDefinitions:defs InnerInterfaceDefinition:def UL_Point_Virgule
+    InnerInterfaceDefinitions:defs InnerInterfaceDefinition:def
         {: defs.add(def); RESULT = defs; :}
     |
         {: RESULT = new LinkedList<>(); :};
 
 InnerInterfaceDefinition ::=
-    NullableType:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante
+    NullableType:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante UL_Point_Virgule
         {: RESULT = new Signature(type, ident, parameters); :}
     ;
 
@@ -433,6 +432,26 @@ Parameters ::= Parameters:parameters UL_Virgule Type:type Identifiant:identifian
 					RESULT = _parameters;
 				:}
 			;
+
+Identifiant ::= UL_Identificateur:nom
+				{:
+					RESULT = new Pair<String, PartialType>(nom, null);
+				:}
+			| Identifiant:identifiant UL_Crochet_Ouvrant UL_Crochet_Fermant
+				{:
+					if (identifiant.getRight() == null) {
+						identifiant.setRight( new PartialArrayType() );
+					} else {
+						identifiant.getRight().enrich(new PartialArrayType());
+					}
+					RESULT = identifiant;
+				:}
+			| UL_Parenthese_Ouvrante Identifiant:identifiant UL_Parenthese_Fermante
+				{:
+					RESULT = identifiant;
+				:}
+			;
+
 
 Declaration ::= Type:type Identifiant:identifiant UL_Egal Expression:valeur UL_Point_Virgule
 				{:

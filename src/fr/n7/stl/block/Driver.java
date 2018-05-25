@@ -31,7 +31,9 @@ class Driver {
 
         // computing
         Parser parser = new Parser(file);
-        parser.parse();
+        try {
+            parser.parse();
+        } catch (Exception exception) { System.out.println("issouuu"); }
 
         switch (mode) {
             case 0:
@@ -68,9 +70,10 @@ class Driver {
     }
 
     private static void json(Parser parser) throws JSONException {
-        String tamCode = parser.fragment == null ? "" : parser.fragment.toString();
+        //String tamCode = parser.fragment == null ? "" : parser.fragment.toString();
 
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("grammarCheck", true);
         jsonObject.put("code", parser.program.toString());
         //jsonObject.put("resolve", parser.resolve);
         //jsonObject.put("checkType", parser.checkType);

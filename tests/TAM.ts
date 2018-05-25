@@ -9,6 +9,7 @@ export interface TAMExpectedResult {
 }
 
 export interface TAMResult {
+    grammarCheck: boolean;
     resolve: boolean;
     checkType: boolean;
     code: string;
@@ -19,8 +20,20 @@ export interface TAMResult {
 export class TAM {
 
     public static parse(fileName: string): TAMResult {
-        const shellResult: Buffer = child_process.execSync("./launch.sh " + fileName + " 2");
-        return JSON.parse(shellResult.toString());
+        let d: TAMResult;
+        try {
+            const shellResult: Buffer = child_process.execSync("sh launch.sh " + fileName + " 2");
+            d = JSON.parse(shellResult.toString());
+        } catch (e) {
+            d = {
+                grammarCheck: false,
+                resolve: false,
+                checkType: false,
+                code: "",
+                TAM: "",
+            };
+        }
+        return d;
     }
 
     public static executeTam(tam: string): string[] {
@@ -70,15 +83,8 @@ export class TAM {
         return;
     }
 
-    private static storeCodeInTmp(code: string) {
-        const program: string = `
-        
-        test_program {
-            ${code}
-        }
-        
-        `;
-        fs.writeFileSync('tmp.bc', program);
-        return 'tmp.bc';
+    public static storeCodeInTmp(code: string) {
+        fs.writeFileSync('tmp.mjava', code);
+        return 'tmp.mjava';
     }
 }

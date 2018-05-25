@@ -4,7 +4,7 @@ class abc<A, B> { }
 class Circle {
     public Circle bar;
     public Circle() { }
-    public Circle foo() { return bar; }
+    public Circle foo(int a) { return bar; }
     public static Circle foo() { }
     private static final int foo() { }
     private final float foo() { }
