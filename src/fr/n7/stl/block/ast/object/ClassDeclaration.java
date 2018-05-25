@@ -181,7 +181,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 		    result += implementedClasses.get(implementedClasses.size() - 1);
         }
 
-        result += " {";
+        result += " {" + "\n";
 
         for (Definition d : this.definitions)
             result += d + "\n";

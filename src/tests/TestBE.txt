@@ -1,2 +1,4 @@
-interface abc { }
-class issou implements abc2 { }
+class Point {
+    private int x;
+    private int y;
+}

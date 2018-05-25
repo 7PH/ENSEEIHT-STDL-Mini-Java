@@ -110,7 +110,6 @@ describe('# Resolve/Checktype tests', function () {
             `class Point {
                 private int x;
                 private int y;
-                
             }`,
         {
             resolve: true,

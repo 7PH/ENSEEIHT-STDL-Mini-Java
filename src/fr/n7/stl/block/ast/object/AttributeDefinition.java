@@ -50,26 +50,6 @@ public class AttributeDefinition extends Definition {
     	throw new SemanticsUndefinedException("getCode method is undefined for AttributeDefinition.");
     }
 
-    @Override
-    public String toString() {
-    	String result = "";
-    	
-    	if (this.getAccessModifier() != null)
-    		result += this.getAccessModifier();
-
-    	if (this.getDefinitionModifier() != null)
-    		result += this.getDefinitionModifier();
-
-    	result += this.type + " " + this.name;
-
-    	if (value != null)
-    	    result += " = " + value;
-
-    	result += ";";
-
-    	return result;
-    }
-
 	@Override
 	public boolean checkType() {
         boolean ok = true;
@@ -87,23 +67,47 @@ public class AttributeDefinition extends Definition {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
+
 		// Verify if the attribute is already in the scope
-		if (!scope.accepts(this)) {
-			Logger.error("Object " + this.name + " is already defined in scope.");
+		if (! scope.accepts(this)) {
+			Logger.error("Object " + name + " is already defined in scope.");
 			return false;
 		}
+
 		// Resolve type part
-		if (!this.type.resolve(scope)) {
+		if (! type.resolve(scope)) {
     		Logger.error("Could not resolve attribute definition because of the type " + this.type.toString() + ".");
 			return false;
 		}
+
 		// Resolve value part
-		if (!this.value.resolve(scope)) {
+		if (value != null && ! value.resolve(scope)) {
     		Logger.error("Could not resolve attribute definition because of the value " + this.value.toString() + ".");
 			return false;
 		}
-		// Register the attribute
+
+        // Register the attribute
 		scope.register(this);
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        String result = "";
+
+        if (this.getAccessModifier() != null)
+            result += this.getAccessModifier() + " ";
+
+        if (this.getDefinitionModifier() != null)
+            result += this.getDefinitionModifier() + " ";
+
+        result += this.type + " " + this.name;
+
+        if (value != null)
+            result += " = " + value;
+
+        result += ";";
+
+        return result;
+    }
 }
