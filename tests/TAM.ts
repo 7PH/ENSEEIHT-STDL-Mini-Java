@@ -1,5 +1,6 @@
 import * as child_process from "child_process";
 import * as fs from "fs";
+import {log} from "util";
 
 
 export interface TAMExpectedResult {
@@ -14,6 +15,7 @@ export interface TAMResult {
     checkType: boolean;
     code: string;
     TAM: string;
+    logger: string;
     output?: string[];
 }
 
@@ -31,6 +33,7 @@ export class TAM {
                 checkType: false,
                 code: "",
                 TAM: "",
+                logger: "Unable to parse data"
             };
         }
         return d;
@@ -57,6 +60,10 @@ export class TAM {
     public static ensureResult(code: string, expected: TAMExpectedResult): void {
         const fileName: string = TAM.storeCodeInTmp(code);
         const result: TAMResult = TAM.parseAndExecute(fileName);
+        const logger: string = result.logger.trim();
+
+        if (logger.length > 0)
+            throw new Error("Error: " + logger);
 
         if (expected.resolve !== result.resolve)
             throw new Error("Resolve expected to be " + expected.resolve + " but is " + result.resolve);

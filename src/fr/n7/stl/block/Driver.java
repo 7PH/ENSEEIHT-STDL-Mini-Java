@@ -1,12 +1,14 @@
 package fr.n7.stl.block;
 
 
+import fr.n7.stl.block.ast.scope.SymbolTable;
+import fr.n7.stl.util.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 class Driver {
 
-    public static void pringUsage() {
+    public static void printUsage() {
         System.out.println("Usage       : java fr.n7.stl.block.Driver <file> <mode>");
         System.out.println(" <file>     : Input file");
         System.out.println(" <mode>     : 0 -> verbose mode");
@@ -17,23 +19,21 @@ class Driver {
     public static void main(String[] args) throws Exception {
         // check
         if (args.length != 2) {
-            pringUsage();
+            printUsage();
             System.exit(0);
         }
 
         // needed data
-        String file;
-        int mode;
-
-        // parsing input
-        file = args[0];
-        mode = Integer.valueOf(args[1]);
+        int mode = Integer.valueOf(args[1]);
 
         // computing
-        Parser parser = new Parser(file);
+        Parser parser = new Parser(args[0]);
+        parser.parse();
         try {
-            parser.parse();
-        } catch (Exception exception) { System.out.println("issouuu"); }
+            parser = execute(parser);
+        } catch (Exception exception) {
+            Logger.error("Something wrong happened with Parser: " + exception);
+        }
 
         switch (mode) {
             case 0:
@@ -49,9 +49,14 @@ class Driver {
                 break;
 
             default:
-                pringUsage();
+                printUsage();
                 System.exit(0);
         }
+    }
+
+    private static Parser execute(Parser parser) throws Exception {
+        parser.resolve = parser.program.resolve(new SymbolTable());
+        return parser;
     }
 
     private static void verbose(Parser parser) {
@@ -62,6 +67,7 @@ class Driver {
         //System.out.println("===============================================");
         //System.out.println("TAM         : ");
         //System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
+        System.out.println("Logger: " + Logger.getAll());
         System.out.println("===============================================");
     }
 
@@ -75,8 +81,9 @@ class Driver {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("grammarCheck", true);
         jsonObject.put("code", parser.program.toString());
-        //jsonObject.put("resolve", parser.resolve);
-        //jsonObject.put("checkType", parser.checkType);
+        jsonObject.put("resolve", parser.resolve);
+        jsonObject.put("checkType", parser.checkType);
+        jsonObject.put("logger", Logger.getAll());
         //jsonObject.put("TAM", tamCode);
         System.out.print(jsonObject);
     }
