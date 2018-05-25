@@ -656,6 +656,10 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new StringValue( chaine );
 				:}
+			| UL_Nouveau Type:type UL_Crochet_Ouvrant Expression:taille UL_Crochet_Fermant
+             	{:
+					RESULT = new ArrayAllocation(type, taille);
+				:}
 			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
 				{:
 					RESULT = new MethodCall( expression, etiquette, parametres );
@@ -675,10 +679,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 			| Expression:object UL_Point UL_Identificateur:method UL_Point_Virgule
 				{:
 				    RESULT = new AttributeAccess(object, method);
-				:}
-			| UL_Nouveau Type:type UL_Crochet_Ouvrant Expression:taille UL_Crochet_Fermant
-             	{:
-					RESULT = new ArrayAllocation( type, taille );
 				:}
 			| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
              	{:

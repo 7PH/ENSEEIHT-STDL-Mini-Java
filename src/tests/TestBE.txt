@@ -1,6 +1,6 @@
 class Point {
     private int x;
     public Point() {
-        int a = this.x;
+        int a = thi2s.x;
     }
 }
