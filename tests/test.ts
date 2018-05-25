@@ -75,18 +75,23 @@ describe('# Grammar tests', function () {
                 throw new Error("Grammar check should have passed");
             done();
         });
-        it('-> duplicate class', function(done: () => any) {
-            TAM.ensureResult(
-                `class abc {} class abc {}`,
-            {
-                resolve: false,
-                checkType: true
-            });
-            done();
-        });
+        
     });
 
 });
 
 
+describe('# Resolve/Checktype tests', function () {
+    this.slow(SLOW_TEST_MS);
 
+    
+    it('-> duplicate class', function(done: () => any) {
+        TAM.ensureResult(
+            `class abc {} class abc {}`,
+        {
+            resolve: false,
+            checkType: true
+        });
+        done();
+    });
+});
