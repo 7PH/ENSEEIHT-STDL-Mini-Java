@@ -1,2 +1,8 @@
-interface abc {}
-interface foo {}
+class Point {
+    private int x;
+    private int y;
+    public Point() {
+        x = 0;
+        y = 0;
+    }
+}

@@ -115,7 +115,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         // Resolve for each definition in the new scope
         for (Definition definition: definitions) {
             if (! definition.resolve(newScope)) {
-                Logger.error("Could not resolve class " + this.getName() + " because of an unresolvable definition.");
+                Logger.error("Could not resolve class " + getName() + " because of an unresolvable definition: " + definition.getClass().getCanonicalName());
                 return false;
             }
         }

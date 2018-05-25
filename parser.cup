@@ -680,8 +680,12 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new ArrayAllocation( type, taille );
 				:}
-			| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
              	{:
-					RESULT = new ObjectInstantiation( type, parametres );
+					RESULT = new ObjectInstantiation(type, new LinkedList<>());
+				:}
+			| UL_Nouveau Type:type UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
+             	{:
+					RESULT = new ObjectInstantiation(type, parameters);
 				:}
             ;

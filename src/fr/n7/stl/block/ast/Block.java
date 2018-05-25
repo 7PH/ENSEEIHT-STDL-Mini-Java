@@ -66,14 +66,19 @@ public class Block {
 		HierarchicalScope<Declaration> newScope = new SymbolTable(_scope);
 
 		boolean reachedReturn = false;
+        int instructionsAfterReturn = 0;
         for (Instruction instruction: instructions) {
 		    if (! instruction.resolve(newScope))
 		        return false;
-		    if (reachedReturn) {
-                return false;
-		    }
-		    reachedReturn = instruction instanceof Return;
+
+		    if (reachedReturn)
+                ++ instructionsAfterReturn;
+
+		    reachedReturn |= instruction instanceof Return;
         }
+
+        if (instructionsAfterReturn > 0)
+            Logger.warning("Unreachable code detected");
 
 		return true;
 	}

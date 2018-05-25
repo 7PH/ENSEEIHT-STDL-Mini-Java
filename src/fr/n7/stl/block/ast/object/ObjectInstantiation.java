@@ -51,4 +51,9 @@ public class ObjectInstantiation implements Expression {
     public Fragment getCode(TAMFactory factory) {
     	throw new SemanticsUndefinedException("getCode method is undefined for ObjectInstantiation.");
     }
+
+    @Override
+    public String toString() {
+        return "new " + type + "()";
+    }
 }

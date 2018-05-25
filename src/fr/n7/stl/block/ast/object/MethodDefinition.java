@@ -106,8 +106,8 @@ public class MethodDefinition extends Definition {
             resolved = false;
 		}
 
-		if (body != null)
-    		resolved &= body.resolve(scope);
+		if (body != null && ! body.resolve(scope))
+		    resolved = false;
 
 		return resolved;
 	}
