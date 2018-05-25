@@ -107,7 +107,7 @@ describe('# Resolve/Checktype tests', function () {
 
     it('-> class declaration with inner declarations', function(done: () => any) {
         TAM.ensureResult(
-            `public class Point {
+            `class Point {
                 private int x;
                 private int y;
                 

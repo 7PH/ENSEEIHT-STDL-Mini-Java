@@ -1,23 +1,4 @@
-class abc { }
-class abc<T> { }
-class abc<A, B> { }
-class Circle {
-    public Circle bar;
-    public Circle() { }
-    public Circle foo(int a) { return bar; }
-    public static Circle foo() { }
-    private static final int foo() { }
-    private final float foo() { }
+class Point {
+    private int x;
+    private int y;
 }
-final class abc { }
-abstract class abc { }
-interface issou1 { }
-interface issou2 extends issou1 { }
-interface issou3 extends issou2<T> { }
-interface issou4 extends issou3<F<D<P>>> { }
-interface issou {
-    void foo();
-    int bar();
-    Circle fooBar();
-}
-interface issou<T1 extends issou1 & issou2, T2> extends issou2<T2> { }
