@@ -61,17 +61,20 @@ public class TypeInstantiation implements Type {
 					/* this est aussi une interface. */
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
 					
-				} else if (thisDeclaration instanceof ClassDeclaration) {
+				} else {
 					/* this est une classe */
 					ClassDeclaration thisClass = (ClassDeclaration) thisDeclaration;
 					
-					// TODO : Vérifier que this implémente _other
+					// Vérifier que this implémente _other
+					if(thisClass.getImplementedClasses().contains(_interface)) {
+						return true;
+					} else {
+						Logger.error(this.name + " is not compatible with " + _interface.toString());
+						return false;
+					}
 					
-				} else {
-					// TODO Cas erreur
-					
-					return false;
 				}
+				
 				
 			} else if (_typeInst.getDeclaration() instanceof ClassDeclaration) {
 				/* _other est une classe. */				
@@ -104,7 +107,7 @@ public class TypeInstantiation implements Type {
 			
 		} else {
 			/* _other est un type atomique. */
-			// TODO
+			// TODO : Compatibilité entre AtomicTypes et TypeInstantiation
 			Logger.error("Compatibility between AtomicTypes et instantiated types was not implemented.");
 			return false;
 

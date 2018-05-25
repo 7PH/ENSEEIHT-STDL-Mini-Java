@@ -15,7 +15,15 @@ public class GenericType {
 	
 	public GenericType(String _ident, List<TypeInstantiation> _extendedTypes) {
 		this(_ident);
-		this.extendedTypes = _extendedTypes;
+		this.setExtendedTypes(_extendedTypes);
 		
+	}
+
+	public List<TypeInstantiation> getExtendedTypes() {
+		return extendedTypes;
+	}
+
+	public void setExtendedTypes(List<TypeInstantiation> extendedTypes) {
+		this.extendedTypes = extendedTypes;
 	}
 }
