@@ -62,7 +62,7 @@ class Driver {
 
     private static void verbose(Parser parser) {
         System.out.println("===============================================");
-        System.out.println("content     : " + parser.program.toString());
+        System.out.println("content     : " + "\n" + parser.program.toString());
         //System.out.println("resolve     : " + (parser.resolve ? "OK   " : "ERROR") + " (" + parser.resolveTimeMs + "ms)");
         //System.out.println("getType     : " + (parser.checkType ? "OK   " : "ERROR") + " (" + parser.checkTypeTimeMs + "ms)");
         //System.out.println("===============================================");

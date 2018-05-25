@@ -129,13 +129,12 @@ public class TypeInstantiation implements Type {
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-
-		if (!scope.contains(this.name)) {
+		if (! scope.contains(this.name)) {
 			Logger.error("Could not resolve TypeInstantiation because the name " + this.name + " is not defined.");
 			return false;
 		} else {
 			if (scope.get(this.name) instanceof ProgramDeclaration) {
-				ProgramDeclaration _declaration = (ClassDeclaration) scope.get(this.name);
+				ProgramDeclaration _declaration = (ProgramDeclaration) scope.get(this.name);
 				this.declaration = _declaration;
 
 				if (this.typeInstantiations.size() > 0) {

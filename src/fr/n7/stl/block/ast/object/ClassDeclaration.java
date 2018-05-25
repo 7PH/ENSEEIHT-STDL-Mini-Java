@@ -53,7 +53,7 @@ public class ClassDeclaration extends ProgramDeclaration {
     	_scope.register(this);
 
 		// Verify that implementedClass contains only interfaces
-    	for (TypeInstantiation tp : implementedClasses) {
+    	for (TypeInstantiation tp: implementedClasses) {
     		if (tp.getDeclaration() instanceof ClassDeclaration) {
     			Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
     			return false;
@@ -61,18 +61,20 @@ public class ClassDeclaration extends ProgramDeclaration {
     	}
 
         // Verify that each interface method is implemented
-        for (TypeInstantiation tp : this.implementedClasses) {
+        for (TypeInstantiation tp: this.implementedClasses) {
+    	    tp.resolve(_scope);
+
         	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
         	List<Signature> classSignatures = getClassSignatures();
-        	for (Signature s : interfaceDeclaration.getSignatures()) {
-        		if (!classSignatures.contains(s)) {
+        	for (Signature s: interfaceDeclaration.getSignatures()) {
+        		if (! classSignatures.contains(s)) {
         			Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + s.getName().split(" ")[0] + ".");
         			return false;
         		}
         	}
         }
-    	
-    	// Verify that there is no more one superclass
+
+        // Verify that there is no more one superclass
         if (this.extendedClass.size() > 1 ) {
         	Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
         	return false;
@@ -166,13 +168,25 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public String toString() {
-		String _result = "class " + this.className.toString() + " { \n";
-		
-		for (Definition d : this.definitions) {
-			_result += d.toString() + "\n";
-		}		
-		
-		return _result + "\n}\n";
+		String result = "class " + this.className.toString();
+
+		if (extendedClass.size() > 0)
+		    result += " extends " + extendedClass.get(0);
+
+		if (implementedClasses.size() > 0) {
+		    result += " implements ";
+		    for (int i = 0; i < implementedClasses.size() - 1; ++ i)
+                result += implementedClasses.get(i) + ", ";
+		    result += implementedClasses.get(implementedClasses.size() - 1);
+        }
+
+        result += " {";
+
+        for (Definition d : this.definitions)
+            result += d + "\n";
+
+		result += "\n" + "}" + "\n";
+		return result;
 	}
 
 }
