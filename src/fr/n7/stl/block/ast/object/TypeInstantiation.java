@@ -141,8 +141,11 @@ public class TypeInstantiation implements Type {
 						Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
 						return true;
 					} else if (_declaration.getGenerics().size() == this.typeInstantiations.size() ) {
-						// TODO : Verifier que les types generiques sont compatibles.
-						// ex : si déclaré MyClass<T extends X>
+						for (int i = 0; i < this.typeInstantiations.size(); i++) {
+							// TODO : Verifier que les types generiques sont compatibles.
+							// ex : si déclaré MyClass<T extends X>
+							// declaration[i].compatibleWith(typeInstantiations[i])
+						}
 						return true;
 					} else {
 						Logger.error("Incorrect number of arguments for type " + this.name + ".");
