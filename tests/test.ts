@@ -103,4 +103,31 @@ describe('# Resolve/Checktype tests', function () {
         });
         done();
     });
+
+    it('-> interface declaration with inner declarations', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {
+                int fun();
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
+
+    it('-> method overloading in interfaces', function(done: () => any) {
+        TAM.ensureResult(
+            `interface abc {
+                int fun();
+                int fun(String param);
+                int fun(String param, int param2);
+                int fun(int param, String param2);
+            }`,
+        {
+            resolve: true,
+            checkType: true
+        });
+        done();
+    });
 });
