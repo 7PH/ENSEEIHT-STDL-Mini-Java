@@ -333,7 +333,7 @@ describe('# Resolve/Checktype simple tests', function () {
         });
         it('-> bad overloading II', function(done: () => any) {
             TAM.ensureResult(`
-                interface abc {
+                class abc {
                     public void fun(String foo) {}
                     public void fun(String bar) {}
                 }
@@ -357,7 +357,7 @@ describe('# Resolve/Checktype simple tests', function () {
         });
         it('-> bad overloading IV', function(done: () => any) {
             TAM.ensureResult(`
-                interface abc {
+                class abc {
                     public void fun(String foo) {}
                     private void fun(String bar) {}
                 }
