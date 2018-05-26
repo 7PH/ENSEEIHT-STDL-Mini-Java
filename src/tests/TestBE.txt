@@ -1,6 +1,7 @@
-abstract class foo {
-    public abstract void issou();
-}
-class foo2 extends foo {
-    public void issou2() { }
+interface A { void imA(String a); }
+interface B { void imB(); }
+class C implements A, B {
+    public void imA(String b) { }
+    public void imB() { }
+    public static void main(String args[]) { }
 }

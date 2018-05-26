@@ -231,8 +231,8 @@ describe('# Resolve/Checktype simple tests', function () {
         TAM.ensureResult(
             `class foo { } class bar implements foo { }`,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
         done();
     });
@@ -288,11 +288,11 @@ describe('# Resolve/Checktype simple tests', function () {
             `abstract class foo { 
                 public abstract void issou();
             } 
-            class foo2 extends foo {
-            }`,
+            class foo2 extends foo { }
+            `,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
         done();
     });
@@ -685,8 +685,69 @@ describe('# Resolve / CheckType medium tests', function () {
             }
         `,
             {
-                resolve: false
+                resolve: true,
+                checkType: false
             });
         done();
     });
+
+    it('-> multiple interface implementations 1', function(done: () => any) {
+        TAM.ensureResult(`
+            interface A { void imA(); }
+            interface B { void imB(); }
+            class C implements A, B {
+                public void imA() { }
+                public void imB() { }
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> multiple interface implementations 2', function(done: () => any) {
+        TAM.ensureResult(`
+            interface A { void imA(); }
+            interface B { void imB(); }
+            class C implements A, B {
+                public void imA() { }
+            }`,
+            {
+                resolve: true,
+                checkType: false
+            });
+        done();
+    });
+
+    it('-> multiple interface implementations 3', function(done: () => any) {
+        TAM.ensureResult(`
+            interface A { void imA(String a); }
+            interface B { void imB(); }
+            class C implements A, B {
+                public void imA(int a) { }
+                public void imB() { }
+            }`,
+            {
+                resolve: true,
+                checkType: false
+            });
+        done();
+    });
+
+    it('-> multiple interface implementations 4', function(done: () => any) {
+        TAM.ensureResult(`
+            interface A { void imA(String a); }
+            interface B { void imB(); }
+            class C implements A, B {
+                public void imA(String b) { }
+                public void imB() { }
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
 });
