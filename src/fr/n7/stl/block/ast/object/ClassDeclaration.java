@@ -40,20 +40,29 @@ public class ClassDeclaration extends ProgramDeclaration {
 		return (this.modifier == ClassModifier.FINAL);
 	}
 
-    public AttributeDefinition getAttributeDeclaration(String name) {
+    public AttributeDefinition getAttributeDeclaration(String name, boolean returnPrivates) {
         for (Definition definition: definitions) {
             if (definition instanceof AttributeDefinition
-                && definition.getName().equals(name))
+                    && definition.getName().equals(name)
+                    && (returnPrivates || definition.getAccessModifier() == AccessModifier.PUBLIC))
                 return (AttributeDefinition) definition;
         }
-        if (extendedClass.size() > 0)
-            return ((ClassDeclaration)extendedClass.get(0).getDeclaration()).getAttributeDeclaration(name);
-        else
-            return null;
+        if (extendedClass.size() > 0) {
+            return ((ClassDeclaration) extendedClass.get(0).getDeclaration()).getAttributeDeclaration(name, false);
+        }
+        return null;
+    }
+
+    public AttributeDefinition getAttributeDeclaration(String name) {
+        return getAttributeDeclaration(name, true);
     }
 
     public boolean hasAttribute(String name) {
-	    return getAttributeDeclaration(name) != null;
+        return getAttributeDeclaration(name) != null;
+    }
+
+    public boolean hasAttribute(String name, boolean returnPrivates) {
+        return getAttributeDeclaration(name, returnPrivates) != null;
     }
 
     @Override

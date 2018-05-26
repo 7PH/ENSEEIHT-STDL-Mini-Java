@@ -495,9 +495,9 @@ describe('# Resolve / CheckType medium tests', function () {
             class ColoredPoint extends Point {
                 private String color;
 
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
+                public ColoredPoint(int x, int y) {
+                    this.x = x;
+                    this.y = y;
                     this.color = "rouge";
                 }
             }`,
@@ -513,47 +513,19 @@ describe('# Resolve / CheckType medium tests', function () {
             class Point {
                 private int x;
                 private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
+            
+                public Point(int x, int y) {
+                    this.x = x;
+                    this.y = y;
                 }
             }
             class ColoredPoint extends Point {
                 private String color;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
-                    this.color = "rouge";
-                }
-            }`,
-            {
-                resolve: false,
-            });
-        done();
-    });
-
-    it('-> class w/ bad constructor', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
+            
+                public Segment(int x, int y, String color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
                 }
             }`,
             {
@@ -562,7 +534,33 @@ describe('# Resolve / CheckType medium tests', function () {
         done();
     });
 
-    it('-> class w/ bad constructor', function(done: () => any) {
+    it('-> class w/ bad constructor 1', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                private int x;
+                private int y;
+            
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class ColoredPoint extends Point {
+                private String color;
+            
+                public Segment(int x, int y, String color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                }
+            }`,
+            {
+                resolve: false
+            });
+        done();
+    });
+
+    it('-> class w/ bad constructor 2', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
                 public static final String ROUGE = "rouge";
@@ -586,8 +584,7 @@ describe('# Resolve / CheckType medium tests', function () {
                 }
             }`,
             {
-                resolve: true,
-                checkType: true
+                resolve: false
             });
         done();
     });
@@ -610,36 +607,6 @@ describe('# Resolve / CheckType medium tests', function () {
                 private String color;
 
                 public ColoredPoint (String color) {
-                    this.color = color;
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ superclass attribute use (w/ a little subtility)', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint {
-                private String color;
-
-                public ColoredPoint (Point p1, Point p2, String color) {
-                    this.p1 = p1;
-                    this.p2 = p2;
                     this.color = color;
                 }
             }`,
