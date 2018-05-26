@@ -271,8 +271,8 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
     });
 
     it('-> class w/ attribute assignment', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
                 public Point() { }

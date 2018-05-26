@@ -53,11 +53,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 	    return getAttributeDeclaration(name) != null;
     }
 
-	@Override
-    public boolean resolve(HierarchicalScope<Declaration> scope) {
-        if (! super.resolve(scope))
-            return false;
-
+    @Override
+    public boolean subResolve(HierarchicalScope<Declaration> scope) {
         if (extendedClass.size() > 0 && extendedClass.get(0).getDeclaration().getName().equals(this.getName())) {
             Logger.error(this.getName() + " cannot extend self");
             return false;

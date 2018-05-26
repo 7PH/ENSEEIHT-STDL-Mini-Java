@@ -34,10 +34,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	}
 
 	@Override
-    public boolean resolve(HierarchicalScope<Declaration> scope) {
-        if (! super.resolve(scope))
-            return false;
-
+    public boolean subResolve(HierarchicalScope<Declaration> scope) {
 		// Check if the superclasses are well superinterface
     	for (InstanceType tp: extendedClass) {
     		if (tp.getDeclaration() instanceof ClassDeclaration) {

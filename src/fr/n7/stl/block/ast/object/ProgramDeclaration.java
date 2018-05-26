@@ -7,6 +7,7 @@ import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.AbstractAttribute;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
@@ -22,6 +23,8 @@ public abstract class ProgramDeclaration implements Declaration {
 	
 	protected List<InstanceType> implementedClasses = new LinkedList<>();
 
+	public abstract boolean subResolve(HierarchicalScope<Declaration> scope);
+
     public boolean resolve(HierarchicalScope<Declaration> scope) {
         if (! scope.accepts(this)) {
             Logger.error(this.getName() + " has already been declared");
@@ -29,25 +32,27 @@ public abstract class ProgramDeclaration implements Declaration {
         }
         scope.register(this);
 
+        SymbolTable subScope = new SymbolTable(scope);
+
         // register 'this' keyword in scope
         AbstractThisUse abstractThisUse = new AbstractThisUse(this);
-        abstractThisUse.resolve(scope);
+        abstractThisUse.resolve(subScope);
 
         for (InstanceType extended: extendedClass) {
-            if (! extended.resolve(scope)) {
+            if (! extended.resolve(subScope)) {
                 Logger.error("Could not resolve extended class " + extended + " from " + getName());
                 return false;
             }
         }
 
         for (InstanceType implemented: implementedClasses) {
-            if (! implemented.resolve(scope)) {
+            if (! implemented.resolve(subScope)) {
                 Logger.error("Could not resolve implemented class " + implemented + " from " + getName());
                 return false;
             }
         }
 
-        return true;
+        return subResolve(subScope);
     }
 
 	public abstract boolean checkType();

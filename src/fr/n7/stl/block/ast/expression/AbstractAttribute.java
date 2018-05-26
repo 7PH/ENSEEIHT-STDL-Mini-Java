@@ -58,7 +58,6 @@ public abstract class AbstractAttribute implements Expression {
         this.objectType = (InstanceType) type;
 
         if (! (objectType.getDeclaration() instanceof ClassDeclaration)) {
-            Logger.error("" + objectType.getDeclaration());
             Logger.error("Accessing 'attribute' of non class declaration");
             return false;
         }
