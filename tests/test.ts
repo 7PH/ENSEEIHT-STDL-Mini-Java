@@ -326,7 +326,7 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                 private Point p2;
 
                 public Segment() {
-                    p1 = new Point();
+                    this.p1 = new Point();
                 }
             }`,
         {
