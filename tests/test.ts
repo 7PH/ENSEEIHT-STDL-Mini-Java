@@ -250,7 +250,7 @@ describe('# Resolve/Checktype tests', function () {
 
 
 
-describe('# Resolve/Checktype tests PART II : we begin serious tests', function () {
+describe('# Resolve / CheckType tests PART II : we begin serious tests', function () {
     this.slow(SLOW_TEST_MS);
 
     it('-> class w/ custom attribute types', function(done: () => any) {
@@ -294,8 +294,8 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
     });
 
     it('-> class w/ attribute assignment & ParameterUse in Constructor', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
             }
@@ -316,8 +316,8 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
     });
 
     it('-> class w/ object instantiation w/out constructor', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
             }
@@ -330,16 +330,15 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                 }
             }`,
         {
-            resolve: false, // Miss Point constructor
-            checkType: true
+            resolve: false // Miss Point constructor
         });
         done();
     });
 
 
     it('-> class w/ instantiation of our type & This', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
 
@@ -364,8 +363,8 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
         done();
     });
     it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
 
@@ -427,15 +426,14 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                 }
             }`,
             {
-                resolve: false,
-                checkType: true
+                resolve: false
             });
         done();
     });
 
     it('-> class w/ bad constructor', function(done: () => any) {
-        TAM.ensureResult(
-            `class Color {
+        TAM.ensureResult(`
+            class Color {
                 public final static String ROUGE = "rouge";
             }
             class Point {
@@ -464,8 +462,8 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
     });
 
     it('-> class w/ superclass attribute use', function(done: () => any) {
-        TAM.ensureResult(
-            `class Color {
+        TAM.ensureResult(`
+            class Color {
                 public final static String ROUGE = "rouge";
             }
             class Point {

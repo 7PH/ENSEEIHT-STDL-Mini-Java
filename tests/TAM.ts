@@ -5,7 +5,7 @@ import {log} from "util";
 
 export interface TAMExpectedResult {
     resolve: boolean;
-    checkType: boolean;
+    checkType?: boolean;
     output?: string[];
 }
 
@@ -68,7 +68,7 @@ export class TAM {
         if (expected.resolve !== result.resolve)
             throw new Error("Resolve expected to be " + expected.resolve + " but is " + result.resolve + " \n " + logger);
 
-        if (expected.checkType !== result.checkType)
+        if (expected.resolve != false && expected.checkType !== result.checkType)
             throw new Error("CheckType expected to be " + expected.checkType + " but is " + result.checkType + " \n " + logger);
 
         if (expected.output != null && result.output == null)
