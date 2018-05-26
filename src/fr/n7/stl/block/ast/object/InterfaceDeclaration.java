@@ -35,19 +35,6 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
-		// Check if the superclasses are well superinterface
-    	for (InstanceType tp: extendedClass) {
-    		if (tp.getDeclaration() instanceof ClassDeclaration) {
-    			Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
-				return false;
-    		}
-    	}
-
-    	if (implementedClasses.size() > 0) {
-    	    Logger.error("Interface " + getName() + " cannot implements another");
-    	    return false;
-        }
-
     	// Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
@@ -65,7 +52,20 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public boolean checkType() {
-		return true;
+        // Check if the superclasses are well superinterface
+        for (InstanceType tp: extendedClass) {
+            if (tp.getDeclaration() instanceof ClassDeclaration) {
+                Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
+                return false;
+            }
+        }
+
+        if (implementedClasses.size() > 0) {
+            Logger.error("Interface " + getName() + " cannot implements another");
+            return false;
+        }
+
+        return true;
 	}
 
 	@Override

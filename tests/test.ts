@@ -90,7 +90,16 @@ describe('# Resolve/Checktype simple tests', function () {
 
     /* ********************* */
     describe('# About class', function() {
-        it('-> class', function(done: () => any) {
+        it('-> one class', function(done: () => any) {
+            TAM.ensureResult(
+                `class abc {} class foo {}`,
+            {
+                resolve: true,
+                checkType: true
+            });
+            done();
+        });
+        it('-> two classes', function(done: () => any) {
             TAM.ensureResult(
                 `class abc {} class foo {}`,
             {
@@ -136,7 +145,16 @@ describe('# Resolve/Checktype simple tests', function () {
 
     /* ********************* */
     describe('# About interface', function() {
-        it('-> interface', function(done: () => any) {
+        it('-> one interface', function(done: () => any) {
+            TAM.ensureResult(
+                `interface abc {}`,
+            {
+                resolve: true,
+                checkType: true
+            });
+            done();
+        });
+        it('-> two interfaces', function(done: () => any) {
             TAM.ensureResult(
                 `interface abc {} interface foo {}`,
             {
@@ -149,8 +167,8 @@ describe('# Resolve/Checktype simple tests', function () {
             TAM.ensureResult(
                 `interface abc {} interface abc {}`,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
             done();
         });
@@ -232,7 +250,7 @@ describe('# Resolve/Checktype simple tests', function () {
         });
         it('-> self reference', function(done: () => any) {
         TAM.ensureResult(
-            `class abc extends abc { }`,
+            `class abc extends abc {}`,
             {
                 resolve: false,
                 checkType: true
@@ -420,10 +438,10 @@ describe('# Resolve / CheckType medium tests', function () {
                 private Point p1;
                 private Point p2;
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
@@ -443,10 +461,10 @@ describe('# Resolve / CheckType medium tests', function () {
                     this.p2 = new Point();
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
@@ -465,10 +483,10 @@ describe('# Resolve / CheckType medium tests', function () {
                     this.p2 = p2;
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
@@ -486,10 +504,10 @@ describe('# Resolve / CheckType medium tests', function () {
                     this.p1 = new Point();
                 }
             }`,
-        {
-            resolve: true,
-            checkType: false
-        });
+            {
+                resolve: true,
+                checkType: false
+            });
         done();
     });
 
@@ -514,10 +532,10 @@ describe('# Resolve / CheckType medium tests', function () {
                     this.p2 = new Point(c, d);
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
     it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
@@ -540,15 +558,15 @@ describe('# Resolve / CheckType medium tests', function () {
                     this.p2 = new Point(c, "d");
                 }
             }`,
-        {
-            resolve: true,
-            checkType: false // "d" is String != int
-        });
+            {
+                resolve: true,
+                checkType: false // "d" is String != int
+            });
         done();
     });
 
-    
-    
+
+
     it('-> class w/ constant', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
@@ -777,12 +795,13 @@ describe('# Resolve / CheckType medium tests', function () {
             }
         `,
             {
-                resolve: false
+                resolve: true,
+                checkType: false
             });
         done();
     });
 
-    it('-> method body ', function(done: () => any) {
+    it('-> method body 1', function(done: () => any) {
         TAM.ensureResult(`
             class Random {
                 public int getRandom() {
@@ -797,7 +816,7 @@ describe('# Resolve / CheckType medium tests', function () {
         done();
     });
 
-    it('-> method body ', function(done: () => any) {
+    it('-> method body 2', function(done: () => any) {
         TAM.ensureResult(`
             class Random {
                 public int getRandom() {
@@ -951,7 +970,7 @@ describe('# Resolve / CheckType medium tests', function () {
         TAM.ensureResult(`
             class Random {
                 public static void main(String args[]) {
-
+                    
                 }
             }
         `,

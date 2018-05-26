@@ -132,6 +132,19 @@ public class MethodDefinition extends Definition {
 
         // body?
         ok &= body == null || body.checkType();
+        
+        if(body != null) {
+        	if(!this.getSignature().getType().compatibleWith(body.getReturnType())) {
+        		ok = false;
+        		Logger.error("The method " + this.getName() + " should return a " + this.getSignature().getType() + " but its body returns a non compatible type : " + body.getReturnType());
+        	}
+        	
+        } else if (!this.getSignature().getType().equals(AtomicType.VoidType)) {
+        	// an empty method should be of voidtype
+        	ok = false;
+        	Logger.error("The method " + this.getName() + " should return a " + this.getSignature().getType() + " but has no body.");
+        }
+        	
 
         // parameters ok?
         for (ParameterDeclaration p : this.signature.getParameters()) {

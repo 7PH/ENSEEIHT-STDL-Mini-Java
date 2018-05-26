@@ -79,6 +79,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         return false;
     }
     public boolean definesMethod(String name) { return definesMethod(name, new LinkedList<>()); }
+    public boolean definesMethod(Signature signature) { return definesMethod(signature.getName()); }
 
     public boolean hasMethod(String name, List<Expression> parameters) {
         return definesMethod(name, parameters)
@@ -93,63 +94,10 @@ public class ClassDeclaration extends ProgramDeclaration {
             return false;
         }
 
-		// Verify that implementedClass contains only interfaces
-    	for (InstanceType tp: implementedClasses) {
-    		if (tp.getDeclaration() instanceof ClassDeclaration) {
-    			Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
-    			return false;
-    		}
-    	}
-
-        // Verify that each interface method is implemented
         for (InstanceType tp: this.implementedClasses) {
-    	    if (! tp.resolve(scope))
-    	        return false;
-
-    	    if (! (tp.getDeclaration() instanceof InterfaceDeclaration)) {
-    	        Logger.error("Class " + getName() + " cannot implements " + tp + ". This is not an interface.");
-    	        return false;
-            }
-
-        	InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
-        	List<Signature> classSignatures = getClassSignatures();
-        	for (Signature s: interfaceDeclaration.getSignatures()) {
-        		if (! classSignatures.contains(s)) {
-        			Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + s.getName().split(" ")[0] + ".");
-        			return false;
-        		}
-        	}
+            if (!tp.resolve(scope))
+                return false;
         }
-
-        // Verify that there is no more one superclass
-        if (this.extendedClass.size() > 1 ) {
-        	Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
-        	return false;
-        }
-
-    	// TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
-
-    	// Verify if every superclass abstract methods are implemented
-		if (this.extendedClass.size() > 0) {
-    		InstanceType tp = this.extendedClass.get(0);
-    		// Check if the superclass is well a simple class
-    		if (tp.getDeclaration() instanceof InterfaceDeclaration) {
-    			Logger.error("The class " + this.getName() + " extends the interface "+ tp.getDeclaration().getName() + " which is not correct.");
-				return false;
-    		}
-    		ClassDeclaration classDeclaration = (ClassDeclaration) tp.getDeclaration();
-    		for (Definition d : classDeclaration.getDefinitions()) {
-    			if (d instanceof MethodDefinition) {
-    				MethodDefinition md = (MethodDefinition) d;
-
-    				// For each abstract method of the superclass, we check if it is implemented
-                    if (md.isAbstract() && ! definesMethod(md.getSignature().getName())) {
-                        Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
-                        return false;
-    				}
-    			}
-    		}
-    	}
 
         // Define a new scope for methods/attributes
         HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
@@ -161,20 +109,6 @@ public class ClassDeclaration extends ProgramDeclaration {
                 return false;
             }
         }
-
-    	// Verify if a method is abstract and accord it with class modifier
-		for (Definition definition: definitions) {
-			if (definition instanceof MethodDefinition) {
-				if (((MethodDefinition) definition).isAbstract() && ! isAbstract()) {
-					Logger.error("Non abstract class" + getName() + " cannot contain abstract method " + definition.getName() + ".");
-				    return false;
-				}
-			} else if (definition instanceof AttributeDefinition) {
-                // ok
-            } else {
-			    Logger.error("ClassDeclaration: Wrong kind of definition for: " + definition);
-            }
-		}
 
         return true;
     }
@@ -192,12 +126,82 @@ public class ClassDeclaration extends ProgramDeclaration {
 	@Override
 	public boolean checkType() {
 		boolean b = true;
+
+        // Verify that implementedClass contains only interfaces
+        for (InstanceType tp: extendedClass) {
+            if (! (tp.getDeclaration() instanceof ClassDeclaration)) {
+                Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
+                b = false;
+            }
+        }
+
+        // Verify that each interface method is implemented
+        for (InstanceType tp: implementedClasses) {
+            if (! (tp.getDeclaration() instanceof InterfaceDeclaration)) {
+                Logger.error("Class " + getName() + " cannot implements " + tp + ". This is not an interface.");
+                return false;
+            }
+
+            InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
+            for (Signature signature: interfaceDeclaration.getSignatures()) {
+                if (! definesMethod(signature)) {
+                    Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + signature.getName().split(" ")[0] + ".");
+                    return false;
+                }
+            }
+        }
+
+        // Verify that there is no more one superclass
+        if (this.extendedClass.size() > 1 ) {
+            Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
+            return false;
+        }
+
+        // TODO: Remonter la chaîne des extends/implements pour checker les methodes abstraites
+
+        // Verify if every superclass abstract methods are implemented
+        if (this.extendedClass.size() > 0) {
+            InstanceType tp = this.extendedClass.get(0);
+            // Check if the superclass is well a simple class
+            if (tp.getDeclaration() instanceof InterfaceDeclaration) {
+                Logger.error("The class " + this.getName() + " extends the interface "+ tp.getDeclaration().getName() + " which is not correct.");
+                return false;
+            }
+            ClassDeclaration classDeclaration = (ClassDeclaration) tp.getDeclaration();
+            for (Definition d : classDeclaration.getDefinitions()) {
+                if (d instanceof MethodDefinition) {
+                    MethodDefinition md = (MethodDefinition) d;
+
+                    // For each abstract method of the superclass, we check if it is implemented
+                    if (md.isAbstract() && ! definesMethod(md.getSignature().getName())) {
+                        Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // Verify if a method is abstract and accord it with class modifier
+        for (Definition definition: definitions) {
+            if (definition instanceof MethodDefinition) {
+                if (((MethodDefinition) definition).isAbstract() && ! isAbstract()) {
+                    Logger.error("Non abstract class" + getName() + " cannot contain abstract method " + definition.getName() + ".");
+                    return false;
+                }
+            } else if (definition instanceof AttributeDefinition) {
+                // ok
+            } else {
+                Logger.error("ClassDeclaration: Wrong kind of definition for: " + definition);
+            }
+        }
+
 		for (Definition d : this.definitions) {
-			b &= d.checkType();
-			if (!b) {
+			if (! d.checkType()) {
 				Logger.error(d.getName() + " definition raised false checktype");
+				b = false;
 			}
 		}
+
 		return b;
 	}
 
