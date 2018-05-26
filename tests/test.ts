@@ -404,6 +404,59 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
         done();
     });
 
+    it('-> class w/ superclass public attribute use', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                public int x;
+                public int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class ColoredPoint extends Point {
+                private String color;
+
+                public Segment(int a, int b, int c, int d) {
+                    this.x = new Point(a, b);
+                    this.y = new Point(c, d);
+                    this.color = "rouge";
+                }
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> class w/ superclass private attribute use', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class ColoredPoint extends Point {
+                private String color;
+
+                public Segment(int a, int b, int c, int d) {
+                    this.x = new Point(a, b);
+                    this.y = new Point(c, d);
+                    this.color = "rouge";
+                }
+            }`,
+            {
+                resolve: false,
+            });
+        done();
+    });
+
     it('-> class w/ bad constructor', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
@@ -418,12 +471,12 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
                     this.y = b;
                 }
             }
-            class ColoredPoint {
+            class ColoredPoint extends Point {
                 private String color;
 
                 public Segment(int a, int b, int c, int d) {
-                    this.p1 = new Point(a, b);
-                    this.p2 = new Point(c, d);
+                    this.x = new Point(a, b);
+                    this.y = new Point(c, d);
                 }
             }`,
             {
@@ -446,12 +499,12 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
                     this.y = b;
                 }
             }
-            class ColoredPoint {
+            class ColoredPoint extends Point {
                 private String color;
 
                 public ColoredPoint (Point p1, Point p2, String c) {
-                    this.p1 = p1;
-                    this.p2 = p2;
+                    this.x = p1;
+                    this.y = p2;
                     this.color = c;
                 }
             }`,
