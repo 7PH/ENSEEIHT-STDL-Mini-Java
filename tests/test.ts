@@ -1,14 +1,15 @@
 import {TAM} from "./TAM";
 
-
-
-
 const SLOW_TEST_MS: number = 2000;
 
-
+/* ###############################################
+ * ##               GRAMMAR TESTS               ## 
+ * ###############################################
+ */
 describe('# Grammar tests', function () {
     this.slow(SLOW_TEST_MS);
 
+    /* ********************* */
     describe('# Global declarations', function() {
         it('-> class, interfaces w/ generic types', function (done: () => any) {
             const s: string = `
@@ -29,6 +30,7 @@ describe('# Grammar tests', function () {
         });
     });
 
+    /* ********************* */
     describe('# Inner class declarations', function() {
         it('-> methods definitions', function (done: () => any) {
             const s: string = `
@@ -64,6 +66,7 @@ describe('# Grammar tests', function () {
         });
     });
 
+    /* ********************* */
     describe('# Inner interface declarations', function() {
         it('-> public methods with different return types and generic types', function (done: () => any) {
             const s: string = `
@@ -75,246 +78,335 @@ describe('# Grammar tests', function () {
                 throw new Error("Grammar check should have passed");
             done();
         });
-        
     });
-
 });
 
-
+/* ###############################################
+ * ##      RESOLVE/CHECKTYPE TESTS - PART I     ##
+ * ###############################################
+ */
 describe('# Resolve/Checktype simple tests', function () {
     this.slow(SLOW_TEST_MS);
 
-    // SIMPLE TEST ABOUT CLASS
-    it('-> class', function(done: () => any) {
-        TAM.ensureResult(
-            `class abc {} class foo {}`,
-        {
-            resolve: true,
-            checkType: true
-        });
-        done();
-    });
-
-    it('-> duplicate class', function(done: () => any) {
-        TAM.ensureResult(
-            `class abc {} class abc {}`,
-        {
-            resolve: false,
-            checkType: true
-        });
-        done();
-    });
-
-    it('-> class declaration with inner declarations', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
-                private int x;
-                private int y;
-            }`,
-        {
-            resolve: true,
-            checkType: true
-        });
-        done();
-    });
-
-    // SIMPLE TEST ABOUT INTERFACE
-    it('-> interface', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {} interface foo {}`,
-        {
-            resolve: true,
-            checkType: true
-        });
-        done();
-    });
-    
-    it('-> duplicate interface', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {} interface abc {}`,
-        {
-            resolve: false,
-            checkType: true
-        });
-        done();
-    });
-
-    it('-> interface declaration with inner declarations', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {
-                int fun();
-            }`,
-        {
-            resolve: true,
-            checkType: true
-        });
-        done();
-    });
-
-    it('-> method overloading in interfaces', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {
-                int fun();
-                int fun(String param);
-                int fun(String param, int param2);
-                int fun(int param, String param2);
-            }`,
+    /* ********************* */
+    describe('# About class', function() {
+        it('-> class', function(done: () => any) {
+            TAM.ensureResult(
+                `class abc {} class foo {}`,
             {
                 resolve: true,
                 checkType: true
             });
-        done();
-    });
-
-    it('-> forbidden overload 1', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {
-                int fun();
-                int fun();
-            }`,
-            { resolve: false, checkType: true });
-        done();
-    });
-
-    it('-> forbidden overload 2', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {
-                int fun(String foo);
-                int fun(String bar);
-            }`,
-            { resolve: false, checkType: true });
-        done();
-    });
-
-    it('-> forbidden overload 3', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {
-                int fun(String foo);
-                String fun(String bar);
-            }`,
-            { resolve: false, checkType: true });
-        done();
-    });
-
-    it('-> interface implementation', function(done: () => any) {
-        TAM.ensureResult(
-            `interface abc {}
-            class issou implements abc {}`,
-        {
-            resolve: true,
-            checkType: true
+            done();
         });
-        done();
-    });
-
-    it('-> unexisting interface implementation', function(done: () => any) {
-        TAM.ensureResult(
-            `class issou implements abc {}`,
+        it('-> duplicate class', function(done: () => any) {
+            TAM.ensureResult(
+                `class abc {} class abc {}`,
             {
                 resolve: false,
                 checkType: true
             });
-        done();
+            done();
+        });
+        it('-> class declaration with inner attributes', function(done: () => any) {
+            TAM.ensureResult(
+                `class Point {
+                    private int x;
+                    private int y;
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class declaration with inner methods', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x() {}
+                    private int y() {}
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
     });
 
-    it('-> self reference', function(done: () => any) {
+    /* ********************* */
+    describe('# About interface', function() {
+        it('-> interface', function(done: () => any) {
+            TAM.ensureResult(
+                `interface abc {} interface foo {}`,
+            {
+                resolve: true,
+                checkType: true
+            });
+            done();
+        });
+        it('-> duplicate interface', function(done: () => any) {
+            TAM.ensureResult(
+                `interface abc {} interface abc {}`,
+            {
+                resolve: false,
+                checkType: true
+            });
+            done();
+        });
+        it('-> interface declaration with inner methods', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {
+                    int fun();
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About implementation', function() {
+        it('-> interface implementation', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {}
+                class issou implements abc {}
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> unexisting interface implementation', function(done: () => any) {
+            TAM.ensureResult(
+                `class issou implements abc {}`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> self reference', function(done: () => any) {
+            TAM.ensureResult(
+                `class abc implements abc {}`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class implementing a class', function(done: () => any) {
+            TAM.ensureResult(`
+                class foo {}
+                class bar implements foo {}
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About extension', function() {
+        it('-> class extension', function(done: () => any) {
+            TAM.ensureResult(`
+                class abc {}
+                class issou extends abc {}
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> unexisting class extension', function(done: () => any) {
+            TAM.ensureResult(
+                `class issou extends abc {}`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> self reference', function(done: () => any) {
         TAM.ensureResult(
             `class abc extends abc { }`,
             {
                 resolve: false,
                 checkType: true
             });
-        done();
+            done();
+        });
+        it('-> class extending an interface', function(done: () => any) {
+            TAM.ensureResult(`
+                interface foo {}
+                class bar extends foo {}
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> interface extending an interface', function(done: () => any) {
+            TAM.ensureResult(`
+                interface foo {}
+                interface bar extends foo {}
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> interface extending a class', function(done: () => any) {
+            TAM.ensureResult(`
+                class foo {}
+                interface bar extends foo {}
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
     });
 
-    it('-> class implementing a class', function(done: () => any) {
-        TAM.ensureResult(
-            `class foo { } class bar implements foo { }`,
-            {
-                resolve: false,
-                checkType: true
-            });
-        done();
-    });
+    /* ********************* */
+    describe('# About overloading', function() {
+        it('-> method overloading in class', function(done: () => any) {
+            TAM.ensureResult(`
+                class abc {
+                    public int fun() {}
+                    public int fun(String param) {}
+                    public int fun(String param, int param2) {}
+                    public int fun(int param, String param2) {}
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> method overloading in interfaces', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {
+                    int fun();
+                    int fun(String param);
+                    int fun(String param, int param2);
+                    int fun(int param, String param2);
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> bad overloading', function(done: () => any) {
+            TAM.ensureResult(`
+                class abc {
+                    public int fun() {}
+                    public int fun() {}
+                }
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
 
-    it('-> class implementing a class', function(done: () => any) {
-        TAM.ensureResult(
-            `class foo { } interface bar extends foo { }`,
-            {
-                resolve: false,
-                checkType: true
-            });
-        done();
-    });
+        it('-> bad overloading II', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {
+                    int fun(String foo);
+                    int fun(String bar);
+                }
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
 
-    it('-> abstract class ', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { } `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
+        it('-> bad overloading III', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {
+                    int fun(String foo);
+                    String fun(String bar);
+                }
+                `,{
+                    resolve: false,
+                    checkType: true 
+                });
+            done();
+        });
     });
+    
 
-    it('-> abstract class w/ abstract method', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { 
-                public abstract void issou();
-            } `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> abstract class w/ extented one', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { 
-                
-            } 
-            class foo2 extends foo {
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { 
-                public abstract void issou();
-            } 
-            class foo2 extends foo {
-            }`,
-            {
-                resolve: false,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> abstract class w/ extented one w/ implemented method', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { 
-                public abstract void issou();
-            } 
-            class foo2 extends foo {
-                public void issou() { }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
+    /* ********************* */
+    describe('# About abstraction', function() {
+        it('-> abstract class ', function(done: () => any) {
+            TAM.ensureResult(
+                `abstract class foo { } `,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> abstract class w/ abstract method', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class foo { 
+                    public abstract void issou();
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> abstract class w/ extented one', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class foo {} 
+                class foo2 extends foo {}
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class foo { 
+                    public abstract void issou();
+                } 
+                class foo2 extends foo {}
+                `,{
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> abstract class w/ extented one w/ implemented method', function(done: () => any) {
+            TAM.ensureResult(
+                `abstract class foo { 
+                    public abstract void issou();
+                } 
+                class foo2 extends foo {
+                    public void issou() {}
+                }
+                `,{
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
 });
 
 
-
+/* ###############################################
+ * ##     RESOLVE/CHECKTYPE TESTS - PART II     ##
+ * ###############################################
+ */
 describe('# Resolve / CheckType medium tests', function () {
     this.slow(SLOW_TEST_MS);
 
