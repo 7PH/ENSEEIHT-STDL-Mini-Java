@@ -689,4 +689,185 @@ describe('# Resolve / CheckType medium tests', function () {
             });
         done();
     });
+
+    it('-> method body ', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                public int getRandom() {
+                    return 5;
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> method body ', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                public int getRandom() {
+                    return "d";
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: false
+            });
+        done();
+    });
+
+    it('-> method body w/ attribute use ', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private int x;
+
+                public int getRandom() {
+                    return this.x;
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> method body w/ attribute use ', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private String x;
+                
+                public int getRandom() {
+                    return this.x;
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: false
+            });
+        done();
+    });
+
+    it('-> method call in class', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private int x;
+
+                public Random() {
+                    this.x = this.getRandom();
+                }
+                
+                public int getRandom() {
+                    return 5;
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> method call in a different class', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private int x;
+
+                public Random(int y) {
+                    this.x = y;
+                }
+                
+                public int getRandom() {
+                    return 5;
+                }
+            }
+            class Getter {
+                public void get() {
+                    Random r = new Random(6);
+                    r.getRandom();
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> method call in a different class w/ use of result', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private int x;
+
+                public Random(int y) {
+                    this.x = y;
+                }
+                
+                public int getRandom() {
+                    return 5;
+                }
+            }
+            class Getter {
+                public void get() {
+                    Random r = new Random(6);
+                    int x = r.getRandom();
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> method call in a different class w/ bad use of result', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                private int x;
+
+                public Random(int y) {
+                    this.x = y;
+                }
+                
+                public int getRandom() {
+                    return 5;
+                }
+            }
+            class Getter {
+                public void get() {
+                    Random r = new Random(6);
+                    String x = r.getRandom();
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: false
+            });
+        done();
+    });
+    it('-> public static void main', function(done: () => any) {
+        TAM.ensureResult(`
+            class Random {
+                public static void main(String args[]) {
+
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
 });
