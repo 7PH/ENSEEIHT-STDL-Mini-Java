@@ -1,10 +1,7 @@
 package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
-import fr.n7.stl.block.ast.object.ClassDeclaration;
-import fr.n7.stl.block.ast.object.InstanceType;
-import fr.n7.stl.block.ast.object.MethodDefinition;
-import fr.n7.stl.block.ast.object.ProgramDeclaration;
+import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
@@ -43,40 +40,53 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
+        // object/target
+        ProgramDeclaration programDeclaration;
 
-        // Verify objet resolve.
-    	if (! object.resolve(scope)) {
-            Logger.error("Could not resolve attribute assignment because of: " + object + ".");
-            return false;
+        if (object == null) {
+            if (! scope.knows(target)) {
+                Logger.error("MethodAccess: Unknown identifier: " + target);
+                return false;
+            }
+
+            Declaration declaration = scope.get(target);
+            if (declaration instanceof AbstractThisUse) {
+                programDeclaration = ((AbstractThisUse)declaration).programDeclaration;
+            } else {
+                programDeclaration = (ProgramDeclaration) scope.get(target);
+            }
+            this.objectType = (InstanceType) programDeclaration.getType();
+        } else {
+            if (! object.resolve(scope)) {
+                Logger.error("Could not resolve attribute assignment because of: " + object + ".");
+                return false;
+            }
+            Type type = object.getType();
+            if (! (type instanceof InstanceType)) {
+                Logger.error(object + " is not a InstanceType.");
+                return false;
+            }
+            this.objectType = (InstanceType) type;
         }
 
         // Resolve parameters
         for (Expression parameter: parameters) {
-            if (!parameter.resolve(scope)) {
-            	Logger.error("The parameter " + parameter.toString() + " in " + this.name + " call on " + this.target + " could not be resolved.");
-            	return false;
+            if (! parameter.resolve(scope)) {
+                Logger.error("The parameter " + parameter.toString() + " in " + this.name + " call on " + this.target + " could not be resolved.");
+                return false;
             }
-        }
-
-        // Get the objet type and check that is a InstanceType
-        Type type = object.getType();
-
-        if (! (type instanceof InstanceType)) {
-            Logger.error(object + " is not a InstanceType.");
-            return false;
         }
        
         // Check if the method exist
-        ProgramDeclaration programDeclaration = objectType.getDeclaration();
+        programDeclaration = objectType.getDeclaration();
         if (programDeclaration instanceof ClassDeclaration) {
             this.methodDefinition = ((ClassDeclaration) programDeclaration).getMethodDefinitionBySignature(name);
         } else {
             // TODO
             this.methodDefinition = null;
-            
         }
         if (this.methodDefinition == null) {
-            Logger.error("Method " + this.name + " does not exist in " + programDeclaration.getName() + ".");
+            Logger.error("Method " + name + " does not exist in " + programDeclaration.getName() + ".");
             return false;
         }
 
@@ -84,15 +94,15 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
     	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
     	int numOfPar = this.parameters.size();
         if (numOfPar != declaredParameters.size()) {
-            Logger.error("Call of " + this.object + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
+            Logger.error("Call of " + object + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
             return false;
         }
 
         // Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
-    	if (!this.methodDefinition.resolve(newScope)) {
-        	Logger.error("The method " + this.methodDefinition.getName() + " call could not be resolved.");
+    	if (! methodDefinition.resolve(newScope)) {
+        	Logger.error("The method " + methodDefinition.getName() + " call could not be resolved.");
         	return false;    		
         }
         return true;
@@ -146,6 +156,6 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public String toString() {
-        return this.object + "." + this.name + "(" + this.parameters + ");";
+        return (object == null ? target : "") + "." + name + "(" + this.parameters + ")";
     }
 }

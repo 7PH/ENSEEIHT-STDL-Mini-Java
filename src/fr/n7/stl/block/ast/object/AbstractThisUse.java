@@ -8,8 +8,11 @@ import fr.n7.stl.block.ast.type.Type;
 
 public class AbstractThisUse extends VariableDeclaration implements Expression {
 
+    public final ProgramDeclaration programDeclaration;
+
     public AbstractThisUse(ProgramDeclaration programDeclaration) {
         super("this", new InstanceType(programDeclaration.getClassName().getName()), null);
+        this.programDeclaration = programDeclaration;
     }
 
     @Override
