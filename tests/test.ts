@@ -122,8 +122,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 `class Point {
                     private int x;
                     private int y;
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -134,8 +134,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class Point {
                     public int x() {}
                     private int y() {}
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: false
                 });
@@ -176,8 +176,8 @@ describe('# Resolve/Checktype simple tests', function () {
             TAM.ensureResult(`
                 interface abc {
                     int fun();
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -298,8 +298,8 @@ describe('# Resolve/Checktype simple tests', function () {
                     public void fun(String param) {}
                     public void fun(String param, int param2) {}
                     public void fun(int param, String param2) {}
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -312,8 +312,8 @@ describe('# Resolve/Checktype simple tests', function () {
                     int fun(String param);
                     int fun(String param, int param2);
                     int fun(int param, String param2);
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -324,8 +324,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class abc {
                     public void fun() {}
                     public void fun() {}
-                }
-                `,{
+                }`,
+                {
                     resolve: false,
                     checkType: true
                 });
@@ -336,8 +336,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class abc {
                     public void fun(String foo) {}
                     public void fun(String bar) {}
-                }
-                `,{
+                }`,
+                {
                     resolve: false,
                     checkType: true
                 });
@@ -348,8 +348,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 interface abc {
                     int fun(String foo);
                     String fun(String bar);
-                }
-                `,{
+                }`,
+                {
                     resolve: false,
                     checkType: true 
                 });
@@ -360,8 +360,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class abc {
                     public void fun(String foo) {}
                     private void fun(String bar) {}
-                }
-                `,{
+                }`,
+                {
                     resolve: false,
                     checkType: true 
                 });
@@ -384,8 +384,8 @@ describe('# Resolve/Checktype simple tests', function () {
             TAM.ensureResult(`
                 abstract class foo { 
                     public abstract void issou();
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -406,8 +406,9 @@ describe('# Resolve/Checktype simple tests', function () {
                 abstract class foo { 
                     public abstract void issou();
                 } 
-                class foo2 extends foo {}
-                `,{
+                class foo2 extends foo {
+                }`,
+                {
                     resolve: false,
                     checkType: true
                 });
@@ -420,8 +421,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 } 
                 class foo2 extends foo {
                     public void issou() {}
-                }
-                `,{
+                }`,
+                {
                     resolve: true,
                     checkType: true
                 });
@@ -439,557 +440,530 @@ describe('# Resolve / CheckType medium tests', function () {
     this.slow(SLOW_TEST_MS);
 
     /* ********************* */
-    it('-> class w/ custom attribute types', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
+    describe('# About object', function() {  
+        it('-> class w/ attribute assignment', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+
+                    public Point() {
+                        this.x = 1;
+                        this.y = 2;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ attribute assignment w/ parameter use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+    
+                    public Point(int p1, int p2) {
+                        this.x = p1;
+                        this.y = p2;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ bad named constructor', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+                    public Segment(int x, int y, String color) {
+                        this.x = x;
+                        this.y = y;
+                        this.color = color;
+                    }
+                }`,
+                {
+                    resolve: false
+                });
+            done();
+        });
     });
 
-    it('-> class w/ attribute assignment', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-                public Point() { }
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
+    /* ********************* */
+    describe('# About method', function() {  
+        it('-> correct typed method body', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public int getRandom() {
+                        return 5;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> correct void method body', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public void getRandom() {}
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> uncorrect typed method body', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public int getRandom() {
+                        return "d";
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
+        it('-> uncorrect void method body', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public void getRandom() {
+                        return "d";
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
+        it('-> public static void main', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static void main(String args[]) {}
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> correct method body w/ attribute use ', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private int x;
+                    public int getRandom() {
+                        return this.x;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> uncorrect method body w/ attribute use ', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private String x;
+                    public int getRandom() {
+                        return this.x;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
+        it('-> method call in inner class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private int x;
 
-                public Segment() {
-                    this.p1 = new Point();
-                    this.p2 = new Point();
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ attribute assignment & ParameterUse in Constructor', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment(Point p1, Point p2) {
-                    this.p1 = p1;
-                    this.p2 = p2;
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ object instantiation w/out constructor', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment() {
-                    this.p1 = new Point();
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-
-
-    it('-> class w/ instantiation of our type & This', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.p1 = new Point(a, b);
-                    this.p2 = new Point(c, d);
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-    it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.p1 = new Point(a, b);
-                    this.p2 = new Point(c, "d");
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: false // "d" is String != int
-            });
-        done();
-    });
-
-
-
-    it('-> class w/ constant', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ superclass public attribute use', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                public int x;
-                public int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-
-                public ColoredPoint(int x, int y) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = "rouge";
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ superclass private attribute use', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-            
-                public Point(int x, int y) {
-                    this.x = x;
-                    this.y = y;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-            
-                public Segment(int x, int y, String color) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = color;
-                }
-            }`,
-            {
-                resolve: false
-            });
-        done();
-    });
-
-    it('-> class w/ bad constructor 1', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-            
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-            
-                public Segment(int x, int y, String color) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = color;
-                }
-            }`,
-            {
-                resolve: false
-            });
-        done();
-    });
-
-    it('-> class w/ bad constructor 2', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-
-                public ColoredPoint (Point p1, Point p2, String c) {
-                    this.x = p1;
-                    this.y = p2;
-                    this.color = c;
-                }
-            }`,
-            {
-                resolve: false
-            });
-        done();
-    });
-
-    it('-> class w/ superclass attribute use', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int x, int y) {
-                    this.x = x;
-                    this.y = y;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-
-                public ColoredPoint (String color) {
-                    this.color = color;
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> class w/ superclass attribute use w/ global constant use', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint {
-                private String color;
-
-                public ColoredPoint () {
-                    this.color = Color.ROUGE;
-                }
-            }`,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> simple interface implementation', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-
-            interface Cercle {
-                Point getCenter();	
-            }
-
-            class CercleImpl implements Cercle {
-                private Point center;
-                
-                public Point getCenter() {
-                    return this.center;
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType : true
-            });
-        done();
-    });
-
-    it('-> simple interface implementation with missing methods', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-
-            interface Cercle {
-                Point getCenter();	
-            }
-
-            class CercleImpl implements Cercle {
-                private Point center;
-            }
-        `,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-
-    it('-> method body 1', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                public int getRandom() {
-                    return 5;
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> method body 2', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                public int getRandom() {
-                    return "d";
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-
-    it('-> method body w/ attribute use ', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private int x;
-
-                public int getRandom() {
-                    return this.x;
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> method body w/ attribute use ', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private String x;
-                
-                public int getRandom() {
-                    return this.x;
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-
-    it('-> method call in class', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private int x;
-
-                public Random() {
-                    this.x = this.getRandom();
-                }
-                
-                public int getRandom() {
-                    return 5;
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> method call in a different class', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private int x;
-
-                public Random(int y) {
-                    this.x = y;
-                }
-                
-                public int getRandom() {
-                    return 5;
-                }
-            }
-            class Getter {
-                public void get() {
-                    Random r = new Random(6);
-                    r.getRandom();
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> method call in a different class w/ use of result', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private int x;
-
-                public Random(int y) {
-                    this.x = y;
-                }
-                
-                public int getRandom() {
-                    return 5;
-                }
-            }
-            class Getter {
-                public void get() {
-                    Random r = new Random(6);
-                    int x = r.getRandom();
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
-    });
-
-    it('-> method call in a different class w/ bad use of result', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                private int x;
-
-                public Random(int y) {
-                    this.x = y;
-                }
-                
-                public int getRandom() {
-                    return 5;
-                }
-            }
-            class Getter {
-                public void get() {
-                    Random r = new Random(6);
-                    String x = r.getRandom();
-                }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-    it('-> public static void main', function(done: () => any) {
-        TAM.ensureResult(`
-            class Random {
-                public static void main(String args[]) {
+                    public static void main (String args[]) {
+                        this.getRandom();
+                    }
                     
+                    public int getRandom() {
+                        return 5;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> method call in a different class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private int x;
+                    public Random(int y) {
+                        this.x = y;
+                    }
+                    public int getRandom() {
+                        return 5;
+                    }
                 }
-            }
-        `,
-            {
-                resolve: true,
-                checkType: true
-            });
-        done();
+                class Main {
+                    public static void main (String args[]) {
+                        Random r = new Random(6);
+                        r.getRandom();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> method call in a different class w/ use of result', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private int x;
+                    public Random(int y) {
+                        this.x = y;
+                    }
+                    public int getRandom() {
+                        return 5;
+                    }
+                }
+                class Main {
+                    public static void main (String args[]) {
+                        Random r = new Random(6);
+                        int x = r.getRandom();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> method call in a different class w/ bad use of result', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    private int x;
+                    public Random(int y) {
+                        this.x = y;
+                    }
+                    public int getRandom() {
+                        return 5;
+                    }
+                }
+                class Main {
+                    public static void main (String args[]) {
+                        Random r = new Random(6);
+                        String x = r.getRandom();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
     });
 
+    /* ********************* */
+    describe('# About using instantiation', function() {    
+        it('-> class w/ custom attribute types', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {}
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ attribute assignment w/ parameter use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {}
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment(Point p1, Point p2) {
+                        this.p1 = p1;
+                        this.p2 = p2;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ instantiation of existing object', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                    public Point() { }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment() {
+                        this.p1 = new Point();
+                        this.p2 = new Point();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ instantiation of unexisting object', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                    public Point() { }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment() {
+                        this.p1 = new ColoredPoint();
+                        this.p2 = new ColoredPoint();
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ object instantiation w/out constructor', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment() {
+                        this.p1 = new Point();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
+        it('-> class w/ real constructor', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+    
+                    public Point(int a, int b) {
+                        this.x = a;
+                        this.y = b;
+                    }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment(int a, int b, int c, int d) {
+                        this.p1 = new Point(a, b);
+                        this.p2 = new Point(c, d);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+    
+                    public Point(int a, int b) {
+                        this.x = a;
+                        this.y = b;
+                    }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+    
+                    public Segment(int a, int b, int c, int d) {
+                        this.p1 = new Point(a, b);
+                        this.p2 = new Point(c, "d");
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: false // "d" is String != int
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About extension', function() {
+        it('-> class w/ superclass attribute use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+
+                    public ColoredPoint (String color) {
+                        this.x = 1;
+                        this.y = 2;
+                        this.color = color;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About implementation', function() {
+        it('-> simple implementation', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {}
+                interface Cercle {
+                    Point getCenter();	
+                }
+                class CercleImpl implements Cercle {
+                    private Point center;
+                    public Point getCenter() {
+                        return this.center;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> simple implementation w/ missing methods', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {}
+                interface Cercle {
+                    Point getCenter();	
+                }
+                class CercleImpl implements Cercle {
+                    private Point center;
+                }`,
+                {
+                    resolve: true,
+                    checkType: false
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About modifier', function() { 
+        it('-> class w/ constant', function(done: () => any) {
+            TAM.ensureResult(`
+                class Color {
+                    public static final String ROUGE = "rouge";
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ superclass public attribute use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+                    public ColoredPoint(int a, int b) {
+                        this.x = a;
+                        this.y = b;
+                        this.color = "rouge";
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ superclass private attribute use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+                    public Segment(int a, int b, String color) {
+                        this.x = a;
+                        this.y = b;
+                        this.color = color;
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ superclass attribute use w/ global constant use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Color {
+                    public static final String ROUGE = "rouge";
+                }
+                class Point {
+                    private int x;
+                    private int y;
+                }
+                class ColoredPoint extends Point{
+                    private String color;
+    
+                    public ColoredPoint () {
+                        this.color = Color.ROUGE;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+    });
 });
