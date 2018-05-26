@@ -109,7 +109,7 @@ public class ObjectAllocation implements Expression {
         return "new " + type + "()";
     }
 
-    public List<Constructor>  getConstructors() {
+    public List<Constructor> getConstructors() {
         List<Constructor> constructorList = new LinkedList<>();
         if (this.type instanceof InstanceType) {
             InstanceType it = (InstanceType) this.type;

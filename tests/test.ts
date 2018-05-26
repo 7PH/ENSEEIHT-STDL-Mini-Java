@@ -330,7 +330,8 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
                 }
             }`,
         {
-            resolve: false // Miss Point constructor
+            resolve: true,
+            checkType: false
         });
         done();
     });
@@ -394,7 +395,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
     it('-> class w/ constant', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
-                public final static String ROUGE = "rouge";
+                public static final String ROUGE = "rouge";
             }`,
             {
                 resolve: true,
@@ -406,7 +407,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
     it('-> class w/ bad constructor', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
-                public final static String ROUGE = "rouge";
+                public static final String ROUGE = "rouge";
             }
             class Point {
                 private int x;
@@ -434,7 +435,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
     it('-> class w/ bad constructor', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
-                public final static String ROUGE = "rouge";
+                public static final String ROUGE = "rouge";
             }
             class Point {
                 private int x;
@@ -464,7 +465,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
     it('-> class w/ superclass attribute use', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
-                public final static String ROUGE = "rouge";
+                public static final String ROUGE = "rouge";
             }
             class Point {
                 private int x;
@@ -494,7 +495,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
     it('-> class w/ superclass attribute use (w/ a little subtility)', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
-                public final static String ROUGE = "rouge";
+                public static final String ROUGE = "rouge";
             }
             class Point {
                 private int x;
