@@ -155,8 +155,11 @@ public class InstanceType implements Type {
 				} else {
 					return true;
 				}
+			} else if (scope.get(this.name) instanceof GenericType) {
+				// This is an instance of the generic type.				
+				return true;
 			} else {
-				Logger.error(this.name + " is not a class nor an interface and cannot be instantiated.");
+				Logger.error(this.name + " is not a class nor an interface and cannot be instantiated. " + scope.get(this.name).getClass().getName() );
 				return false;
 			}
 		}
