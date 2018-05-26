@@ -42,7 +42,7 @@ public class MethodAccess implements Instruction, Expression {
     }
     
     public MethodAccess(String identifier, String method, List<Expression> parameters) {
-        this.identifier = identifier;
+        this.name = identifier;
         this.method = method;
         this.parameters = parameters;
     }
