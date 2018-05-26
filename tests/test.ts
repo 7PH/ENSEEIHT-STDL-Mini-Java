@@ -447,7 +447,7 @@ describe('# Resolve / CheckType medium tests', function () {
                     private int x;
                     private int y;
 
-                    public Point() {
+                    public Point() {
                         this.x = 1;
                         this.y = 2;
                     }
