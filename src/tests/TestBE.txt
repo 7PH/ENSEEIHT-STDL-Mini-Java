@@ -1,1 +1,5 @@
-class foo { } class bar implements foo { }
+class Issou {
+    public static void main(String args[]) {
+
+    }
+}

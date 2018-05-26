@@ -2,6 +2,7 @@ package fr.n7.stl.block;
 
 
 import fr.n7.stl.block.ast.scope.SymbolTable;
+import fr.n7.stl.tam.ast.impl.TAMFactoryImpl;
 import fr.n7.stl.util.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +58,7 @@ class Driver {
     private static Parser execute(Parser parser) throws Exception {
         parser.resolve = parser.program.resolve(new SymbolTable());
         parser.checkType = parser.program.checkType();
+        parser.fragment = parser.program.getCode(new TAMFactoryImpl());
         return parser;
     }
 
@@ -65,10 +67,10 @@ class Driver {
         System.out.println("content     : " + "\n" + parser.program.toString());
         System.out.println("resolve     : " + (parser.resolve ? "OK   " : "ERROR") + " (" + parser.resolveTimeMs + "ms)");
         System.out.println("checkType   : " + (parser.checkType ? "OK   " : "ERROR") + " (" + parser.checkTypeTimeMs + "ms)");
-        //System.out.println("===============================================");
-        //System.out.println("TAM         : ");
-        //System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
         System.out.println("Logger: " + Logger.getAll());
+        System.out.println("===============================================");
+        System.out.println("TAM         : ");
+        System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
         System.out.println("===============================================");
     }
 
