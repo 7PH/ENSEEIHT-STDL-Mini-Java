@@ -104,7 +104,17 @@ public class MethodDefinition extends Definition {
             newScope.register(parameterDeclaration);
         }
 
-		// abstract => ! body
+        // abstract => ! modifier
+        if (isAbstract()) {
+            AccessModifier am = this.getAccessModifier();
+            DefinitionModifier dm = this.getDefinitionModifier();
+            if (am != null || dm != null) {
+                Logger.error("An abstract method can not have a modifier as " + ((am == null) ? "" : am) + " " + ((dm == null) ? "" : dm));
+                resolved = false;
+            }
+        }
+
+        // abstract => ! body
 		if (isAbstract() && body != null) {
             Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
             resolved = false;
