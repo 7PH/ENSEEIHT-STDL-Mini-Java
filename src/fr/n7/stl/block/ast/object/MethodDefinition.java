@@ -134,11 +134,12 @@ public class MethodDefinition extends Definition {
         ok &= body == null || body.checkType();
         
         if(body != null) {
-        	if(!body.getReturnType().compatibleWith(this.getSignature().getType())) {
+        	boolean isWild = this.getSignature().getType().equals(AtomicType.Wildcard) && body.getReturnType().equals(AtomicType.VoidType);
+        	
+        	if(!isWild && !body.getReturnType().compatibleWith(this.getSignature().getType())) {
         		ok = false;
         		Logger.error("The method " + this.getName() + " should return a " + this.getSignature().getType() + " but its body returns a non compatible type : " + body.getReturnType());
-        	}
-        	
+        	}        	
         }       	
 
         // parameters ok?
