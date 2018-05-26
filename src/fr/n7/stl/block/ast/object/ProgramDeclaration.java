@@ -87,7 +87,7 @@ public abstract class ProgramDeclaration implements Declaration {
 	}
 	
 	public Type getType() {
-		throw new SemanticsUndefinedException("getType method not implemented yet in ProgramDeclaration");
+	    return new InstanceType(className.getName());
 	}
 
 	public List<InstanceType> getExtendedClass() {
