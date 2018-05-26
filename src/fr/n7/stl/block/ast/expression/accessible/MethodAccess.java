@@ -3,7 +3,6 @@ package fr.n7.stl.block.ast.expression.accessible;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.object.InstanceType;
-import fr.n7.stl.block.ast.object.InterfaceDeclaration;
 import fr.n7.stl.block.ast.object.MethodDefinition;
 import fr.n7.stl.block.ast.object.ProgramDeclaration;
 import fr.n7.stl.block.ast.expression.Expression;
@@ -21,29 +20,24 @@ import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
-public class MethodAccess implements Instruction, Expression {
-	
-	private String name;
-
-    private Expression objectIdentifier;
-
-    private String method;
+public class MethodAccess extends DefinitionAccess implements Instruction, Expression {
+    
+    private String target;
     
     private MethodDefinition methodDefinition;
 
     private List<Expression> parameters;
 
-    private InstanceType objectType;
-
-    public MethodAccess(Expression object, String method, List<Expression> parameters) {
-        this.objectIdentifier = object;
-        this.method = method;
+    public MethodAccess(Expression object, String name, List<Expression> parameters) {
+        this.object = object;
+        this.name = name;
         this.parameters = parameters;
     }
     
-    public MethodAccess(String identifier, String method, List<Expression> parameters) {
-        this.name = identifier;
-        this.method = method;
+    // Name attribute is the target x in : x.issou()
+    public MethodAccess(String target, String name, List<Expression> parameters) {
+        this.target = target;
+        this.name = name;
         this.parameters = parameters;
     }
 
@@ -51,24 +45,24 @@ public class MethodAccess implements Instruction, Expression {
     public boolean resolve(HierarchicalScope<Declaration> scope) {
     	
         // Verify objet resolve.
-    	if (! objectIdentifier.resolve(scope)) {
-            Logger.error("Could not resolve attribute assignment because of: " + objectIdentifier + ".");
+    	if (! object.resolve(scope)) {
+            Logger.error("Could not resolve attribute assignment because of: " + object + ".");
             return false;
         }
 
         // Resolve parameters
         for (Expression parameter: parameters) {
             if (!parameter.resolve(scope)) {
-            	Logger.error("The parameter " + parameter.toString() + " in " + this.method + " call on " + this.name + " could not be resolved.");
+            	Logger.error("The parameter " + parameter.toString() + " in " + this.name + " call on " + this.target + " could not be resolved.");
             	return false;
             }
         }
 
         // Get the objet type and check that is a InstanceType
-        Type type = objectIdentifier.getType();
+        Type type = object.getType();
 
         if (! (type instanceof InstanceType)) {
-            Logger.error(objectIdentifier + " is not a InstanceType.");
+            Logger.error(object + " is not a InstanceType.");
             return false;
         }
        
@@ -90,7 +84,7 @@ public class MethodAccess implements Instruction, Expression {
     	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
     	int numOfPar = this.parameters.size();
         if (numOfPar != declaredParameters.size()) {
-            Logger.error("Call of " + this.objectIdentifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
+            Logger.error("Call of " + this.object + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
             return false;
         }
 
@@ -125,10 +119,10 @@ public class MethodAccess implements Instruction, Expression {
                 b &= parameterType.compatibleWith(declaredType);
                 if (!b) {
                 Logger.error("Parameter " + parameterType.toString() + " use in "
-                            + this.objectIdentifier + " method is not compatible with declared one : " + declaredParameters + ".");
+                            + this.object + " method is not compatible with declared one : " + declaredParameters + ".");
                 }
             } else {
-                Logger.error("Parameter " + parameterType.toString() + " use in " + this.objectIdentifier + "method is an ErrorType.");
+                Logger.error("Parameter " + parameterType.toString() + " use in " + this.object + "method is an ErrorType.");
                 b &= false;
             }
         }	
@@ -152,6 +146,6 @@ public class MethodAccess implements Instruction, Expression {
 
     @Override
     public String toString() {
-        return this.objectIdentifier + "." + this.method + "(" + this.parameters + ");";
+        return this.object + "." + this.name + "(" + this.parameters + ");";
     }
 }
