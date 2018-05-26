@@ -572,4 +572,61 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
             });
         done();
     });
+
+    it('-> simple interface implementation', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+
+            interface Cercle {
+                Point getCenter();	
+            }
+
+            class CercleImpl implements Cercle {
+                private Point center;
+                
+                public Point getCenter() {
+                    return this.center;
+                }
+            }
+        `,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+
+    it('-> simple interface implementation with missing methods', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+
+            interface Cercle {
+                Point getCenter();	
+            }
+
+            class CercleImpl implements Cercle {
+                private Point center;
+            }
+        `,
+            {
+                resolve: false
+            });
+        done();
+    });
 });
