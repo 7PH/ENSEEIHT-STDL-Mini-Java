@@ -269,18 +269,6 @@ describe('# Resolve/Checktype simple tests', function () {
         done();
     });
 
-    it('-> abstract class w/ abstract method w/ body', function(done: () => any) {
-        TAM.ensureResult(
-            `abstract class foo { 
-                public abstract void issou() {}
-            } `,
-            {
-                resolve: false,
-                checkType: true
-            });
-        done();
-    });
-
     it('-> abstract class w/ extented one', function(done: () => any) {
         TAM.ensureResult(
             `abstract class foo { 
@@ -298,7 +286,7 @@ describe('# Resolve/Checktype simple tests', function () {
     it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
         TAM.ensureResult(
             `abstract class foo { 
-                abstract void issou();
+                public abstract void issou();
             } 
             class foo2 extends foo {
             }`,

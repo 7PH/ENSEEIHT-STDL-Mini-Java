@@ -1,6 +1,7 @@
 package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
@@ -65,6 +66,26 @@ public class ClassDeclaration extends ProgramDeclaration {
         return getAttributeDeclaration(name, returnPrivates) != null;
     }
 
+    // @TODO check also parameters
+    public boolean definesMethod(String name, List<Expression> parameters) {
+        for (Definition definition: definitions) {
+            if (! (definition instanceof MethodDefinition))
+                continue;
+            MethodDefinition method = (MethodDefinition) definition;
+            if (method.getSignature().getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean definesMethod(String name) { return definesMethod(name, new LinkedList<>()); }
+
+    public boolean hasMethod(String name, List<Expression> parameters) {
+        return definesMethod(name, parameters)
+                || (extendedClass.size() > 0 && ((ClassDeclaration)extendedClass.get(0).getDeclaration()).definesMethod(name, parameters));
+    }
+    public boolean hasMethod(String name) { return hasMethod(name, new LinkedList<>()); }
+
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
         if (extendedClass.size() > 0 && extendedClass.get(0).getDeclaration().getName().equals(this.getName())) {
@@ -120,12 +141,11 @@ public class ClassDeclaration extends ProgramDeclaration {
     		for (Definition d : classDeclaration.getDefinitions()) {
     			if (d instanceof MethodDefinition) {
     				MethodDefinition md = (MethodDefinition) d;
+
     				// For each abstract method of the superclass, we check if it is implemented
-    				if (md.isAbstract()) {
-    					if (!(this.definitions.contains(md))) {
-    						Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
-    	    				return false;
-    					}
+                    if (md.isAbstract() && ! definesMethod(md.getSignature().getName())) {
+                        Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
+                        return false;
     				}
     			}
     		}
