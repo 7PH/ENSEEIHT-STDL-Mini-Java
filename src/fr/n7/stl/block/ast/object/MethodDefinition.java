@@ -23,12 +23,21 @@ public class MethodDefinition extends Definition {
 
     protected Register register;
 
+    protected String startLabel;
+
     protected int offset;
+
+    private static int ID = 0;
+
+    private synchronized static Integer getID() {
+        return ++ ID;
+    }
 	
 	public MethodDefinition(Signature _signature, Block _body) {
 		this.signature = _signature;
 		this.body = _body;
 		this.abstractArgument = body == null;
+        this.startLabel = "method_start_" + MethodDefinition.getID();
 	}
 
 	/** Get the method signature.
@@ -154,13 +163,35 @@ public class MethodDefinition extends Definition {
     }
 
 	@Override
-    public int allocateMemory(Register _register, int _offset) {
-    	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodDefinition.");
+    public int allocateMemory(Register register, int offset) {
+        body.allocateMemory(register, offset);
+        return 0;
+    }
+
+    public int getParametersLength() {
+        int length = 0;
+        for (ParameterDeclaration parameterDeclaration: signature.getParameters())
+            length += parameterDeclaration.getType().length();
+        return length;
     }
 
 	@Override
-    public Fragment getCode(TAMFactory _factory) {
-    	throw new SemanticsUndefinedException("getCode method is undefined for MethodDefinition.");
+    public Fragment getCode(TAMFactory factory) {
+        String id = String.valueOf(factory.createLabelNumber());
+        String endLabel = "method_end_" + id;
+
+        Fragment fragment1 = factory.createFragment();
+        fragment1.add(factory.createJump(endLabel));
+
+        Fragment fragment2 = factory.createFragment();
+        fragment2.add(factory.createLoad(Register.LB, - 1 - getReturnType().length() - getParametersLength(), getParametersLength()));
+        fragment2.append(body.getCode(factory));
+        fragment2.addPrefix(startLabel + ":");
+        fragment2.addSuffix(endLabel + ":");
+
+        fragment1.append(fragment2);
+
+        return fragment1;
     }
 
     @Override
@@ -170,7 +201,10 @@ public class MethodDefinition extends Definition {
 
 	@Override
 	public Type getReturnType() {
-    	throw new SemanticsUndefinedException("getReturnType method is undefined for MethodDefinition.");
+        return body.getReturnType();
 	}
 
+    public String getStartLabel() {
+        return startLabel;
+    }
 }

@@ -208,12 +208,17 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public int allocateMemory(Register register, int offset) {
-		throw new SemanticsUndefinedException("allocateMemory method not implemented yet in ClassDeclaration");
+        for (Definition definition: definitions)
+            offset = definition.allocateMemory(register, offset);
+        return offset;
 	}
 
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-		throw new SemanticsUndefinedException("getCode method not implemented yet in ClassDeclaration");
+        Fragment fragment = factory.createFragment();
+	    for (Definition definition: definitions)
+	        fragment.append(definition.getCode(factory));
+	    return fragment;
 	}
 
 	@Override

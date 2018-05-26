@@ -39,8 +39,8 @@ public class Block {
     /**
 	 * Constructor for a block.
 	 */
-	public Block(List<Instruction> _instructions) {
-		this.instructions = _instructions;
+	public Block(List<Instruction> instructions) {
+		this.instructions = instructions;
 	}
 	
 	/* (non-Javadoc)
@@ -127,9 +127,12 @@ public class Block {
 	 */
 	public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
+
         for (Instruction instruction: instructions)
             fragment.append(instruction.getCode(factory));
+
         fragment.add(factory.createPop(0, allocated));
+
         return fragment;
 	}
 

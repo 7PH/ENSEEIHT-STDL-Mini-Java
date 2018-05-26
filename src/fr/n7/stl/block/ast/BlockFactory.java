@@ -41,8 +41,8 @@ public class BlockFactory {
 		return new Iteration(_condition, _body);
 	}
 	
-	public Instruction createPrinter(Expression _value) {
-		return new Printer(_value);
+	public Instruction createPrinter(Expression expression) {
+		return new LogInstruction(expression);
 	}
 	
 	public Expression createTrueValue() {

@@ -42,19 +42,10 @@ public class Program implements ASTNode {
         }
     	return b;
     }
-    
-	/** Compute the size of the allocated memory. 
-	 * @param _register register associated to the address of the program.
-	 * @param _offset current offset for the address of the program.
-	 * @return size of the memory allocated to the program.
-	 */
-    int allocateMemory(Register _register, int _offset) {
-    	throw new SemanticsUndefinedException("allocateMemory method is undefined for Program.");
-    }
 
     public MethodDefinition findFirstPublicStaticVoidMain() {
         List<ParameterDeclaration> mainParams = new ArrayList<>();
-        mainParams.add(new ParameterDeclaration("args", new ArrayType(AtomicType.StringType)));
+        //mainParams.add(new ParameterDeclaration("args", new ArrayType(AtomicType.StringType)));
         Signature mainSignature = new Signature(AtomicType.VoidType, "main", mainParams);
 
         for (ProgramDeclaration declaration: declarations) {
@@ -66,6 +57,12 @@ public class Program implements ASTNode {
         }
 
         return null;
+    }
+
+    public int allocateMemory(Register register, int offset) {
+        for (ProgramDeclaration declaration: declarations)
+            offset = declaration.allocateMemory(register, offset);
+        return offset;
     }
 	
 	/** Provide the generated TAM code.
@@ -82,7 +79,13 @@ public class Program implements ASTNode {
         // get code of the public static void main if found
         MethodDefinition main = findFirstPublicStaticVoidMain();
         if (main == null) return fragment;
-        // @TODO here call the method 'main'
+
+        // @TODO String args[] ???
+        // for (Expression argument : arguments)
+        //     fragment.append(argument.getCode(factory));
+        //fragment.add(factory.createPush(main.getType().length()));
+        fragment.add(factory.createCall(main.getStartLabel(), Register.SB));
+        //fragment.add(factory.createPop(main.getType().length(), main.getParametersLength()));
 
         // ok
         return fragment;
