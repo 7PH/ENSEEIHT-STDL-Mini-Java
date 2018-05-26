@@ -1,20 +1,18 @@
-class Color {
-    public static final String ROUGE = "rouge";
-}
 class Point {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Point(int a, int b) {
+        this.x = a;
+        this.y = b;
     }
 }
 class ColoredPoint extends Point {
     private String color;
 
-    public ColoredPoint (String color) {
+    public Segment(int x, int y, String color) {
+        this.x = x;
+        this.y = y;
         this.color = color;
-        int a = this.x;
     }
 }
