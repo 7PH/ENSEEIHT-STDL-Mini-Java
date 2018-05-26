@@ -35,7 +35,7 @@ public class Signature implements Declaration {
                 name += p.getType() + ", ";
 
             // only for beauty purpose
-            name = name.substring(0, name.length() - 1);
+            name = name.substring(0, name.length() - 2);
         }
 
         name += ")";

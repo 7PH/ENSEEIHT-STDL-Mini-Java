@@ -33,14 +33,14 @@ public class ObjectAllocation implements Expression {
     	// Resolve type part
     	if (!this.type.resolve(scope)) {
     		Logger.error("Could not resolve object instantiation because of the type " + this.type.toString() + ".");
-    		b &= false;
+    		b = false;
         }
 
         // Verify that the object allocation is about a class
         if (this.type instanceof InstanceType) {
             if (! (((InstanceType) this.type).getDeclaration() instanceof ClassDeclaration)) {
                 Logger.error("Could not instantiate " + this.type.toString() + ", it is an interface.");
-    		    b &= false;
+    		    b = false;
             }
         }
 
@@ -49,47 +49,11 @@ public class ObjectAllocation implements Expression {
     	    parameter.resolve(scope);
         }
 
-        // Check if a constructor is present
-        List<Constructor> listeConstructors = this.getConstructors();
-        if (listeConstructors.size() == 0) {
-            Logger.error("You need to define a constructor before using one.");
-            b &= false;
-        }
-
-
-        // Check that the parameters
-        for (Constructor c : listeConstructors) {
-            List<ParameterDeclaration> declaredParam = c.getSignature().getParameters();
-            if (declaredParam.size() != parameters.size()) {
-                Logger.error(c.getName() + " expected " + declaredParam.size() + " arguments, " + parameters.size() + " given.");
-                b &= false;
-            } else {
-                for (int i = 0; i < parameters.size(); i ++) {
-                    Type parameterType = parameters.get(i).getType();
-                    Type declaredType = declaredParam.get(i).getType();
-
-                    // Verify if a type is an ErrorType
-                    if (! parameterType.equalsTo(AtomicType.ErrorType)) {
-                        // Verify compatibility between declared and used type
-                        b &= parameterType.compatibleWith(declaredType);
-                        if (! b) {
-                            Logger.error("Parameter " + parameterType + " use in "
-                                    + c.getName() + " method is not compatible with declared one : " + declaredParam + ".");
-                        }
-                    } else {
-                        Logger.error("Parameter " + parameterType + " use in " + c.getName() + "method is an ErrorType.");
-                        b &= false;
-                    }
-                }	
-            }
-        }
-
-
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
     	for (Expression e : parameters) {
     		if(! e.resolve(newScope)) {
     			Logger.error("Could not resolve object insantiation because the constructor parameter " + e.toString() + " could not be resolved.");
-    			b &= false;
+    			b = false;
     		}
     	}
     	
@@ -98,7 +62,41 @@ public class ObjectAllocation implements Expression {
 
     @Override
     public Type getType() {
-    	return this.type;
+
+        // Check if a constructor is present
+        List<Constructor> listeConstructors = this.getConstructors();
+        if (listeConstructors.size() == 0) {
+            Logger.error("You need to define a constructor before using one.");
+            return AtomicType.ErrorType;
+        }
+
+        // Check that the parameters
+        for (Constructor c : listeConstructors) {
+            List<ParameterDeclaration> declaredParam = c.getSignature().getParameters();
+            if (declaredParam.size() != parameters.size()) {
+                Logger.error(c.getName() + " expected " + declaredParam.size() + " arguments, " + parameters.size() + " given.");
+                return AtomicType.ErrorType;
+            } else {
+                for (int i = 0; i < parameters.size(); i ++) {
+                    Type parameterType = parameters.get(i).getType();
+                    Type declaredType = declaredParam.get(i).getType();
+
+                    // Verify if a type is an ErrorType
+                    if (! parameterType.equalsTo(AtomicType.ErrorType)) {
+                        // Verify compatibility between declared and used type
+                        if (! parameterType.compatibleWith(declaredType)) {
+                            Logger.error("Parameter " + parameterType + " use in " + c.getName() + " method is not compatible with declared one : " + declaredParam + ".");
+                            return AtomicType.ErrorType;
+                        }
+                    } else {
+                        Logger.error("Parameter " + parameterType + " use in " + c.getName() + "method is an ErrorType.");
+                        return AtomicType.ErrorType;
+                    }
+                }
+            }
+        }
+
+        return type;
     }
 
     @Override
