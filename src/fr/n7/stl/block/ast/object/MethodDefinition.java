@@ -28,6 +28,7 @@ public class MethodDefinition extends Definition {
 	public MethodDefinition(Signature _signature, Block _body) {
 		this.signature = _signature;
 		this.body = _body;
+		this.abstractArgument = body == null;
 	}
 
 	/** Get the method signature.
@@ -120,7 +121,7 @@ public class MethodDefinition extends Definition {
         boolean ok = true;
 
         // body?
-        ok &= this.body.checkType();
+        ok &= body == null || body.checkType();
 
         // parameters ok?
         for (ParameterDeclaration p : this.signature.getParameters()) {
@@ -145,7 +146,7 @@ public class MethodDefinition extends Definition {
 
     @Override
     public String toString() {
-    	return this.signature.toString() + this.body.toString();
+    	return signature.toString() + ((body == null) ? "" : body.toString());
     }
 
 	@Override
