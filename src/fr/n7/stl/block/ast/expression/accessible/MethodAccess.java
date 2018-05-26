@@ -40,12 +40,12 @@ public class MethodAccess implements Instruction, Expression {
         this.method = method;
         this.parameters = parameters;
     }
-    /*
+    
     public MethodAccess(String identifier, String method, List<Expression> parameters) {
         this.identifier = identifier;
         this.method = method;
         this.parameters = parameters;
-    }*/
+    }
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
