@@ -23,7 +23,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 		this(name, new LinkedList<>(), signatures);
 	}
 	
-	public InterfaceDeclaration(ClassName name, List<TypeInstantiation> extendedClass, List<Signature> signatures) {
+	public InterfaceDeclaration(ClassName name, List<InstanceType> extendedClass, List<Signature> signatures) {
 		this.className = name;
 		this.signatures = signatures;
         this.extendedClass = extendedClass;
@@ -39,7 +39,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
             return false;
 
 		// Check if the superclasses are well superinterface
-    	for (TypeInstantiation tp: extendedClass) {
+    	for (InstanceType tp: extendedClass) {
     		if (tp.getDeclaration() instanceof ClassDeclaration) {
     			Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
 				return false;
@@ -92,7 +92,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 		if (extendedClass.size() > 0) {
 		    result += " extends ";
-            for (TypeInstantiation extended: extendedClass)
+            for (InstanceType extended: extendedClass)
                 result += extended + ", ";
             result = result.substring(0, result.length() - 2);
 		}

@@ -109,9 +109,9 @@ non terminal Definition                 InnerClassDefinitionWithoutModifier;
 non terminal List<Definition>           InnerClassDefinitions;
 non terminal Definition                 InnerClassDefinition;
 non terminal AccessModifier             AccessModifier;
-non terminal List<TypeInstantiation>    TypeInstantiations;
-non terminal List<TypeInstantiation>    TypeInstantiationsWithEsperluette;
-non terminal TypeInstantiation          TypeInstantiation;
+non terminal List<InstanceType>         InstanceTypes;
+non terminal List<InstanceType>         InstanceTypesWithEsperluette;
+non terminal InstanceType               InstanceType;
 non terminal DefinitionModifier         DefinitionModifier;
 non terminal ClassName                  ClassName;
 non terminal List<GenericType>          GenericTypes;
@@ -120,8 +120,8 @@ non terminal List<Signature>            InnerInterfaceDefinitions;
 non terminal Signature                  InnerInterfaceDefinition;
 non terminal Type                       NullableType;
 non terminal ClassModifier              ClassModifier;
-non terminal List<TypeInstantiation>    ClassExtension;
-non terminal List<TypeInstantiation>	ClassImplementation;
+non terminal List<InstanceType>         ClassExtension;
+non terminal List<InstanceType>	        ClassImplementation;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -176,9 +176,9 @@ InterfaceDeclaration ::=
         {:
             RESULT = new InterfaceDeclaration(className, definitions);
         :}
-    | UL_Interface ClassName:className UL_Extends TypeInstantiations:typeInstantiations UL_Accolade_Ouvrante InnerInterfaceDefinitions:definitions UL_Accolade_Fermante
+    | UL_Interface ClassName:className UL_Extends InstanceTypes:InstanceTypes UL_Accolade_Ouvrante InnerInterfaceDefinitions:definitions UL_Accolade_Fermante
         {:
-			RESULT = new InterfaceDeclaration(className, typeInstantiations, definitions);
+			RESULT = new InterfaceDeclaration(className, InstanceTypes, definitions);
 		:}
     ;
 
@@ -197,33 +197,33 @@ ClassModifier ::=
     ;
 
 ClassExtension ::=
-    UL_Extends TypeInstantiations:ext
+    UL_Extends InstanceTypes:ext
         {:
 			RESULT = ext;
 		:}
-  /*  | UL_Extends TypeInstantiation:ext UL_Implements TypeInstantiations:impl
+  /*  | UL_Extends InstanceType:ext UL_Implements InstanceTypes:impl
         {:
 			impl.add(ext);
 			RESULT = impl;
 		:}
-    | UL_Implements TypeInstantiations:impl
+    | UL_Implements InstanceTypes:impl
         {:
 			RESULT = impl;
 		:}*/
     |
         {:
-			RESULT = new LinkedList<TypeInstantiation>();
+			RESULT = new LinkedList<InstanceType>();
 		:}
     ;
 
 ClassImplementation ::=
-    UL_Implements TypeInstantiations:impl
+    UL_Implements InstanceTypes:impl
         {:
 			RESULT = impl;
 		:}
     |
         {:
-			RESULT = new LinkedList<TypeInstantiation>();
+			RESULT = new LinkedList<InstanceType>();
 		:}
 	;
 
@@ -250,8 +250,8 @@ GenericTypes ::=
 GenericType ::=
     UL_Identificateur:ident
         {: RESULT = new GenericType(ident); :}
-    | UL_Identificateur:ident UL_Extends TypeInstantiationsWithEsperluette:typeInstantiations
-        {: RESULT = new GenericType(ident, typeInstantiations); :}
+    | UL_Identificateur:ident UL_Extends InstanceTypesWithEsperluette:InstanceTypes
+        {: RESULT = new GenericType(ident, InstanceTypes); :}
     ;
 
 InnerClassDefinitions ::=
@@ -308,37 +308,37 @@ DefinitionModifier ::=
         {: RESULT = null; :}
     ;
 
-TypeInstantiations ::=
-    TypeInstantiation:typeInstantiation
+InstanceTypes ::=
+    InstanceType:InstanceType
         {:
-			List<TypeInstantiation> typeInstantiations = new LinkedList<>();
-			typeInstantiations.add(typeInstantiation);
-			RESULT = typeInstantiations;
+			List<InstanceType> InstanceTypes = new LinkedList<>();
+			InstanceTypes.add(InstanceType);
+			RESULT = InstanceTypes;
         :}
-    | TypeInstantiations:typeInstantiations UL_Virgule TypeInstantiation:typeInstantiation
+    | InstanceTypes:InstanceTypes UL_Virgule InstanceType:InstanceType
         {:
-			typeInstantiations.add(typeInstantiation);
-			RESULT = typeInstantiations;
+			InstanceTypes.add(InstanceType);
+			RESULT = InstanceTypes;
 		:};
 
-TypeInstantiationsWithEsperluette ::=
-    TypeInstantiation:typeInstantiation
+InstanceTypesWithEsperluette ::=
+    InstanceType:InstanceType
         {:
-			List<TypeInstantiation> typeInstantiations = new LinkedList<>();
-			typeInstantiations.add(typeInstantiation);
-			RESULT = typeInstantiations;
+			List<InstanceType> InstanceTypes = new LinkedList<>();
+			InstanceTypes.add(InstanceType);
+			RESULT = InstanceTypes;
         :}
-    | TypeInstantiationsWithEsperluette:typeInstantiations UL_Esperluette TypeInstantiation:typeInstantiation
+    | InstanceTypesWithEsperluette:InstanceTypes UL_Esperluette InstanceType:InstanceType
         {:
-			typeInstantiations.add(typeInstantiation);
-			RESULT = typeInstantiations;
+			InstanceTypes.add(InstanceType);
+			RESULT = InstanceTypes;
 		:};
 
-TypeInstantiation ::=
+InstanceType ::=
     UL_Identificateur:ident
-        {: RESULT = new TypeInstantiation(ident); :}
-    | UL_Identificateur:ident UL_Inferieur TypeInstantiations:typeInstantiations UL_Superieur
-        {: RESULT = new TypeInstantiation(ident, typeInstantiations); :}
+        {: RESULT = new InstanceType(ident); :}
+    | UL_Identificateur:ident UL_Inferieur InstanceTypes:InstanceTypes UL_Superieur
+        {: RESULT = new InstanceType(ident, InstanceTypes); :}
     ;
 
 NullableType ::=
@@ -379,11 +379,11 @@ Type ::= Atomique:atomique
 			:}
 /*		| ClassName:className  // MyClass<T>  MyClass<Integer>
 			{:
-				RESULT = new TypeInstantiation(className.getName(), className.getGenerics());
+				RESULT = new InstanceType(className.getName(), className.getGenerics());
 			:}*/
-		| TypeInstantiation:typeInstantiation
+		| InstanceType:InstanceType
 			{:
-				RESULT = typeInstantiation;
+				RESULT = InstanceType;
 			:}
 /*		| UL_Identificateur:nom
 			{:

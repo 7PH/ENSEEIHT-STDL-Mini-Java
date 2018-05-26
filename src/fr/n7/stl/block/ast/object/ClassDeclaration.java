@@ -20,7 +20,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	private List<Definition> definitions;
 	
-	public ClassDeclaration(ClassModifier modifier, ClassName name, List<TypeInstantiation> extension, List<TypeInstantiation> implementation, List<Definition> definitions) {
+	public ClassDeclaration(ClassModifier modifier, ClassName name, List<InstanceType> extension, List<InstanceType> implementation, List<Definition> definitions) {
 		this.modifier = modifier;
 		this.className = name;
 		this.extendedClass = extension;
@@ -51,7 +51,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
 		// Verify that implementedClass contains only interfaces
-    	for (TypeInstantiation tp: implementedClasses) {
+    	for (InstanceType tp: implementedClasses) {
     		if (tp.getDeclaration() instanceof ClassDeclaration) {
     			Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
     			return false;
@@ -59,7 +59,7 @@ public class ClassDeclaration extends ProgramDeclaration {
     	}
 
         // Verify that each interface method is implemented
-        for (TypeInstantiation tp: this.implementedClasses) {
+        for (InstanceType tp: this.implementedClasses) {
     	    if (! tp.resolve(scope))
     	        return false;
 
@@ -88,7 +88,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     	// Verify if every superclass abstract methods are implemented
 		if (this.extendedClass.size() > 0) {
-    		TypeInstantiation tp = this.extendedClass.get(0);
+    		InstanceType tp = this.extendedClass.get(0);
     		// Check if the superclass is well a simple class
     		if (tp.getDeclaration() instanceof InterfaceDeclaration) {
     			Logger.error("The class " + this.getName() + " extends the interface "+ tp.getDeclaration().getName() + " which is not correct.");

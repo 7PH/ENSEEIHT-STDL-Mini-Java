@@ -11,7 +11,7 @@ import java.util.List;
 public class Constructor extends MethodDefinition {
 
     public Constructor(String className, List<ParameterDeclaration> parameters, Block body) {
-        super(new Signature(new TypeInstantiation(className), "", parameters), body);
+        super(new Signature(new InstanceType(className), "", parameters), body);
     }
 
     @Override

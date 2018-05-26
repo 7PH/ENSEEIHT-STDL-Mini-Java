@@ -16,9 +16,9 @@ public abstract class ProgramDeclaration implements Declaration {
 	
 	protected ClassName className;
 	
-	protected List<TypeInstantiation> extendedClass = new LinkedList<>();
+	protected List<InstanceType> extendedClass = new LinkedList<>();
 	
-	protected List<TypeInstantiation> implementedClasses = new LinkedList<>();
+	protected List<InstanceType> implementedClasses = new LinkedList<>();
 
     public boolean resolve(HierarchicalScope<Declaration> scope) {
         if (! scope.accepts(this)) {
@@ -27,14 +27,14 @@ public abstract class ProgramDeclaration implements Declaration {
         }
         scope.register(this, "this");
 
-        for (TypeInstantiation extended: extendedClass) {
+        for (InstanceType extended: extendedClass) {
             if (! extended.resolve(scope)) {
                 Logger.error("Could not resolve extended class " + extended + " from " + getName());
                 return false;
             }
         }
 
-        for (TypeInstantiation implemented: implementedClasses) {
+        for (InstanceType implemented: implementedClasses) {
             if (! implemented.resolve(scope)) {
                 Logger.error("Could not resolve implemented class " + implemented + " from " + getName());
                 return false;
@@ -76,11 +76,11 @@ public abstract class ProgramDeclaration implements Declaration {
 		throw new SemanticsUndefinedException("getType method not implemented yet in ProgramDeclaration");
 	}
 
-	public List<TypeInstantiation> getExtendedClass() {
+	public List<InstanceType> getExtendedClass() {
 		return extendedClass;
 	}
 
-	public List<TypeInstantiation> getImplementedClasses() {
+	public List<InstanceType> getImplementedClasses() {
 		return implementedClasses;
 	}
 

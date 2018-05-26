@@ -250,29 +250,12 @@ describe('# Resolve/Checktype tests', function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe('# Resolve/Checktype tests PART II : we begin serious tests', function () {
     this.slow(SLOW_TEST_MS);
 
-    it('-> class w/ instantiation of our type', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
+    it('-> class w/ custom attribute types', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
                 private int x;
                 private int y;
             }
@@ -292,14 +275,15 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
             `class Point {
                 private int x;
                 private int y;
+                public Point() { }
             }
             class Segment {
                 private Point p1;
                 private Point p2;
 
                 public Segment() {
-                    p1 = null;
-                    p2 = null;
+                    this.p1 = new Point();
+                    this.p2 = new Point();
                 }
             }`,
         {
@@ -319,9 +303,9 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                 private Point p1;
                 private Point p2;
 
-                public Segment(Point p) {
-                    p1 = p;
-                    p2 = null;
+                public Segment(Point p1, Point p2) {
+                    this.p1 = p1;
+                    this.p2 = p2;
                 }
             }`,
         {
@@ -434,20 +418,20 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
     });
     
     it('-> class w/ constant', function(done: () => any) {
-        TAM.ensureResult(
-            `class Color {
+        TAM.ensureResult(`
+            class Color {
                 public final static String ROUGE = "rouge";
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
     it('-> class w/ bad constructor', function(done: () => any) {
-        TAM.ensureResult(
-            `class Color {
+        TAM.ensureResult(`
+            class Color {
                 public final static String ROUGE = "rouge";
             }
             class Point {
@@ -459,7 +443,7 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                     this.y = b;
                 }
             }
-            class PointColore {
+            class ColoredPoint {
                 private String color;
 
                 public Segment(int a, int b, int c, int d) {
@@ -467,10 +451,10 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                     this.p2 = new Point(c, d);
                 }
             }`,
-        {
-            resolve: false,
-            checkType: true
-        });
+            {
+                resolve: false,
+                checkType: true
+            });
         done();
     });
 
@@ -488,19 +472,19 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                     this.y = b;
                 }
             }
-            class PointColore {
+            class ColoredPoint {
                 private String color;
 
-                public PointColore(Point p1, Point p2, String c) {
+                public ColoredPoint (Point p1, Point p2, String c) {
                     this.p1 = p1;
                     this.p2 = p2;
                     this.color = c;
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
@@ -518,25 +502,25 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                     this.y = b;
                 }
             }
-            class PointColore {
+            class ColoredPoint {
                 private String color;
 
-                public PointColore(Point p1, Point p2, String c) {
+                public ColoredPoint (Point p1, Point p2, String c) {
                     this.p1 = p1;
                     this.p2 = p2;
                     this.color = c;
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 
     it('-> class w/ superclass attribute use (w/ a little subtility)', function(done: () => any) {
-        TAM.ensureResult(
-            `class Color {
+        TAM.ensureResult(`
+            class Color {
                 public final static String ROUGE = "rouge";
             }
             class Point {
@@ -548,19 +532,19 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
                     this.y = b;
                 }
             }
-            class PointColore {
+            class ColoredPoint {
                 private String color;
 
-                public PointColore(Point p1, Point p2, String color) {
+                public ColoredPoint (Point p1, Point p2, String color) {
                     this.p1 = p1;
                     this.p2 = p2;
                     this.color = color;
                 }
             }`,
-        {
-            resolve: true,
-            checkType: true
-        });
+            {
+                resolve: true,
+                checkType: true
+            });
         done();
     });
 });

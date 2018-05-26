@@ -8,20 +8,20 @@ public class GenericType {
 	private String name;
 	
 	/* Exemple : MyClass<T extends A,B,C> */
-	private List<TypeInstantiation> extendedTypes;
+	private List<InstanceType> extendedTypes;
 	
 	public GenericType(String ident) {
 		this.name = ident;
 		extendedTypes = new LinkedList<>();
 	}
 	
-	public GenericType(String ident, List<TypeInstantiation> extendedTypes) {
+	public GenericType(String ident, List<InstanceType> extendedTypes) {
 		this(ident);
 		this.extendedTypes = extendedTypes;
 		
 	}
 
-	public List<TypeInstantiation> getExtendedTypes() {
+	public List<InstanceType> getExtendedTypes() {
 		return extendedTypes;
 	}
 
@@ -30,7 +30,7 @@ public class GenericType {
 	    String result = name;
 	    if (extendedTypes.size() > 0) {
 	        result += " extends ";
-	        for (TypeInstantiation type: extendedTypes)
+	        for (InstanceType type: extendedTypes)
 	            result += type + " & ";
 	        result = result.substring(0, result.length() - 3);
         }

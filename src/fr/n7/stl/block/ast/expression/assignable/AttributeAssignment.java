@@ -3,9 +3,8 @@ package fr.n7.stl.block.ast.expression.assignable;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.AbstractAttribute;
 import fr.n7.stl.block.ast.expression.Expression;
-import fr.n7.stl.block.ast.expression.assignable.AssignableExpression;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
-import fr.n7.stl.block.ast.object.TypeInstantiation;
+import fr.n7.stl.block.ast.object.InstanceType;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
@@ -15,7 +14,7 @@ import fr.n7.stl.util.Logger;
 
 public class AttributeAssignment extends AbstractAttribute implements AssignableExpression {
 	
-	private TypeInstantiation objectType;
+	private InstanceType objectType;
 	
 	private AttributeDefinition attribute;
 
@@ -41,16 +40,16 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
 	    	return false;
 		}
 
-		// Get objet type and check that is a TypeInstantiation
+		// Get objet type and check that is a InstanceType
 	    Type type = this.object.getType();
 
-	    if (! (type instanceof TypeInstantiation)) {
-	    	Logger.error(this.object.toString() + " is not a TypeInstantiation.");
+	    if (! (type instanceof InstanceType)) {
+	    	Logger.error(this.object.toString() + " is not a InstanceType.");
 	    	return false;
 	    }
 
-	    // Verify that the TypeInstantiation contain the field
-	    this.objectType = (TypeInstantiation) type;
+	    // Verify that the InstanceType contain the field
+	    this.objectType = (InstanceType) type;
 
         //if (!(this.objectType.contains(this.attrName))) {
         //	Logger.error(this.object.toString() + " does not contain " + this.attrName + " field.");
