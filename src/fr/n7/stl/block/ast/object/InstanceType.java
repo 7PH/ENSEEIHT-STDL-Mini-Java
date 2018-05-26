@@ -53,6 +53,7 @@ public class InstanceType implements Type {
 				if (declaration instanceof InterfaceDeclaration) {
 					/* this est aussi une interface. */
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
+					Logger.error("InstanceType compatibleWith : TODO #1");
 
 				} else {
 					/* this est une classe */
@@ -88,6 +89,8 @@ public class InstanceType implements Type {
 								return false;
 							}
 						}
+						// Les types génériques sont corrects.
+						return true;
 					}
 					
 				} else {
@@ -95,6 +98,8 @@ public class InstanceType implements Type {
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
 					declaration.getExtendedClass().contains(_typeInst);
 					// et les types generiques de _classe ont été instantiés
+					Logger.error("InstanceType compatibleWith : TODO #2");
+					return false;
 				}
 			}
 			
@@ -106,6 +111,7 @@ public class InstanceType implements Type {
 
 		}
 
+		Logger.error("Something went wrong.");
 		return false;
 
 	}
