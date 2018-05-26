@@ -134,7 +134,7 @@ public class MethodDefinition extends Definition {
         ok &= body == null || body.checkType();
         
         if(body != null) {
-        	boolean isWild = this.getSignature().getType().equals(AtomicType.Wildcard) && body.getReturnType().equals(AtomicType.VoidType);
+        	boolean isWild = this.getSignature().getType().equals(AtomicType.VoidType) && body.getReturnType().equals(AtomicType.Wildcard);
         	
         	if(!isWild && !body.getReturnType().compatibleWith(this.getSignature().getType())) {
         		ok = false;
