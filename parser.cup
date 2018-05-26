@@ -122,7 +122,7 @@ non terminal Type                       NullableType;
 non terminal ClassModifier              ClassModifier;
 non terminal List<InstanceType>         ClassExtension;
 non terminal List<InstanceType>	        ClassImplementation;
-non terminal DefinitionAccess			MethodAccess;
+non terminal DefinitionAccess			DefinitionAccess;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -487,7 +487,7 @@ Instruction ::= Declaration:declaration
 					List<Expression> _parametres = new LinkedList<Expression>();
 					RESULT = new FunctionCall( nom, _parametres );
 				:}
-			| MethodAccess:methodAccess UL_Point_Virgule
+			| DefinitionAccess:methodAccess UL_Point_Virgule
 				{:
 					RESULT = methodAccess;
 				:}
@@ -541,6 +541,10 @@ Affectable ::= UL_Identificateur:name
 			| Affectable:object UL_Point UL_Identificateur:attribute
 				{:
 					RESULT = new AttributeAssignment(object, attribute);
+				:}
+			| DefinitionAccess:ma
+				{:
+					RESULT = ma;
 				:}
 			;
 
@@ -669,7 +673,7 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new ArrayAllocation(type, taille);
 				:}
-			| MethodAccess:methodAccess
+			| DefinitionAccess:methodAccess
 				{:
 					RESULT = methodAccess;
 				:}
@@ -682,20 +686,19 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 					RESULT = new ObjectAllocation(type, parameters);
 				:}
             ;
-MethodAccess ::= 
-    MethodAccess:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+DefinitionAccess ::=
+    DefinitionAccess:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
         {:
-            RESULT = new MethodAccess( object, method, new LinkedList<Expression>());
+            RESULT = new MethodAccess(object, method, new LinkedList<Expression>());
         :}
-	| MethodAccess:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+	| DefinitionAccess:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
         {:
-            RESULT = new MethodAccess( object, method, parametres );
+            RESULT = new MethodAccess(object, method, parametres );
         :}
-	| MethodAccess:object UL_Point UL_Identificateur:attribute
+	| DefinitionAccess:object UL_Point UL_Identificateur:attribute
 		{:
 			RESULT = new AttributeAccess(object, attribute);
 		:}
-	/*
 	| UL_Identificateur:object UL_Point UL_Identificateur:attribute
 		{:
 			RESULT = new AttributeAccess(object, attribute);
@@ -708,5 +711,4 @@ MethodAccess ::=
 		{:
 			RESULT = new MethodAccess( object, method, parametres );
 		:}
-	*/
 	;
