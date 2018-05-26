@@ -95,10 +95,12 @@ public class MethodDefinition extends Definition {
 		// Resolve signature
         resolved &= signature.getType().resolve(scope);
 
+        HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
         // @TODO Do something with parameters?
-        //for (ParameterDeclaration parameter: signature.getParameters()) {
-        //	resolved &= parameter.resolve(scope);
-        //}
+        for (ParameterDeclaration parameterDeclaration: this.signature.getParameters()) {
+            parameterDeclaration.getType().resolve(scope);
+            newScope.register(parameterDeclaration);
+        }
 
 		// abstract => ! body
 		if (isAbstract() && body != null) {
@@ -106,7 +108,7 @@ public class MethodDefinition extends Definition {
             resolved = false;
 		}
 
-		if (body != null && ! body.resolve(scope))
+		if (body != null && ! body.resolve(newScope))
 		    resolved = false;
 
 		return resolved;
