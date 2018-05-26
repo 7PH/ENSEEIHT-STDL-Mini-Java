@@ -12,6 +12,7 @@ public class ObjectUse extends AbstractUse {
 
     public ObjectUse(ClassDeclaration declaration) {
         super();
+
         this.declaration = declaration;
     }
 
