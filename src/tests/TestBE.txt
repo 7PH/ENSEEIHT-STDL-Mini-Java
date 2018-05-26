@@ -1,7 +1,23 @@
-class Issou {
-    public static void main() {
-        int a = 1;
-        int b = a;
-        System.out.println(a + b);
+class Point {
+    public int x;
+    public int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Point translate(int dx, int dy) {
+        return this.translateX(dx).translateY(dy);
+    }
+
+    public Point translateX(int dx) {
+        this.x = this.x + dx;
+        return this;
+    }
+
+    public Point translateY(int dy) {
+        this.y = this.y + dy;
+        return this;
     }
 }

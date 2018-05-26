@@ -59,7 +59,7 @@ class Driver {
     private static Parser execute(Parser parser) throws Exception {
         parser.resolve = parser.program.resolve(new SymbolTable());
         parser.checkType = parser.program.checkType();
-        parser.program.allocateMemory(Register.SB, 3);
+        parser.program.allocateMemory(Register.SB, 0);
         parser.fragment = parser.program.getCode(new TAMFactoryImpl());
         return parser;
     }

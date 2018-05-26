@@ -111,6 +111,7 @@ public class MethodDefinition extends Definition {
         for (ParameterDeclaration parameterDeclaration: signature.getParameters()) {
             parameterDeclaration.getType().resolve(scope);
             newScope.register(parameterDeclaration);
+            parameterDeclaration.setMethodDefinition(this);
         }
 
         // abstract => ! modifier
@@ -164,7 +165,7 @@ public class MethodDefinition extends Definition {
 
 	@Override
     public int allocateMemory(Register register, int offset) {
-        body.allocateMemory(register, offset);
+        body.allocateMemory(Register.SB, offset + 3 + getParametersLength() + getType().length());
         return 0;
     }
 

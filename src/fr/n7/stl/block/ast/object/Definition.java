@@ -5,9 +5,9 @@ import fr.n7.stl.block.ast.scope.Declaration;
 
 public abstract class Definition implements Declaration, Instruction {
 
-	private AccessModifier accessModifier;
-	
-	private DefinitionModifier definitionModifier;
+	protected AccessModifier accessModifier;
+
+    protected DefinitionModifier definitionModifier;
 
 	public AccessModifier getAccessModifier() {
 		return this.accessModifier;
@@ -24,6 +24,16 @@ public abstract class Definition implements Declaration, Instruction {
 	public void setDefinitionModifier(DefinitionModifier _definitionModifier) {
 		this.definitionModifier = _definitionModifier;
 	}
+
+	public boolean isStatic() {
+	    return definitionModifier == DefinitionModifier.STATIC
+                || definitionModifier == DefinitionModifier.STATIC_FINAL;
+    }
+
+    public boolean isFinal() {
+	    return definitionModifier == DefinitionModifier.FINAL
+                ||  definitionModifier == DefinitionModifier.STATIC_FINAL;
+    }
 	
 	public abstract String toString();
 }

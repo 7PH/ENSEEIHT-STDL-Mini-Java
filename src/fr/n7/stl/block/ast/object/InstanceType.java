@@ -123,8 +123,8 @@ public class InstanceType implements Type {
 
 	@Override
 	public int length() {
-		throw new SemanticsUndefinedException("length method is undefined for InstanceType.");
-	}
+	    return 2; // @TODO
+    }
 
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
