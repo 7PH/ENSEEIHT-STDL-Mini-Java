@@ -57,7 +57,7 @@ public class Program implements ASTNode {
         mainParams.add(new ParameterDeclaration("args", new ArrayType(AtomicType.StringType)));
         Signature mainSignature = new Signature(AtomicType.VoidType, "main", mainParams);
 
-        for (Declaration declaration: declarations) {
+        for (ProgramDeclaration declaration: declarations) {
             if (! (declaration instanceof ClassDeclaration))
                 continue;
             ClassDeclaration classDeclaration = (ClassDeclaration) declaration;
@@ -73,10 +73,18 @@ public class Program implements ASTNode {
 	 * @return the generated TAM code.
 	 */
     public Fragment getCode(TAMFactory factory){
-        MethodDefinition main = findFirstPublicStaticVoidMain();
         Fragment fragment = factory.createFragment();
+
+        // add all the code of all the declarations
+        for (ProgramDeclaration declaration: declarations)
+            fragment.append(declaration.getCode(factory));
+
+        // get code of the public static void main if found
+        MethodDefinition main = findFirstPublicStaticVoidMain();
         if (main == null) return fragment;
-        fragment.append(main.getCode(factory));
+        // @TODO here call the method 'main'
+
+        // ok
         return fragment;
     }
 
