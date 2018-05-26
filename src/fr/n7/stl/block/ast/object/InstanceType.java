@@ -17,6 +17,8 @@ public class InstanceType implements Type {
 	private List<InstanceType> typeInstantiations = new LinkedList<>();
 
 	private ProgramDeclaration declaration;
+	
+	private GenericType genericDeclaration;
 
 	public InstanceType(String name) {
 		this.name = name;
@@ -42,7 +44,35 @@ public class InstanceType implements Type {
 		 * /!\ Verifier les types génériques
 		 */
 
-		//La Declaration d'un InstanceType est TOUJOURS un ProgramDeclaration ?
+		// If "this" reffers to a generic type check if they are the same.
+		if (this.genericDeclaration != null) {
+			if (other instanceof InstanceType) {
+				if (((InstanceType) other).getGenericDeclaration() != null) {
+					// other reffers to a generic type : check if they have the same name
+					GenericType g = ((InstanceType) other).getGenericDeclaration();
+					if (g.getName().equals(this.genericDeclaration.getName())) {
+						// They have the same name : they are compatible.
+						return true;
+					} else {
+						Logger.error("Generic type " + this.genericDeclaration + " is not compatible with the generic type " + g.getName());
+						return false;
+					}
+				} else {
+					// other is not a generic type : check if this.generic type extends other
+					 if (!this.genericDeclaration.getExtendedTypes().contains((InstanceType) other)) {
+						Logger.error("Generic type " + this.genericDeclaration + " is not compatible with the type " + other);
+						return false;
+					 } else {
+						 return true;
+					 }
+				}
+			} else {
+				Logger.error("Generic type " + this.name + " is not compatible with the atomic type " + other);
+				return false;
+			}
+		}
+		
+		// If not, it's an InstanceType.
 		if (other instanceof InstanceType) {
 			InstanceType _typeInst = (InstanceType) other;
 			
@@ -156,7 +186,9 @@ public class InstanceType implements Type {
 					return true;
 				}
 			} else if (scope.get(this.name) instanceof GenericType) {
-				// This is an instance of the generic type.				
+				// This is an instance of the generic type.
+				this.genericDeclaration = (GenericType) scope.get(this.name);
+	
 				return true;
 			} else {
 				Logger.error(this.name + " is not a class nor an interface and cannot be instantiated. " + scope.get(this.name).getClass().getName() );
@@ -177,6 +209,10 @@ public class InstanceType implements Type {
 
 	public void setDeclaration(ProgramDeclaration declaration) {
 		this.declaration = declaration;
+	}
+
+	public GenericType getGenericDeclaration() {
+		return genericDeclaration;
 	}
 
 	public List<InstanceType> getTypeInstantiations() {

@@ -1009,6 +1009,40 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
 
+        it('-> generic with bad checktype affectation', function(done: () => any) {
+            TAM.ensureResult(`
+                class Box<T, X> {
+                    private T t;
+
+                    public void set(X t) { this.t = t; }
+                }`,
+                {
+                    resolve: true,
+                    checkType : false
+                });
+            done();
+        });
+
+        it('-> generic type extending a class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Thing {
+	
+                }
+
+                class Box<T extends Thing> {
+                    private Thing t;
+
+                    public void set(T t) { 
+                        this.t = t; 
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
     });
 
 });
