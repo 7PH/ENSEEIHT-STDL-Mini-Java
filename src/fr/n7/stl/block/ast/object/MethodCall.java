@@ -51,7 +51,15 @@ public class MethodCall implements Instruction, Expression {
             	return false;
             }
         }
-        
+
+        // Verify number of parameters
+    	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
+    	int numOfPar = this.parameters.size();
+        if (numOfPar != declaredParameters.size()) {
+            Logger.error("Call of " + this.objectIdentifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
+            return false;
+        }
+
         // Define a new scope for it
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
@@ -72,28 +80,25 @@ public class MethodCall implements Instruction, Expression {
     public boolean checkType() {
     	boolean b = false;
     	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
-    	int numOfPar = this.parameters.size();
-    	
-    	// Verify if the number of parameters is correct
-    	if (numOfPar == declaredParameters.size()) {
-    		for (int i = 0; i < numOfPar; i++) {
-    			Type parameterType = this.parameters.get(i).getType();
-    			Type declaredType = declaredParameters.get(i).getType();
-    			// Verify if a type is an ErrorType
-    			if (!parameterType.equalsTo(AtomicType.ErrorType)) {
-    				// Verify compatibility between declared and used type
-    				b &= parameterType.compatibleWith(declaredType);
-    				if (!b) {
-    				Logger.error("Parameter " + parameterType.toString() + " use in "
-    							+ this.objectIdentifier + " method is not compatible with declared one : " + declaredParameters + ".");
-    				}
-    			} else {
-    				Logger.error("Parameter " + parameterType.toString() + " use in " + this.objectIdentifier + "method is an ErrorType.");
-    			}
-    		}	
-    	} else {
-    		Logger.error("Call of " + this.objectIdentifier + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
-    	}
+        int numOfPar = this.parameters.size();
+        
+    	// Verify if each parameters is of the well type
+        for (int i = 0; i < numOfPar; i++) {
+            Type parameterType = this.parameters.get(i).getType();
+            Type declaredType = declaredParameters.get(i).getType();
+            // Verify if a type is an ErrorType
+            if (!parameterType.equalsTo(AtomicType.ErrorType)) {
+                // Verify compatibility between declared and used type
+                b &= parameterType.compatibleWith(declaredType);
+                if (!b) {
+                Logger.error("Parameter " + parameterType.toString() + " use in "
+                            + this.objectIdentifier + " method is not compatible with declared one : " + declaredParameters + ".");
+                }
+            } else {
+                Logger.error("Parameter " + parameterType.toString() + " use in " + this.objectIdentifier + "method is an ErrorType.");
+                b &= false;
+            }
+        }	
     	return b;
     }
 

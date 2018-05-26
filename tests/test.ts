@@ -336,59 +336,6 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
         done();
     });
 
-    it('-> class w/ instantiation of our type', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    x = a;
-                    y = b;
-                }
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment(int a, int b, int c, int d) {
-                    p1 = new Point(a, b);
-                    p2 = new Point(c, d);
-                }
-            }`,
-        {
-            resolve: true,
-            checkType: true
-        });
-        done();
-    });
-
-    it('-> class w/ instantiation of our type', function(done: () => any) {
-        TAM.ensureResult(
-            `class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    x = a;
-                    y = b;
-                }
-            }
-            class Segment {
-                private Point p1;
-                private Point p2;
-
-                public Segment(int a, int b, int c, int d) {
-                    p1 = new Point(a, b);
-                    p2 = new Point(c, "d");
-                }
-            }`,
-        {
-            resolve: true,
-            checkType: false // "d" is String != int
-        });
-        done();
-    });
 
     it('-> class w/ instantiation of our type & This', function(done: () => any) {
         TAM.ensureResult(
@@ -416,6 +363,34 @@ describe('# Resolve/Checktype tests PART II : we begin serious tests', function 
         });
         done();
     });
+    it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
+        TAM.ensureResult(
+            `class Point {
+                private int x;
+                private int y;
+
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class Segment {
+                private Point p1;
+                private Point p2;
+
+                public Segment(int a, int b, int c, int d) {
+                    this.p1 = new Point(a, b);
+                    this.p2 = new Point(c, "d");
+                }
+            }`,
+        {
+            resolve: true,
+            checkType: false // "d" is String != int
+        });
+        done();
+    });
+
+    
     
     it('-> class w/ constant', function(done: () => any) {
         TAM.ensureResult(`
