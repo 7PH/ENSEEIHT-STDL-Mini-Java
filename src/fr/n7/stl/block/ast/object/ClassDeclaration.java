@@ -46,7 +46,10 @@ public class ClassDeclaration extends ProgramDeclaration {
                 && definition.getName().equals(name))
                 return (AttributeDefinition) definition;
         }
-        return null;
+        if (extendedClass.size() > 0)
+            return ((ClassDeclaration)extendedClass.get(0).getDeclaration()).getAttributeDeclaration(name);
+        else
+            return null;
     }
 
     public boolean hasAttribute(String name) {

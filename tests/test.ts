@@ -471,18 +471,16 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
                 private int x;
                 private int y;
 
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
+                public Point(int x, int y) {
+                    this.x = x;
+                    this.y = y;
                 }
             }
-            class ColoredPoint {
+            class ColoredPoint extends Point {
                 private String color;
 
-                public ColoredPoint (Point p1, Point p2, String c) {
-                    this.p1 = p1;
-                    this.p2 = p2;
-                    this.color = c;
+                public ColoredPoint (String color) {
+                    this.color = color;
                 }
             }`,
             {
