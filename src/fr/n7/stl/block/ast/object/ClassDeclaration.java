@@ -128,8 +128,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 		boolean b = true;
 
         // Verify that implementedClass contains only interfaces
-        for (InstanceType tp: implementedClasses) {
-            if (tp.getDeclaration() instanceof ClassDeclaration) {
+        for (InstanceType tp: extendedClass) {
+            if (! (tp.getDeclaration() instanceof ClassDeclaration)) {
                 Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
                 b = false;
             }

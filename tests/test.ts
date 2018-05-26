@@ -231,18 +231,18 @@ describe('# Resolve/Checktype simple tests', function () {
         TAM.ensureResult(
             `class foo { } class bar implements foo { }`,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
         done();
     });
 
-    it('-> class implementing a class', function(done: () => any) {
+    it('-> interface extending a class', function(done: () => any) {
         TAM.ensureResult(
             `class foo { } interface bar extends foo { }`,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
         done();
     });
@@ -291,8 +291,8 @@ describe('# Resolve/Checktype simple tests', function () {
             class foo2 extends foo {
             }`,
             {
-                resolve: false,
-                checkType: true
+                resolve: true,
+                checkType: false
             });
         done();
     });
@@ -685,12 +685,13 @@ describe('# Resolve / CheckType medium tests', function () {
             }
         `,
             {
-                resolve: false
+                resolve: true,
+                checkType: false
             });
         done();
     });
 
-    it('-> method body ', function(done: () => any) {
+    it('-> method body 1', function(done: () => any) {
         TAM.ensureResult(`
             class Random {
                 public int getRandom() {
@@ -705,7 +706,7 @@ describe('# Resolve / CheckType medium tests', function () {
         done();
     });
 
-    it('-> method body ', function(done: () => any) {
+    it('-> method body 2', function(done: () => any) {
         TAM.ensureResult(`
             class Random {
                 public int getRandom() {
@@ -859,7 +860,7 @@ describe('# Resolve / CheckType medium tests', function () {
         TAM.ensureResult(`
             class Random {
                 public static void main(String args[]) {
-
+                    
                 }
             }
         `,

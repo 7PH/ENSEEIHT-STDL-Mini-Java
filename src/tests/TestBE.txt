@@ -1,7 +1,1 @@
-interface A { void imA(String a); }
-interface B { void imB(); }
-class C implements A, B {
-    public void imA(String b) { }
-    public void imB() { }
-    public static void main(String args[]) { }
-}
+class foo { } class bar implements foo { }
