@@ -418,6 +418,7 @@ describe('# Resolve/Checktype simple tests', function () {
                 });
             done();
         });
+    });
 });
 
 
