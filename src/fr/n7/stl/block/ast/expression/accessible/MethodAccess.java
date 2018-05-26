@@ -1,7 +1,11 @@
 package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.object.ClassDeclaration;
+import fr.n7.stl.block.ast.object.InstanceType;
+import fr.n7.stl.block.ast.object.InterfaceDeclaration;
 import fr.n7.stl.block.ast.object.MethodDefinition;
+import fr.n7.stl.block.ast.object.ProgramDeclaration;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
@@ -19,7 +23,7 @@ import java.util.List;
 
 public class MethodAccess implements Instruction, Expression {
 	
-	private String identifier;
+	private String name;
 
     private Expression objectIdentifier;
 
@@ -28,6 +32,8 @@ public class MethodAccess implements Instruction, Expression {
     private MethodDefinition methodDefinition;
 
     private List<Expression> parameters;
+
+    private InstanceType objectType;
 
     public MethodAccess(Expression object, String method, List<Expression> parameters) {
         this.objectIdentifier = object;
@@ -44,13 +50,40 @@ public class MethodAccess implements Instruction, Expression {
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
     	
-    	//TODO : Miss objectIdentifier ?
-    	
+        // Verify objet resolve.
+    	if (! objectIdentifier.resolve(scope)) {
+            Logger.error("Could not resolve attribute assignment because of: " + objectIdentifier + ".");
+            return false;
+        }
+
+        // Resolve parameters
         for (Expression parameter: parameters) {
             if (!parameter.resolve(scope)) {
-            	Logger.error("The parameter " + parameter.toString() + " in " + this.method + " call on " + this.identifier + " could not be resolved.");
+            	Logger.error("The parameter " + parameter.toString() + " in " + this.method + " call on " + this.name + " could not be resolved.");
             	return false;
             }
+        }
+
+        // Get the objet type and check that is a InstanceType
+        Type type = objectIdentifier.getType();
+
+        if (! (type instanceof InstanceType)) {
+            Logger.error(objectIdentifier + " is not a InstanceType.");
+            return false;
+        }
+       
+        // Check if the method exist
+        ProgramDeclaration programDeclaration = objectType.getDeclaration();
+        if (programDeclaration instanceof ClassDeclaration) {
+            this.methodDefinition = ((ClassDeclaration) programDeclaration).getMethodDefinitionBySignature(name);
+        } else {
+            // TODO
+            this.methodDefinition = null;
+            
+        }
+        if (this.methodDefinition == null) {
+            Logger.error("Method " + this.name + " does not exist in " + programDeclaration.getName() + ".");
+            return false;
         }
 
         // Verify number of parameters
@@ -67,8 +100,7 @@ public class MethodAccess implements Instruction, Expression {
     	if (!this.methodDefinition.resolve(newScope)) {
         	Logger.error("The method " + this.methodDefinition.getName() + " call could not be resolved.");
         	return false;    		
-    	}
-    	
+        }
         return true;
     }
 
