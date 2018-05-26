@@ -66,26 +66,27 @@ public class ClassDeclaration extends ProgramDeclaration {
         return getAttributeDeclaration(name, returnPrivates) != null;
     }
 
-    // @TODO check also parameters
-    public boolean definesMethod(String name, List<Expression> parameters) {
+    public MethodDefinition getMethodDefinitionBySignature(String name) {
         for (Definition definition: definitions) {
             if (! (definition instanceof MethodDefinition))
                 continue;
             MethodDefinition method = (MethodDefinition) definition;
             if (method.getSignature().getName().equals(name)) {
-                return true;
+                return method;
             }
         }
-        return false;
+        return null;
     }
-    public boolean definesMethod(String name) { return definesMethod(name, new LinkedList<>()); }
+
+    public boolean definesMethod(String name) {
+        return getMethodDefinitionBySignature(name) != null;
+    }
+
     public boolean definesMethod(Signature signature) { return definesMethod(signature.getName()); }
 
-    public boolean hasMethod(String name, List<Expression> parameters) {
-        return definesMethod(name, parameters)
-                || (extendedClass.size() > 0 && ((ClassDeclaration)extendedClass.get(0).getDeclaration()).definesMethod(name, parameters));
+    public boolean hasMethod(String name) {
+        return definesMethod(name) || (extendedClass.size() > 0 && ((ClassDeclaration)extendedClass.get(0).getDeclaration()).definesMethod(name));
     }
-    public boolean hasMethod(String name) { return hasMethod(name, new LinkedList<>()); }
 
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {

@@ -1,13 +1,17 @@
 package fr.n7.stl.block.ast.object;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
+import fr.n7.stl.block.ast.type.ArrayType;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
@@ -47,13 +51,41 @@ public class Program implements ASTNode {
     int allocateMemory(Register _register, int _offset) {
     	throw new SemanticsUndefinedException("allocateMemory method is undefined for Program.");
     }
+
+    public MethodDefinition findFirstPublicStaticVoidMain() {
+        List<ParameterDeclaration> mainParams = new ArrayList<>();
+        mainParams.add(new ParameterDeclaration("args", new ArrayType(AtomicType.StringType)));
+        Signature mainSignature = new Signature(AtomicType.VoidType, "main", mainParams);
+
+        for (ProgramDeclaration declaration: declarations) {
+            if (! (declaration instanceof ClassDeclaration))
+                continue;
+            ClassDeclaration classDeclaration = (ClassDeclaration) declaration;
+            MethodDefinition main = classDeclaration.getMethodDefinitionBySignature(mainSignature.getName());
+            if (main != null) return main;
+        }
+
+        return null;
+    }
 	
 	/** Provide the generated TAM code.
-	 * @param _factory factory to build AST nodes for TAM code.
+	 * @param factory factory to build AST nodes for TAM code.
 	 * @return the generated TAM code.
 	 */
-    Fragment getCode(TAMFactory _factory){
-    	throw new SemanticsUndefinedException("getCode method is undefined for Program.");
+    public Fragment getCode(TAMFactory factory){
+        Fragment fragment = factory.createFragment();
+
+        // add all the code of all the declarations
+        for (ProgramDeclaration declaration: declarations)
+            fragment.append(declaration.getCode(factory));
+
+        // get code of the public static void main if found
+        MethodDefinition main = findFirstPublicStaticVoidMain();
+        if (main == null) return fragment;
+        // @TODO here call the method 'main'
+
+        // ok
+        return fragment;
     }
 
 
