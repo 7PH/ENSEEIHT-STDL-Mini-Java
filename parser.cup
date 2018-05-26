@@ -664,17 +664,17 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new ArrayAllocation(type, taille);
 				:}
-			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
 				{:
-					RESULT = new MethodCall( expression, etiquette, parametres );
+					RESULT = new MethodAccess( object, method, parametres );
 				:}
-			| Expression:expression UL_Point UL_Identificateur:etiquette UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+			| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
 				{:
-					RESULT = new MethodCall( expression, etiquette, new LinkedList<Expression>() );
+					RESULT = new MethodAccess( object, method, new LinkedList<Expression>() );
 				:}
-			| Expression:object UL_Point UL_Identificateur:method
+			| Expression:object UL_Point UL_Identificateur:attribute
 				{:
-				    RESULT = new AttributeAccess(object, method);
+				    RESULT = new AttributeAccess(object, attribute);
 				:}
 			| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
              	{:
