@@ -1,6 +1,7 @@
-package fr.n7.stl.block.ast.object;
+package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.object.MethodDefinition;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
@@ -16,7 +17,7 @@ import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
-public class MethodCall implements Instruction, Expression {
+public class MethodAccess implements Instruction, Expression {
 	
 	private String identifier;
 
@@ -28,17 +29,17 @@ public class MethodCall implements Instruction, Expression {
 
     private List<Expression> parameters;
 
-    public MethodCall(Expression object, String method, List<Expression> parameters) {
+    public MethodAccess(Expression object, String method, List<Expression> parameters) {
         this.objectIdentifier = object;
         this.method = method;
         this.parameters = parameters;
     }
-    
-    public MethodCall(String identifier, String method, List<Expression> parameters) {
+    /*
+    public MethodAccess(String identifier, String method, List<Expression> parameters) {
         this.identifier = identifier;
         this.method = method;
         this.parameters = parameters;
-    }
+    }*/
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {

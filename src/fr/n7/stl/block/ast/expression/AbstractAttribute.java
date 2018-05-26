@@ -1,6 +1,6 @@
 package fr.n7.stl.block.ast.expression;
 
-import fr.n7.stl.block.ast.object.AccessModifier;
+
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.object.InstanceType;
@@ -13,8 +13,6 @@ import fr.n7.stl.util.Logger;
 /**
  * Common elements between left (Assignable) and right (Expression) end sides of assignments. These elements
  * share attributes, toString and getType methods.
- * @author Marc Pantel
- *
  */
 public abstract class AbstractAttribute implements Expression {
 

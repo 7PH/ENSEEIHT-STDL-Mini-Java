@@ -6,6 +6,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 public class AttributeAccess extends AbstractAttribute implements Expression {
+
     public AttributeAccess(Expression object, String name) {
         super(object, name);
     }
