@@ -137,7 +137,7 @@ describe('# Resolve/Checktype simple tests', function () {
                 }
                 `,{
                     resolve: true,
-                    checkType: true
+                    checkType: false
                 });
             done();
         });
@@ -167,8 +167,8 @@ describe('# Resolve/Checktype simple tests', function () {
             TAM.ensureResult(
                 `interface abc {} interface abc {}`,
             {
-                resolve: true,
-                checkType: false
+                resolve: false,
+                checkType: true
             });
             done();
         });
@@ -210,8 +210,8 @@ describe('# Resolve/Checktype simple tests', function () {
             TAM.ensureResult(
                 `class abc implements abc {}`,
                 {
-                    resolve: false,
-                    checkType: true
+                    resolve: true,
+                    checkType: false
                 });
             done();
         });
@@ -220,8 +220,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class foo {}
                 class bar implements foo {}
                 `,{
-                    resolve: false,
-                    checkType: true
+                    resolve: true,
+                    checkType: false
                 });
             done();
         });
@@ -262,8 +262,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 interface foo {}
                 class bar extends foo {}
                 `,{
-                    resolve: false,
-                    checkType: true
+                    resolve: true,
+                    checkType: false
                 });
             done();
         });
@@ -282,8 +282,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 class foo {}
                 interface bar extends foo {}
                 `,{
-                    resolve: false,
-                    checkType: true
+                    resolve: true,
+                    checkType: false
                 });
             done();
         });
@@ -294,10 +294,10 @@ describe('# Resolve/Checktype simple tests', function () {
         it('-> method overloading in class', function(done: () => any) {
             TAM.ensureResult(`
                 class abc {
-                    public int fun() {}
-                    public int fun(String param) {}
-                    public int fun(String param, int param2) {}
-                    public int fun(int param, String param2) {}
+                    public void fun() {}
+                    public void fun(String param) {}
+                    public void fun(String param, int param2) {}
+                    public void fun(int param, String param2) {}
                 }
                 `,{
                     resolve: true,
@@ -322,8 +322,8 @@ describe('# Resolve/Checktype simple tests', function () {
         it('-> bad overloading', function(done: () => any) {
             TAM.ensureResult(`
                 class abc {
-                    public int fun() {}
-                    public int fun() {}
+                    public void fun() {}
+                    public void fun() {}
                 }
                 `,{
                     resolve: false,
@@ -331,12 +331,11 @@ describe('# Resolve/Checktype simple tests', function () {
                 });
             done();
         });
-
         it('-> bad overloading II', function(done: () => any) {
             TAM.ensureResult(`
                 interface abc {
-                    int fun(String foo);
-                    int fun(String bar);
+                    public void fun(String foo) {}
+                    public void fun(String bar) {}
                 }
                 `,{
                     resolve: false,
@@ -344,7 +343,6 @@ describe('# Resolve/Checktype simple tests', function () {
                 });
             done();
         });
-
         it('-> bad overloading III', function(done: () => any) {
             TAM.ensureResult(`
                 interface abc {
@@ -357,8 +355,19 @@ describe('# Resolve/Checktype simple tests', function () {
                 });
             done();
         });
+        it('-> bad overloading IV', function(done: () => any) {
+            TAM.ensureResult(`
+                interface abc {
+                    public void fun(String foo) {}
+                    private void fun(String bar) {}
+                }
+                `,{
+                    resolve: false,
+                    checkType: true 
+                });
+            done();
+        });
     });
-    
 
     /* ********************* */
     describe('# About abstraction', function() {
@@ -429,6 +438,7 @@ describe('# Resolve/Checktype simple tests', function () {
 describe('# Resolve / CheckType medium tests', function () {
     this.slow(SLOW_TEST_MS);
 
+    /* ********************* */
     it('-> class w/ custom attribute types', function(done: () => any) {
         TAM.ensureResult(`
             class Point {
