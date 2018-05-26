@@ -1,6 +1,7 @@
 package fr.n7.stl.block.ast.expression;
 
 
+import fr.n7.stl.block.ast.expression.accessible.DefinitionAccess;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.object.InstanceType;
@@ -14,15 +15,9 @@ import fr.n7.stl.util.Logger;
  * Common elements between left (Assignable) and right (Expression) end sides of assignments. These elements
  * share attributes, toString and getType methods.
  */
-public abstract class AbstractAttribute implements Expression {
-
-    protected Expression object;
-
-    protected String name;
+public abstract class AbstractAttribute extends DefinitionAccess implements Expression {
 
     protected AttributeDefinition attributeDefinition;
-
-    protected InstanceType objectType;
 
     public AbstractAttribute(Expression object, String name) {
         this.object = object;

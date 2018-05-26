@@ -122,7 +122,7 @@ non terminal Type                       NullableType;
 non terminal ClassModifier              ClassModifier;
 non terminal List<InstanceType>         ClassExtension;
 non terminal List<InstanceType>	        ClassImplementation;
-non terminal MethodAccess				MethodAccess;
+non terminal DefinitionAccess			MethodAccess;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -673,10 +673,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				{:
 					RESULT = methodAccess;
 				:}
-			| Expression:object UL_Point UL_Identificateur:attribute
-				{:
-				    RESULT = new AttributeAccess(object, attribute);
-				:}
 			| UL_Nouveau Type:type UL_Parenthese_Ouvrante UL_Parenthese_Fermante
              	{:
 					RESULT = new ObjectAllocation(type, new LinkedList<>());
@@ -695,6 +691,10 @@ MethodAccess ::=
         {:
             RESULT = null;
         :}
+	| MethodAccess:object UL_Point UL_Identificateur:attribute
+		{:
+			RESULT = new AttributeAccess(object, attribute);
+		:}
     | UL_Identificateur:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
         {:
             RESULT = new MethodAccess( object, method, new LinkedList<Expression>() );
