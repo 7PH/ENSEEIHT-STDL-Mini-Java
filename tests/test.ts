@@ -81,7 +81,7 @@ describe('# Grammar tests', function () {
 });
 
 
-describe('# Resolve/Checktype tests', function () {
+describe('# Resolve/Checktype simple tests', function () {
     this.slow(SLOW_TEST_MS);
 
     // SIMPLE TEST ABOUT CLASS
@@ -246,11 +246,88 @@ describe('# Resolve/Checktype tests', function () {
             });
         done();
     });
+
+    it('-> abstract class ', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { } `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ abstract method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou();
+            } `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ abstract method w/ body', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou() {}
+            } `,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                
+            } 
+            class foo2 extends foo {
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou();
+            } 
+            class foo2 extends foo {
+            }`,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one w/ implemented method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou();
+            } 
+            class foo2 extends foo {
+                public void issou() { }
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
 });
 
 
 
-describe('# Resolve / CheckType tests PART II : we begin serious tests', function () {
+describe('# Resolve / CheckType medium tests', function () {
     this.slow(SLOW_TEST_MS);
 
     it('-> class w/ custom attribute types', function(done: () => any) {
