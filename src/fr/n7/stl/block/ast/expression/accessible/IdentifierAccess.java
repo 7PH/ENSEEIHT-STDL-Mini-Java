@@ -47,7 +47,7 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
             this.expression = new VariableUse((VariableDeclaration) declaration);
             return true;
         } else if (declaration instanceof ParameterDeclaration) {
-            expression = new ParameterUse((ParameterDeclaration) declaration, null);
+            this.expression = new ParameterUse((ParameterDeclaration) declaration, null);
             return true;
         } else if (declaration instanceof ConstantDeclaration) {
             // TODO : refactor the management of Constants

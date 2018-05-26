@@ -1,12 +1,15 @@
-class Test00 {
-    public int x;
+interface Toto {
+    void issou();
+}
 
-    // @TODO:
-    public Bonjour y;
+class TotoImpl implements Toto {
+    public TotoImpl() { }
+    public void issou() { }
+}
 
-    public static void main(String args[]) {
-        Point point = new Point(0, 0);
-        point.draw(1, 0);
+class TotoUse {
+    public static void main (String args[]) {
+        Toto t = new TotoImpl();
+        t.issou();
     }
-
 }

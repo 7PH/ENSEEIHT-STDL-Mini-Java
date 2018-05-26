@@ -24,7 +24,7 @@ public class ParameterUse extends AbstractUse {
     }
 
     @Override
-    protected Declaration getDeclaration() {
+    protected ParameterDeclaration getDeclaration() {
         return parameterDeclaration;
     }
 
@@ -33,7 +33,7 @@ public class ParameterUse extends AbstractUse {
         Fragment fragment = factory.createFragment();
         fragment.add(factory.createLoad(
                 Register.SB,
-                parameterDeclaration.getFunctionDeclaration().getOffset(),
+                parameterDeclaration.getMethodDefinition().getOffset(),
                 parameterDeclaration.getType().length()));
         return fragment;
     }

@@ -42,13 +42,23 @@ public class AttributeDefinition extends Definition {
 	}
 	
 	@Override
-    public int allocateMemory(Register register, int _offset) {
-    	throw new SemanticsUndefinedException("allocateMemory method is undefined for AttributeDefinition.");
+    public int allocateMemory(Register register, int offset) {
+	    if (isStatic()) {
+	        // a static attribute takes place directly on stack
+            return type.length();
+        } else {
+            // a non-static attribute will be stored among the object itself
+            return 0;
+        }
     }
 
 	@Override
     public Fragment getCode(TAMFactory factory) {
-    	throw new SemanticsUndefinedException("getCode method is undefined for AttributeDefinition.");
+        Fragment fragment = factory.createFragment();
+        if (isStatic()) {
+            factory.createPush(type.length());
+        }
+        return fragment;
     }
 
 	@Override

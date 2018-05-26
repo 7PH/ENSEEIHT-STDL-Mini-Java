@@ -113,7 +113,7 @@ public class FunctionDeclaration implements Instruction, Declaration {
             parameterDeclaration.getType().resolve(scope);
             funScope.register(parameterDeclaration);
             parameterDeclaration.setOffset(i);
-            parameterDeclaration.setFunctionDeclaration(this);
+            //parameterDeclaration.setMethodDefinition(this);
             i += parameterDeclaration.getType().length();
         }
 

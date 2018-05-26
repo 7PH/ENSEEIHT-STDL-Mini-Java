@@ -3,6 +3,7 @@
  */
 package fr.n7.stl.block.ast.instruction.declaration;
 
+import fr.n7.stl.block.ast.object.MethodDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 
@@ -27,16 +28,17 @@ public class ParameterDeclaration implements Declaration {
 	 * i.e. the size of the memory allocated to the previous parameters
 	 */
 	protected int offset;
-    private FunctionDeclaration functionDeclaration;
+
+    private MethodDefinition methodDefinition;
 
     /**
 	 * Builds an AST node for a formal parameter declaration
-	 * @param _name : Name of the formal parameter
-	 * @param _type : AST node for the type of the formal parameter
+	 * @param name : Name of the formal parameter
+	 * @param type : AST node for the type of the formal parameter
 	 */
-	public ParameterDeclaration(String _name, Type _type) {
-		this.name = _name;
-		this.type = _type;
+	public ParameterDeclaration(String name, Type type) {
+		this.name = name;
+		this.type = type;
 	}
 
 	/* (non-Javadoc)
@@ -79,11 +81,11 @@ public class ParameterDeclaration implements Declaration {
 	    this.offset = offset;
     }
 
-    public void setFunctionDeclaration(FunctionDeclaration functionDeclaration) {
-        this.functionDeclaration = functionDeclaration;
+    public void setMethodDefinition(MethodDefinition methodDefinition) {
+        this.methodDefinition = methodDefinition;
     }
 
-    public FunctionDeclaration getFunctionDeclaration() {
-        return functionDeclaration;
+    public MethodDefinition getMethodDefinition() {
+        return methodDefinition;
     }
 }
