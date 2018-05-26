@@ -275,6 +275,8 @@ InnerClassDefinitionWithoutModifier ::=
         {: RESULT = new Constructor(ident, parameters, body); :}
     | Type:type UL_Identificateur:ident UL_Point_Virgule
         {: RESULT = new AttributeDefinition(type, ident); :}
+	| Type:type UL_Identificateur:ident UL_Egal Expression:value UL_Point_Virgule
+        {: RESULT = new AttributeDefinition(type, ident, value); :}
     | Type:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
         {: RESULT = new MethodDefinition(new Signature(type, ident, parameters), body); :}
     ;
@@ -668,16 +670,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 				{:
 					RESULT = new MethodCall( expression, etiquette, new LinkedList<Expression>() );
 				:}
-			/*
-			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante UL_Point_Virgule
-				{:
-				   RESULT = new MethodCall("this", method, parameters );
-				:}
-			| UL_This UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante UL_Point_Virgule
-				{:
-					RESULT = new MethodCall("this", method, new LinkedList<Expression>());
-				:}
-				*/
 			| Expression:object UL_Point UL_Identificateur:method
 				{:
 				    RESULT = new AttributeAccess(object, method);
