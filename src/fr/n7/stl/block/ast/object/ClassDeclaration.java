@@ -40,6 +40,19 @@ public class ClassDeclaration extends ProgramDeclaration {
 		return (this.modifier == ClassModifier.FINAL);
 	}
 
+    public AttributeDefinition getAttributeDeclaration(String name) {
+        for (Definition definition: definitions) {
+            if (definition instanceof AttributeDefinition
+                && definition.getName().equals(name))
+                return (AttributeDefinition) definition;
+        }
+        return null;
+    }
+
+    public boolean hasAttribute(String name) {
+	    return getAttributeDeclaration(name) != null;
+    }
+
 	@Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
         if (! super.resolve(scope))

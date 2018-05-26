@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.AbstractAttribute;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
@@ -11,6 +12,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
+import org.w3c.dom.Attr;
 
 public abstract class ProgramDeclaration implements Declaration {
 	
@@ -25,7 +27,11 @@ public abstract class ProgramDeclaration implements Declaration {
             Logger.error(this.getName() + " has already been declared");
             return false;
         }
-        scope.register(this, "this");
+        scope.register(this);
+
+        // register 'this' keyword in scope
+        AbstractThisUse abstractThisUse = new AbstractThisUse(this);
+        abstractThisUse.resolve(scope);
 
         for (InstanceType extended: extendedClass) {
             if (! extended.resolve(scope)) {

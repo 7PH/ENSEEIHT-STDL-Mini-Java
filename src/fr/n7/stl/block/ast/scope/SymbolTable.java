@@ -66,7 +66,7 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
         if (this.accepts(declaration)) {
             this.declarations.put(declaration.getName(), declaration);
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot register '" + declaration.getName() + "'");
         }
 	}
 

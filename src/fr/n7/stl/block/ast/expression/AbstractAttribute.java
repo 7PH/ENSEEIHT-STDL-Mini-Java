@@ -1,11 +1,12 @@
 package fr.n7.stl.block.ast.expression;
 
+import fr.n7.stl.block.ast.object.AttributeDefinition;
+import fr.n7.stl.block.ast.object.ClassDeclaration;
+import fr.n7.stl.block.ast.object.InstanceType;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
-import fr.n7.stl.block.ast.type.RecordType;
 import fr.n7.stl.block.ast.type.Type;
-import fr.n7.stl.block.ast.type.declaration.FieldDeclaration;
 import fr.n7.stl.util.Logger;
 
 /**
@@ -20,9 +21,9 @@ public abstract class AbstractAttribute implements Expression {
 
     protected String name;
 
-    protected FieldDeclaration field;
+    protected AttributeDefinition attributeDefinition;
 
-    protected RecordType recordType;
+    protected InstanceType objectType;
 
     public AbstractAttribute(Expression object, String name) {
         this.object = object;
@@ -37,30 +38,39 @@ public abstract class AbstractAttribute implements Expression {
         return this.object + "." + this.name;
     }
 
-    /* (non-Javadoc)
-     * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
-     */
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
+        // Verify objet resolve.
         if (! object.resolve(scope)) {
-            Logger.error("Could not resolve object " + object);
+            Logger.error("Could not resolve attribute assignment because of: " + object + ".");
             return false;
         }
 
-        // on va récup le type de l'objet
-        System.out.println(object.getClass());
+        // Get objet type and check that is a InstanceType
         Type type = object.getType();
 
-        if (! (type instanceof RecordType)) return false;
-        this.recordType = (RecordType) type;
+        if (! (type instanceof InstanceType)) {
+            Logger.error(object + " is not a InstanceType.");
+            return false;
+        }
 
-        // on vérifie qu'il contient le field 'name'
-        if (! this.recordType.contains(name)) return false;
+        // Verify that the InstanceType contain the field
+        this.objectType = (InstanceType) type;
 
-        // on l'assigne
-        this.field = this.recordType.get(name);
+        if (! (objectType.getDeclaration() instanceof ClassDeclaration)) {
+            Logger.error("" + objectType.getDeclaration());
+            Logger.error("Accessing 'attribute' of non class declaration");
+            return false;
+        }
 
-        // youpi
+        ClassDeclaration classDeclaration = (ClassDeclaration) objectType.getDeclaration();
+        if (! classDeclaration.hasAttribute(name)) {
+            Logger.error("Class " + classDeclaration.getName() + " has no attribute member " + name);
+            return false;
+        }
+
+        this.attributeDefinition = classDeclaration.getAttributeDeclaration(name);
+
         return true;
     }
 
@@ -69,8 +79,8 @@ public abstract class AbstractAttribute implements Expression {
      * @return Synthesized Type of the expression.
      */
     public Type getType() {
-        if (field == null) return AtomicType.ErrorType;
-        return field.getType();
+        if (attributeDefinition == null) return AtomicType.ErrorType;
+        return attributeDefinition.getType();
     }
 
 }

@@ -37,29 +37,26 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
 	 * @TODO resolve? on VariableUse case
 	 */
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (scope.knows(this.name)) {
-			Declaration declaration = scope.get(this.name);
-			if (declaration instanceof VariableDeclaration) {
-				this.expression = new VariableUse((VariableDeclaration) declaration);
-				return true;
-			} else if (declaration instanceof ParameterDeclaration) {
-                expression = new ParameterUse((ParameterDeclaration) declaration, null);
-                return true;
-			} else if (declaration instanceof ConstantDeclaration) {
-                // TODO : refactor the management of Constants
-                this.expression = new ConstantUse((ConstantDeclaration) declaration);
-                return true;
-            } else if (declaration instanceof ClassDeclaration) {
-                this.expression = new ObjectUse((ClassDeclaration) declaration);
-                return true;
-            } else {
-                Logger.error("The declaration for " + this.name + " is of the wrong kind.");
-                return false;
-            }
-		} else {
-			Logger.error("The identifier " + this.name + " has not been found.");
-			return false;	
-		}
+		if (! scope.knows(this.name)) {
+            Logger.error("The identifier " + this.name + " has not been found.");
+            return false;
+        }
+
+        Declaration declaration = scope.get(this.name);
+        if (declaration instanceof VariableDeclaration) {
+            this.expression = new VariableUse((VariableDeclaration) declaration);
+            return true;
+        } else if (declaration instanceof ParameterDeclaration) {
+            expression = new ParameterUse((ParameterDeclaration) declaration, null);
+            return true;
+        } else if (declaration instanceof ConstantDeclaration) {
+            // TODO : refactor the management of Constants
+            this.expression = new ConstantUse((ConstantDeclaration) declaration);
+            return true;
+        }
+
+        Logger.error("The declaration for " + this.name + " is of the wrong kind.");
+        return false;
 	}
 	
 	/* (non-Javadoc)

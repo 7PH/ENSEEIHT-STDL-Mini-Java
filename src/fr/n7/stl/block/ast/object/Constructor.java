@@ -16,10 +16,7 @@ public class Constructor extends MethodDefinition {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-        if (! super.resolve(scope))
-            return false;
-
-        return true;
+        return super.resolve(scope);
     }
 
     @Override

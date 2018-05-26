@@ -9,6 +9,7 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 /**
  * Implementation of the ABSTRACT Syntax Tree node for an array type.
@@ -61,12 +62,11 @@ public class Assignment implements Instruction, Expression {
 	 */
 	@Override
 	public boolean checkType() {
-		boolean b = value.getType().compatibleWith(assignable.getType());
-		if (!b)
-			throw new RuntimeException("Value type : " + value.getType().toString()
-									+ " is not compatible with Assignable one : "
-									+ assignable.getType().toString());
-		return b;
+		if (! value.getType().compatibleWith(assignable.getType())) {
+            Logger.error("Assignment: " + value.getType() + " not compatible with " + assignable.getType());
+            return false;
+        }
+		return true;
 	}
 	
 	/* (non-Javadoc)

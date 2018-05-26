@@ -4,9 +4,8 @@
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractIdentifier;
-import fr.n7.stl.block.ast.instruction.declaration.ConstantDeclaration;
-import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
+import fr.n7.stl.block.ast.object.AbstractThisUse;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
@@ -24,10 +23,10 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 
 	/**
 	 * Creates a variable assignment expression ABSTRACT Syntax Tree node.
-	 * @param _name Name of the assigned variable.
+	 * @param name Name of the assigned variable.
 	 */
-	public VariableAssignment(String _name) {
-		super(_name);
+	public VariableAssignment(String name) {
+		super(name);
 	}
 
     public VariableDeclaration getDeclaration() {
@@ -39,21 +38,18 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (scope.knows(this.name)) {
-			Declaration _declaration = scope.get(this.name);
-			if (_declaration instanceof VariableDeclaration) {
-				this.declaration = ((VariableDeclaration) _declaration);
-				return true;
-			} else if (_declaration instanceof ParameterDeclaration) {
-                return false;
-            } else if (_declaration instanceof ConstantDeclaration) {
-                return false;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		if (! scope.knows(this.name)) {
+		    return false;
+        }
+
+        Declaration declaration = scope.get(this.name);
+
+        if (declaration instanceof VariableDeclaration) {
+            this.declaration = ((VariableDeclaration) declaration);
+            return true;
+        }
+
+        return false;
 	}
 	
 	/* (non-Javadoc)

@@ -48,14 +48,14 @@ public class VariableDeclaration implements Declaration, Instruction {
 	
 	/**
 	 * Creates a variable declaration instruction node for the ABSTRACT Syntax Tree.
-	 * @param _name Name of the declared variable.
-	 * @param _type AST node for the type of the declared variable.
-	 * @param _value AST node for the initial value of the declared variable.
+	 * @param name Name of the declared variable.
+	 * @param type AST node for the type of the declared variable.
+	 * @param value AST node for the initial value of the declared variable.
 	 */
-	public VariableDeclaration(String _name, Type _type, Expression _value) {
-		this.name = _name;
-		this.type = _type;
-		this.value = _value;
+	public VariableDeclaration(String name, Type type, Expression value) {
+		this.name = name;
+		this.type = type;
+		this.value = value;
 	}
 
 	/* (non-Javadoc)

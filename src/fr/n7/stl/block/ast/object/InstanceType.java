@@ -16,7 +16,7 @@ public class InstanceType implements Type {
 	/* Types génériques : <String> etc */
 	private List<InstanceType> typeInstantiations = new LinkedList<>();
 
-	private Declaration declaration;
+	private ProgramDeclaration declaration;
 
 	public InstanceType(String name) {
 		this.name = name;
@@ -43,27 +43,21 @@ public class InstanceType implements Type {
 		 */
 
 		//La Declaration d'un InstanceType est TOUJOURS un ProgramDeclaration ?
-		if (!(this.getDeclaration() instanceof ProgramDeclaration)) {
-			Logger.error("This message should not appear. compatibleWith method was called on a InstanceType that was initiated with a declaration that is not a ProgramDeclaration");
-			return false;
-		} 
-		ProgramDeclaration thisDeclaration = (ProgramDeclaration) this.getDeclaration();
-		
 		if (other instanceof InstanceType) {
 			InstanceType _typeInst = (InstanceType) other;
 			
 			if (_typeInst.getDeclaration() instanceof InterfaceDeclaration) {
-				/* _other est une interface. */				
+				/* _other est une interface. */
 				InterfaceDeclaration _interface = (InterfaceDeclaration) _typeInst.getDeclaration();
-				
-				if (thisDeclaration instanceof InterfaceDeclaration) {
+
+				if (declaration instanceof InterfaceDeclaration) {
 					/* this est aussi une interface. */
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
-					
+
 				} else {
 					/* this est une classe */
-					ClassDeclaration thisClass = (ClassDeclaration) thisDeclaration;
-					
+					ClassDeclaration thisClass = (ClassDeclaration) declaration;
+
 					// Vérifier que this implémente _other
 					if(thisClass.getImplementedClasses().contains(_interface)) {
 						return true;
@@ -71,15 +65,15 @@ public class InstanceType implements Type {
 						Logger.error(this.name + " is not compatible with " + _interface.toString());
 						return false;
 					}
-					
+
 				}
-				
-				
+
+
 			} else if (_typeInst.getDeclaration() instanceof ClassDeclaration) {
 				/* _other est une classe. */				
 				ClassDeclaration _classe = (ClassDeclaration) _typeInst.getDeclaration();
 				
-				if (thisDeclaration.getName().equals(_classe.getName())) {
+				if (declaration.getName().equals(_classe.getName())) {
 					/* C'est la même classe. */
 					
 					// Verifier les types génériques.					
@@ -99,7 +93,7 @@ public class InstanceType implements Type {
 				} else {
 					/* Ce n'est pas la même classe. */
 					// TODO : Vérifier que this extends _other et vérifier les types génériques.
-					thisDeclaration.getExtendedClass().contains(_typeInst);
+					declaration.getExtendedClass().contains(_typeInst);
 					// et les types generiques de _classe ont été instantiés
 				}
 			}
@@ -168,11 +162,11 @@ public class InstanceType implements Type {
 	}
 
 
-	public Declaration getDeclaration() {
+	public ProgramDeclaration getDeclaration() {
 		return declaration;
 	}
 
-	public void setDeclaration(Declaration declaration) {
+	public void setDeclaration(ProgramDeclaration declaration) {
 		this.declaration = declaration;
 	}
 
@@ -181,12 +175,12 @@ public class InstanceType implements Type {
 	}
 
 	/** Say if the object contains this attribute.
-	 * @param attributeIdentificateur the searched attribute
+	 * @param name the searched attribute
 	 * @return true if contains, false if not
 	 */
-	public boolean contains(String attributeIdentificateur) {
+	public boolean contains(String name) {
 		if (this.getDeclaration() instanceof InterfaceDeclaration) {
-			Logger.error("Interface " + this.name + " does not contain attribute " + attributeIdentificateur + " because " + this.name + " is an interface.");
+			Logger.error("Interface " + this.name + " does not contain attribute " + name + " because " + this.name + " is an interface.");
 			return false;
 		} else if (this.getDeclaration() instanceof ClassDeclaration) {
 			ClassDeclaration _classe = (ClassDeclaration) this.getDeclaration();
