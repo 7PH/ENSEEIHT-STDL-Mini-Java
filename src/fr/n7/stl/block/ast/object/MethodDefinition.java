@@ -96,8 +96,9 @@ public class MethodDefinition extends Definition {
         resolved &= signature.getType().resolve(scope);
 
         HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
+
         // @TODO Do something with parameters?
-        for (ParameterDeclaration parameterDeclaration: this.signature.getParameters()) {
+        for (ParameterDeclaration parameterDeclaration: signature.getParameters()) {
             parameterDeclaration.getType().resolve(scope);
             newScope.register(parameterDeclaration);
         }

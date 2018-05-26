@@ -1,14 +1,13 @@
 class Point {
     private int x;
     private int y;
-    public Point() { }
 }
 class Segment {
     private Point p1;
     private Point p2;
 
-    public Segment() {
-        this.p1 = new Point();
-        this.p2 = new Point();
+    public Segment(Point p1, Point p2) {
+        this.p1 = p1;
+        this.p2 = p2;
     }
 }
