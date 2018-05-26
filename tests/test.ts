@@ -617,7 +617,7 @@ describe('# Resolve / CheckType medium tests', function () {
         done();
     });
 
-    it('-> class w/ superclass attribute use (w/ a little subtility)', function(done: () => any) {
+    it('-> class w/ superclass attribute use w/ global constant use', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
                 public static final String ROUGE = "rouge";
@@ -634,10 +634,8 @@ describe('# Resolve / CheckType medium tests', function () {
             class ColoredPoint {
                 private String color;
 
-                public ColoredPoint (Point p1, Point p2, String color) {
-                    this.p1 = p1;
-                    this.p2 = p2;
-                    this.color = color;
+                public ColoredPoint () {
+                    this.color = Color.ROUGE;
                 }
             }`,
             {
