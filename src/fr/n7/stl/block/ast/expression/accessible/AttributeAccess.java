@@ -13,6 +13,10 @@ public class AttributeAccess extends AbstractAttribute {
         super(object, name);
     }
 
+    public AttributeAccess(String className, String name) {
+        super(className, name);
+    }
+
     @Override
     public Fragment getCode(TAMFactory factory) {
         return null;

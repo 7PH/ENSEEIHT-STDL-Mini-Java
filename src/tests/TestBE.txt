@@ -6,6 +6,14 @@ class Random {
     }
     
     public int getRandom() {
-        return 5;
+        return this.x;
     }
 }
+/*
+class Box<T> {
+    private T t;
+
+    public void set(T t) { 
+        this.t = t; 
+    }
+}*/

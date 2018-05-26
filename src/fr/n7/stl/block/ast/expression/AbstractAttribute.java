@@ -17,10 +17,17 @@ import fr.n7.stl.util.Logger;
  */
 public abstract class AbstractAttribute extends DefinitionAccess implements Expression {
 
+    protected String className;
+
     protected AttributeDefinition attributeDefinition;
 
     public AbstractAttribute(Expression object, String name) {
         this.object = object;
+        this.name = name;
+    }
+
+    public AbstractAttribute(String className, String name) {
+        this.className = className;
         this.name = name;
     }
 

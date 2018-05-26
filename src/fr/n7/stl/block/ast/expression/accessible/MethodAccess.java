@@ -43,7 +43,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-    	
+
         // Verify objet resolve.
     	if (! object.resolve(scope)) {
             Logger.error("Could not resolve attribute assignment because of: " + object + ".");
