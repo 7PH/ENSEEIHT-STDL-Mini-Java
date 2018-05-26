@@ -273,12 +273,14 @@ InnerClassDefinition ::=
 InnerClassDefinitionWithoutModifier ::=
     UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
         {: RESULT = new Constructor(ident, parameters, body); :}
-    | Type:type UL_Identificateur:ident UL_Point_Virgule
+    | NullableType:type UL_Identificateur:ident UL_Point_Virgule
         {: RESULT = new AttributeDefinition(type, ident); :}
-	| Type:type UL_Identificateur:ident UL_Egal Expression:value UL_Point_Virgule
+	| NullableType:type UL_Identificateur:ident UL_Egal Expression:value UL_Point_Virgule
         {: RESULT = new AttributeDefinition(type, ident, value); :}
-    | Type:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
+    | NullableType:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante Bloc:body
         {: RESULT = new MethodDefinition(new Signature(type, ident, parameters), body); :}
+    | UL_Abstract NullableType:type UL_Identificateur:ident UL_Parenthese_Ouvrante ParametersOrNot:parameters UL_Parenthese_Fermante UL_Point_Virgule
+        {: RESULT = new MethodDefinition(new Signature(type, ident, parameters), null); :}
     ;
 
 InnerInterfaceDefinitions ::=

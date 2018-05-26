@@ -4,6 +4,7 @@ import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
@@ -54,7 +55,7 @@ public class AttributeDefinition extends Definition {
 	public boolean checkType() {
         boolean ok = true;
 		if (value != null && ! value.getType().compatibleWith(type)) {
-			Logger.error(value.toString() + " is not compatible with " + type.toString());
+			Logger.error(value + " is not compatible with " + type);
             ok = false;
 		}
 		return ok;
@@ -74,15 +75,21 @@ public class AttributeDefinition extends Definition {
 			return false;
 		}
 
+		// Check if type is well not a void
+		if (type.equalsTo(AtomicType.VoidType)) {
+			Logger.error("Could not resolve attribute definition because of the type " + this.type + " which is a void.");
+			return false;
+		}
+
 		// Resolve type part
 		if (! type.resolve(scope)) {
-    		Logger.error("Could not resolve attribute definition because of the type " + this.type.toString() + ".");
+    		Logger.error("Could not resolve attribute definition because of the type " + this.type + ".");
 			return false;
 		}
 
 		// Resolve value part
 		if (value != null && ! value.resolve(scope)) {
-    		Logger.error("Could not resolve attribute definition because of the value " + this.value.toString() + ".");
+    		Logger.error("Could not resolve attribute definition because of the value " + this.value + ".");
 			return false;
 		}
 

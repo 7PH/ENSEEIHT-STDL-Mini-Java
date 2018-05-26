@@ -81,7 +81,7 @@ describe('# Grammar tests', function () {
 });
 
 
-describe('# Resolve/Checktype tests', function () {
+describe('# Resolve/Checktype simple tests', function () {
     this.slow(SLOW_TEST_MS);
 
     // SIMPLE TEST ABOUT CLASS
@@ -246,11 +246,88 @@ describe('# Resolve/Checktype tests', function () {
             });
         done();
     });
+
+    it('-> abstract class ', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { } `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ abstract method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou();
+            } `,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ abstract method w/ body', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou() {}
+            } `,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                
+            } 
+            class foo2 extends foo {
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                abstract void issou();
+            } 
+            class foo2 extends foo {
+            }`,
+            {
+                resolve: false,
+                checkType: true
+            });
+        done();
+    });
+
+    it('-> abstract class w/ extented one w/ implemented method', function(done: () => any) {
+        TAM.ensureResult(
+            `abstract class foo { 
+                public abstract void issou();
+            } 
+            class foo2 extends foo {
+                public void issou() { }
+            }`,
+            {
+                resolve: true,
+                checkType: true
+            });
+        done();
+    });
 });
 
 
 
-describe('# Resolve / CheckType tests PART II : we begin serious tests', function () {
+describe('# Resolve / CheckType medium tests', function () {
     this.slow(SLOW_TEST_MS);
 
     it('-> class w/ custom attribute types', function(done: () => any) {
@@ -418,9 +495,9 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
             class ColoredPoint extends Point {
                 private String color;
 
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
+                public ColoredPoint(int x, int y) {
+                    this.x = x;
+                    this.y = y;
                     this.color = "rouge";
                 }
             }`,
@@ -436,47 +513,19 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
             class Point {
                 private int x;
                 private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
+            
+                public Point(int x, int y) {
+                    this.x = x;
+                    this.y = y;
                 }
             }
             class ColoredPoint extends Point {
                 private String color;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
-                    this.color = "rouge";
-                }
-            }`,
-            {
-                resolve: false,
-            });
-        done();
-    });
-
-    it('-> class w/ bad constructor', function(done: () => any) {
-        TAM.ensureResult(`
-            class Color {
-                public static final String ROUGE = "rouge";
-            }
-            class Point {
-                private int x;
-                private int y;
-
-                public Point(int a, int b) {
-                    this.x = a;
-                    this.y = b;
-                }
-            }
-            class ColoredPoint extends Point {
-                private String color;
-
-                public Segment(int a, int b, int c, int d) {
-                    this.x = new Point(a, b);
-                    this.y = new Point(c, d);
+            
+                public Segment(int x, int y, String color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
                 }
             }`,
             {
@@ -485,7 +534,33 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
         done();
     });
 
-    it('-> class w/ bad constructor', function(done: () => any) {
+    it('-> class w/ bad constructor 1', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                private int x;
+                private int y;
+            
+                public Point(int a, int b) {
+                    this.x = a;
+                    this.y = b;
+                }
+            }
+            class ColoredPoint extends Point {
+                private String color;
+            
+                public Segment(int x, int y, String color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                }
+            }`,
+            {
+                resolve: false
+            });
+        done();
+    });
+
+    it('-> class w/ bad constructor 2', function(done: () => any) {
         TAM.ensureResult(`
             class Color {
                 public static final String ROUGE = "rouge";
@@ -509,8 +584,7 @@ describe('# Resolve / CheckType tests PART II : we begin serious tests', functio
                 }
             }`,
             {
-                resolve: true,
-                checkType: true
+                resolve: false
             });
         done();
     });

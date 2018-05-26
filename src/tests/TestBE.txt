@@ -1,20 +1,6 @@
-class Color {
-    public static final String ROUGE = "rouge";
+abstract class foo {
+    public abstract void issou();
 }
-class Point {
-    public int x;
-    public int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-class ColoredPoint extends Point {
-    private String color;
-
-    public ColoredPoint (String color) {
-        this.color = color;
-        int a = this.x;
-    }
+class foo2 extends foo {
+    public void issou() { }
 }

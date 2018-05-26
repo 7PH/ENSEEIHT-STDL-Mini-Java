@@ -28,6 +28,7 @@ public class MethodDefinition extends Definition {
 	public MethodDefinition(Signature _signature, Block _body) {
 		this.signature = _signature;
 		this.body = _body;
+		this.abstractArgument = body == null;
 	}
 
 	/** Get the method signature.
@@ -103,7 +104,17 @@ public class MethodDefinition extends Definition {
             newScope.register(parameterDeclaration);
         }
 
-		// abstract => ! body
+        // abstract => ! modifier
+        if (isAbstract()) {
+            AccessModifier am = this.getAccessModifier();
+            DefinitionModifier dm = this.getDefinitionModifier();
+            if (am != AccessModifier.PUBLIC || dm != null) {
+                Logger.error("An abstract method cannot be " + (am == null ? "" : am) + " " + (dm == null ? "" : dm));
+                resolved = false;
+            }
+        }
+
+        // abstract => ! body
 		if (isAbstract() && body != null) {
             Logger.error("Method " + this.getName() + " is declared abstract but has a body.");
             resolved = false;
@@ -120,7 +131,7 @@ public class MethodDefinition extends Definition {
         boolean ok = true;
 
         // body?
-        ok &= this.body.checkType();
+        ok &= body == null || body.checkType();
 
         // parameters ok?
         for (ParameterDeclaration p : this.signature.getParameters()) {
@@ -145,7 +156,7 @@ public class MethodDefinition extends Definition {
 
     @Override
     public String toString() {
-    	return this.signature.toString() + this.body.toString();
+    	return signature.toString() + ((body == null) ? "" : body.toString());
     }
 
 	@Override
