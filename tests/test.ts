@@ -832,20 +832,6 @@ describe('# Resolve / CheckType medium tests', function () {
         done();
     });
 
-    it('-> method returning void with empty body', function(done: () => any) {
-        TAM.ensureResult(`
-            class MyClass {
-                public void y() {}
-            }
-        `,
-            {
-                resolve: true,
-                checkType: false
-            });
-        done();
-    });
-    
-
     it('-> method body w/ attribute use ', function(done: () => any) {
         TAM.ensureResult(`
             class Random {
