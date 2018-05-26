@@ -82,7 +82,7 @@ terminal			UL_Crochet_Ouvrant, UL_Crochet_Fermant;
 terminal			UL_Inferieur, UL_Superieur;
 terminal			UL_Inferieur_Egal, UL_Superieur_Egal;
 terminal			UL_Double_Egal, UL_Exclamation_Egal;
-terminal			UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour;
+terminal			UL_Si, UL_Sinon, UL_Tant_Que, UL_Nouveau, UL_Afficher, UL_Retour, UL_Log;
 terminal			UL_Definition_Constante, UL_Type_Booleen, UL_Type_Caractere, UL_Type_Chaine, UL_Type_Entier, UL_Type_Flottant, UL_Type_Vide;
 terminal String		UL_Identificateur, UL_Chaine, UL_Caractere;
 terminal String		UL_Nombre_Entier, UL_Nombre_Flottant, UL_Nul, UL_Vrai, UL_Faux; // Valeur transmise par l'analyseur lexical
@@ -486,10 +486,6 @@ Instruction ::= Declaration:declaration
 					List<Expression> _parametres = new LinkedList<Expression>();
 					RESULT = new FunctionCall( nom, _parametres );
 				:}
-			| UL_Afficher Expression:expression UL_Point_Virgule
-				{:
-					RESULT = new Printer( expression );
-				:}
 			| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors UL_Sinon Bloc:sinon
 				{:
 					RESULT = new Conditional( condition, alors, sinon);
@@ -506,6 +502,10 @@ Instruction ::= Declaration:declaration
 				{:
 					RESULT = new Return( expression);
 				:}
+		    | UL_Log UL_Parenthese_Ouvrante Expression:expression UL_Parenthese_Fermante UL_Point_Virgule
+		        {:
+                    RESULT = new LogInstruction(expression);
+		        :}
 			;
 
 Expressions ::= Expressions:expressions UL_Virgule Expression:expression

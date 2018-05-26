@@ -22,14 +22,14 @@ import static fr.n7.stl.block.ast.type.AtomicType.*;
  * @author Marc Pantel
  *
  */
-public class Printer implements Instruction {
+public class LogInstruction implements Instruction {
 
 	protected Expression parameter;
 
 	protected Type parameterType;
 
-	public Printer(Expression _value) {
-		this.parameter = _value;
+	public LogInstruction(Expression value) {
+		this.parameter = value;
 	}
 
 	/* (non-Javadoc)
@@ -37,7 +37,7 @@ public class Printer implements Instruction {
 	 */
 	@Override
 	public String toString() {
-		return "print " + this.parameter + ";\n";
+		return "System.out.println(" + this.parameter + ");\n";
 	}
 	
 	/* (non-Javadoc)
@@ -54,15 +54,11 @@ public class Printer implements Instruction {
 	@Override
 	public boolean checkType() {
         parameterType = parameter.getType();
-        while (parameterType instanceof NamedType)
-            parameterType = ((NamedType)parameterType).getType();
-        boolean b = parameterType == IntegerType
+
+        return parameterType == IntegerType
                 || parameterType == BooleanType
                 || parameterType == CharacterType
                 || parameterType == StringType;
-        if (!b)
-        	throw new RuntimeException("You print a wrong type : " + parameterType.toString());
-        return b;
 	}
 
 	/* (non-Javadoc)

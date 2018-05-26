@@ -2,6 +2,7 @@ package fr.n7.stl.block;
 
 
 import fr.n7.stl.block.ast.scope.SymbolTable;
+import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.impl.TAMFactoryImpl;
 import fr.n7.stl.util.Logger;
 import org.json.JSONException;
@@ -58,6 +59,7 @@ class Driver {
     private static Parser execute(Parser parser) throws Exception {
         parser.resolve = parser.program.resolve(new SymbolTable());
         parser.checkType = parser.program.checkType();
+        parser.program.allocateMemory(Register.SB, 3);
         parser.fragment = parser.program.getCode(new TAMFactoryImpl());
         return parser;
     }

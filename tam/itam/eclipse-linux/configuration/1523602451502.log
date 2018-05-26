@@ -1,0 +1,33 @@
+!SESSION 2018-04-13 08:54:11.439 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=9.0.4
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.osgi 4 0 2018-04-13 08:54:12.226
+!MESSAGE Application error
+!STACK 1
+org.eclipse.swt.SWTError: No more handles [gtk_init_check() failed]
+	at org.eclipse.swt.SWT.error(SWT.java:4517)
+	at org.eclipse.swt.widgets.Display.createDisplay(Display.java:908)
+	at org.eclipse.swt.widgets.Display.create(Display.java:892)
+	at org.eclipse.swt.graphics.Device.<init>(Device.java:156)
+	at org.eclipse.swt.widgets.Display.<init>(Display.java:512)
+	at org.eclipse.swt.widgets.Display.<init>(Display.java:503)
+	at org.eclipse.ui.internal.Workbench.createDisplay(Workbench.java:790)
+	at org.eclipse.ui.PlatformUI.createDisplay(PlatformUI.java:162)
+	at itam.Itam.start(Itam.java:21)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:669)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:608)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1515)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1488)

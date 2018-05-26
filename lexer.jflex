@@ -139,6 +139,7 @@ Identificateur = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 "final" { return symbolFactory.newSymbol("Final", UL_Final); }
 //"this" { return symbolFactory.newSymbol("This", UL_This); }
 "abstract" { return symbolFactory.newSymbol("Abstract", UL_Abstract); }
+"System.out.println" { return symbolFactory.newSymbol("Log", UL_Log); }
   {Caractere}		{ return symbolFactory.newSymbol("Caractère", UL_Caractere, yytext()); }
   {Chaine}			{ return symbolFactory.newSymbol("Chaine de caractères", UL_Chaine, yytext()); }
   {Entier}     		{ return symbolFactory.newSymbol("Nombre Entier", UL_Nombre_Entier, yytext()); }
