@@ -1,3 +1,6 @@
 abstract class foo {
     public abstract void issou();
 }
+class foo2 extends foo {
+    public void issou() { }
+}

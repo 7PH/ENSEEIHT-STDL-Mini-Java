@@ -108,8 +108,8 @@ public class MethodDefinition extends Definition {
         if (isAbstract()) {
             AccessModifier am = this.getAccessModifier();
             DefinitionModifier dm = this.getDefinitionModifier();
-            if (am != null || dm != null) {
-                Logger.error("An abstract method can not have a modifier as " + ((am == null) ? "" : am) + " " + ((dm == null) ? "" : dm));
+            if (am != AccessModifier.PUBLIC || dm != null) {
+                Logger.error("An abstract method cannot be " + (am == null ? "" : am) + " " + (dm == null ? "" : dm));
                 resolved = false;
             }
         }
