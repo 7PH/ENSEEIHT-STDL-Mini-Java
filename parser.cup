@@ -122,6 +122,7 @@ non terminal Type                       NullableType;
 non terminal ClassModifier              ClassModifier;
 non terminal List<InstanceType>         ClassExtension;
 non terminal List<InstanceType>	        ClassImplementation;
+non terminal MethodAccess				MethodAccess;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -486,6 +487,10 @@ Instruction ::= Declaration:declaration
 					List<Expression> _parametres = new LinkedList<Expression>();
 					RESULT = new FunctionCall( nom, _parametres );
 				:}
+			| MethodAccess:methodAccess
+				{:
+					RESULT = methodAccess;
+				:}
 			| UL_Si UL_Parenthese_Ouvrante Expression:condition UL_Parenthese_Fermante Bloc:alors UL_Sinon Bloc:sinon
 				{:
 					RESULT = new Conditional( condition, alors, sinon);
@@ -664,13 +669,9 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new ArrayAllocation(type, taille);
 				:}
-			| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+			| MethodAccess:methodAccess
 				{:
-					RESULT = new MethodAccess( object, method, parametres );
-				:}
-			| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-				{:
-					RESULT = new MethodAccess( object, method, new LinkedList<Expression>() );
+					RESULT = methodAccess;
 				:}
 			| Expression:object UL_Point UL_Identificateur:attribute
 				{:
@@ -685,3 +686,13 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
 					RESULT = new ObjectAllocation(type, parameters);
 				:}
             ;
+
+MethodAccess ::= 
+ 	Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
+		{:
+			RESULT = new MethodAccess( object, method, parametres );
+		:}
+	| Expression:object UL_Point UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+		{:
+			RESULT = new MethodAccess( object, method, new LinkedList<Expression>() );
+		:}

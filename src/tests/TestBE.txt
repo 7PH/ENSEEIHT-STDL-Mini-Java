@@ -1,10 +1,11 @@
 class Random {
     private int x;
 
-    public int getRandom() {
-        return 5;
-    }
     public static void main (String args[]) {
         this.getRandom();
+    }
+    
+    public int getRandom() {
+        return 5;
     }
 }
