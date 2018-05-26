@@ -966,4 +966,49 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
     });
+
+        describe('# About generics', function() {
+        it('-> basic tests', function(done: () => any) {
+            TAM.ensureResult(`
+                class A<T> { }
+                class B<T1, T2> extends A<T1> { }
+                class C { }
+                class D { }
+                class E<T> extends B<C, D> { }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
+        it('-> generic attribute', function(done: () => any) {
+            TAM.ensureResult(`
+                class Box<T> {
+                    private T t;
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
+        it('-> generic methods', function(done: () => any) {
+            TAM.ensureResult(`
+                class Box<T> {
+                    private T t;
+
+                    public void set(T t) { this.t = t; }
+                    public T get() { return t; }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
+    });
+
 });

@@ -3,7 +3,10 @@ package fr.n7.stl.block.ast.object;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GenericType {
+import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.type.Type;
+
+public class GenericType implements Declaration {
 
 	private String name;
 	
@@ -36,4 +39,14 @@ public class GenericType {
         }
         return result;
     }
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public Type getType() {
+		return null;
+	}
 }
