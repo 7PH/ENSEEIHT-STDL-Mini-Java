@@ -262,8 +262,8 @@ describe('# Resolve/Checktype simple tests', function () {
                 interface foo {}
                 class bar extends foo {}
                 `,{
-                    resolve: true,
-                    checkType: false
+                    resolve: false,
+                    checkType: true
                 });
             done();
         });
