@@ -48,8 +48,17 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
        
         // Check if the method exists
         if (programDeclaration instanceof ClassDeclaration) {
-            this.methodDefinition = ((ClassDeclaration) programDeclaration)
-                    .getMethodDefinitionsByMethodName(name, true).get(0);
+            MethodDefinition tmp  = ((ClassDeclaration) programDeclaration).getMethodDefinitionsByMethodName(name, true).get(0);
+            
+            if(tmp.getAccessModifier() == AccessModifier.PUBLIC || tmp.getParent() == ((AbstractThisUse) scope.get("this")).programDeclaration ) {
+            	this.methodDefinition = tmp;
+            	return true;
+            } else {
+            	Logger.error("Could not access method " + this.name + " of class " + tmp.getParent().getName() + ". The method does not exist or is private.");
+            	return false;
+            }        
+            
+                
         } else {
             // TODO
             this.methodDefinition = null;

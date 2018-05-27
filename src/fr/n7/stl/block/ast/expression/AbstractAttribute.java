@@ -48,7 +48,7 @@ public abstract class AbstractAttribute extends DefinitionAccess {
         	this.attributeDefinition = tmp;
         	return true;
         } else {
-        	Logger.error("Could not access definition " + this.name + " of class " + tmp.getParent().getName() + ". The definition does not exist or is private.");
+        	Logger.error("Could not access attribute " + this.name + " of class " + tmp.getParent().getName() + ". The definition does not exist or is private.");
         	return false;
         }
 
