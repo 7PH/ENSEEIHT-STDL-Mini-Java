@@ -37,7 +37,6 @@ class Driver {
             Logger.error("Something wrong happened with Parser: " + exception);
             if (mode == 0) {
                 exception.printStackTrace();
-                System.exit(0);
             }
         }
 

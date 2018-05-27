@@ -1,5 +1,6 @@
 package fr.n7.stl.block.ast.expression;
 
+import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AbstractThisUse;
 import fr.n7.stl.block.ast.object.InstanceType;
 import fr.n7.stl.block.ast.instruction.Instruction;
@@ -36,7 +37,6 @@ public abstract class DefinitionAccess implements Instruction {
     @Override
     public final boolean resolve(HierarchicalScope<Declaration> scope) {
 
-
         if (object == null) {
             if (! scope.knows(target)) {
                 Logger.error("MethodAccess: Unknown identifier: " + target);
@@ -46,6 +46,14 @@ public abstract class DefinitionAccess implements Instruction {
             Declaration declaration = scope.get(target);
             if (declaration instanceof AbstractThisUse) {
                 this.programDeclaration = ((AbstractThisUse)declaration).programDeclaration;
+            } else if (declaration instanceof VariableDeclaration) {
+                if (! (declaration.getType() instanceof  InstanceType)) {
+                    // appel de méthode sur une variable non objet
+                    Logger.error("Calling a method on a non-object " + target);
+                    return false;
+                }
+                InstanceType type = (InstanceType)declaration.getType();
+                this.programDeclaration = type.getDeclaration();
             } else {
                 this.programDeclaration = (ProgramDeclaration) scope.get(target);
             }

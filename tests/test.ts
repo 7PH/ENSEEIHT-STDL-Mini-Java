@@ -597,7 +597,7 @@ describe('# Resolve / CheckType medium tests', function () {
                     }
                     
                     public int bar() {
-                        return fooBar;
+                        return this.fooBar;
                     }
                 }`,
                 {
@@ -610,17 +610,20 @@ describe('# Resolve / CheckType medium tests', function () {
             TAM.ensureResult(`
                 class Random {
                     private int x;
+                
                     public Random(int y) {
                         this.x = y;
                     }
+                
                     public int getRandom() {
                         return 5;
                     }
                 }
                 class Main {
                     public static void main (String args[]) {
-                        Random r = new Random(6);
-                        r.getRandom();
+                        Random random = new Random(6);
+                        int value = random.getRandom();
+                        System.out.println(value);
                     }
                 }`,
                 {

@@ -1,11 +1,18 @@
 class Random {
-    private int fooBar;
+    private int x;
 
-    public void foo () {
-        int b = this.bar();
+    public Random(int y) {
+        this.x = y;
     }
 
-    public int bar() {
-        return this.fooBar;
+    public int getRandom() {
+        return 5;
+    }
+}
+class Main {
+    public static void main (String args[]) {
+        Random random = new Random(6);
+        int value = random.getRandom();
+        System.out.println(value);
     }
 }
