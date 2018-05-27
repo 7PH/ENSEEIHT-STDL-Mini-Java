@@ -58,6 +58,16 @@ public class ClassDeclaration extends ProgramDeclaration {
         return getAttributeDeclaration(name, true);
     }
 
+    public List<AttributeDefinition> getAttributes() {
+        List<AttributeDefinition> attributes = new LinkedList<>();
+        for (Definition d : definitions) {
+            if (d instanceof AttributeDefinition) {
+                attributes.add((AttributeDefinition) d);
+            }
+        }
+        return attributes;
+    }
+
     public boolean hasAttribute(String name) {
         return getAttributeDeclaration(name) != null;
     }
