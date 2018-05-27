@@ -15,6 +15,10 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
 	
 	private AttributeDefinition attribute;
 
+    public AttributeAssignment(String target, String name) {
+        super(target, name);
+    }
+
     public AttributeAssignment(Expression object, String name) {
         super(object, name);
     }
@@ -23,6 +27,7 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
+        System.out.println("@TODO");
         return fragment;
     }
 

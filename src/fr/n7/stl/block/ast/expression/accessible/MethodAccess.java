@@ -1,6 +1,7 @@
 package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.DefinitionAccess;
 import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.Instruction;
@@ -19,56 +20,22 @@ import java.util.List;
 
 public class MethodAccess extends DefinitionAccess implements Instruction, Expression {
     
-    private String target;
-    
     private MethodDefinition methodDefinition;
 
     private List<Expression> parameters;
 
     public MethodAccess(Expression object, String name, List<Expression> parameters) {
-        this.object = object;
-        this.name = name;
+        super(object, name);
         this.parameters = parameters;
     }
     
-    // Name attribute is the target x in : x.issou()
     public MethodAccess(String target, String name, List<Expression> parameters) {
-        this.target = target;
-        this.name = name;
+        super(target, name);
         this.parameters = parameters;
     }
 
     @Override
-    public boolean resolve(HierarchicalScope<Declaration> scope) {
-        // object/target
-        ProgramDeclaration programDeclaration;
-
-        if (object == null) {
-            if (! scope.knows(target)) {
-                Logger.error("MethodAccess: Unknown identifier: " + target);
-                return false;
-            }
-
-            Declaration declaration = scope.get(target);
-            if (declaration instanceof AbstractThisUse) {
-                programDeclaration = ((AbstractThisUse)declaration).programDeclaration;
-            } else {
-                programDeclaration = (ProgramDeclaration) scope.get(target);
-            }
-            this.objectType = (InstanceType) programDeclaration.getType();
-        } else {
-            if (! object.resolve(scope)) {
-                Logger.error("Could not resolve attribute assignment because of: " + object + ".");
-                return false;
-            }
-            Type type = object.getType();
-            if (! (type instanceof InstanceType)) {
-                Logger.error(object + " is not a InstanceType.");
-                return false;
-            }
-            this.objectType = (InstanceType) type;
-        }
-
+    public boolean subResolve(HierarchicalScope<Declaration> scope) {
         // Resolve parameters
         for (Expression parameter: parameters) {
             if (! parameter.resolve(scope)) {
@@ -77,8 +44,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             }
         }
        
-        // Check if the method exist
-        programDeclaration = objectType.getDeclaration();
+        // Check if the method exists
         if (programDeclaration instanceof ClassDeclaration) {
             this.methodDefinition = ((ClassDeclaration) programDeclaration).getMethodDefinitionBySignature(name);
         } else {
@@ -91,8 +57,8 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
         }
 
         // Verify number of parameters
-    	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
-    	int numOfPar = this.parameters.size();
+    	List<ParameterDeclaration> declaredParameters = methodDefinition.getSignature().getParameters();
+    	int numOfPar = parameters.size();
         if (numOfPar != declaredParameters.size()) {
             Logger.error("Call of " + object + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
             return false;
@@ -115,7 +81,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public boolean checkType() {
-    	boolean b = false;
+    	boolean b = true;
     	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
         int numOfPar = this.parameters.size();
         
@@ -124,16 +90,16 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             Type parameterType = this.parameters.get(i).getType();
             Type declaredType = declaredParameters.get(i).getType();
             // Verify if a type is an ErrorType
-            if (!parameterType.equalsTo(AtomicType.ErrorType)) {
+            if (! parameterType.equalsTo(AtomicType.ErrorType)) {
                 // Verify compatibility between declared and used type
-                b &= parameterType.compatibleWith(declaredType);
-                if (!b) {
-                Logger.error("Parameter " + parameterType.toString() + " use in "
-                            + this.object + " method is not compatible with declared one : " + declaredParameters + ".");
+                if (! parameterType.compatibleWith(declaredType)) {
+                    Logger.error("Parameter " + parameterType.toString() + " use in "
+                                + this.object + " method is not compatible with declared one : " + declaredParameters + ".");
+                    b = false;
                 }
             } else {
                 Logger.error("Parameter " + parameterType.toString() + " use in " + this.object + "method is an ErrorType.");
-                b &= false;
+                b = false;
             }
         }	
     	return b;
@@ -156,6 +122,6 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public String toString() {
-        return (object == null ? target : "") + "." + name + "(" + this.parameters + ")";
+        return super.toString() + "(" + parameters + ")";
     }
 }

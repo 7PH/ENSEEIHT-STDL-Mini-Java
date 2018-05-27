@@ -3,7 +3,6 @@ package fr.n7.stl.block.ast.object;
 import java.util.LinkedList;
 import java.util.List;
 
-import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
@@ -20,6 +19,8 @@ public abstract class ProgramDeclaration implements Declaration {
 	protected List<InstanceType> extendedClass = new LinkedList<>();
 	
 	protected List<InstanceType> implementedClasses = new LinkedList<>();
+
+	protected Type type;
 
 	public abstract boolean subResolve(HierarchicalScope<Declaration> scope);
 
@@ -55,6 +56,9 @@ public abstract class ProgramDeclaration implements Declaration {
             }
         }
 
+        this.type = new InstanceType(className.getName());
+        this.type.resolve(subScope);
+
         return subResolve(subScope);
     }
 
@@ -87,7 +91,7 @@ public abstract class ProgramDeclaration implements Declaration {
 	}
 	
 	public Type getType() {
-	    return new InstanceType(className.getName());
+	    return type;
 	}
 
 	public List<InstanceType> getExtendedClass() {

@@ -13,13 +13,15 @@ public class AttributeAccess extends AbstractAttribute {
         super(object, name);
     }
 
-    public AttributeAccess(String className, String name) {
-        super(className, name);
+    public AttributeAccess(String target, String name) {
+        super(target, name);
     }
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-        return null;
+        Fragment fragment = factory.createFragment();
+
+        return fragment;
     }
 
     @Override

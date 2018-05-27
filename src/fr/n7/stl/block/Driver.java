@@ -35,6 +35,10 @@ class Driver {
             parser = execute(parser);
         } catch (Exception exception) {
             Logger.error("Something wrong happened with Parser: " + exception);
+            if (mode == 0) {
+                exception.printStackTrace();
+                System.exit(0);
+            }
         }
 
         switch (mode) {

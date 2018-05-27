@@ -1,19 +1,9 @@
-class Random {
+class Point {
     private int x;
+    private int y;
 
-    public static void main (String args[]) {
-        this.getRandom();
-    }
-    
-    public int getRandom() {
-        return this.x;
+    public Point() {
+        this.x = 1;
+        this.y = 2;
     }
 }
-/*
-class Box<T> {
-    private T t;
-
-    public void set(T t) { 
-        this.t = t; 
-    }
-}*/
