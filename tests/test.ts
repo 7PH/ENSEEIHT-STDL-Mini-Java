@@ -914,6 +914,44 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
+        it('-> class w/ private method use in inner class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    private int getX() {
+                        return this.x;
+                    }
+                    public void translateX(int a) {
+                        this.x = this.getX() + a;
+                    }
+                }
+                `,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ public method use in inner class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    public int getX() {
+                        return this.x;
+                    }
+                    public void translateX(int a) {
+                        this.x = this.getX() + a;
+                    }
+                }
+                `,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
         it('-> class w/ superclass public attribute use', function(done: () => any) {
             TAM.ensureResult(`
                 class Point {
@@ -980,26 +1018,7 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
-        it('-> class w/ private method use in inner class', function(done: () => any) {
-            TAM.ensureResult(`
-                class Point {
-                    public int x;
-                    public int y;
-                    private int getX() {
-                        return this.x;
-                    }
-                    public void translateX(int a) {
-                        this.x = this.getX() + a;
-                    }
-                }
-                `,
-                {
-                    resolve: true,
-                    checkType: true
-                });
-            done();
-        });
-        it('-> class w/ superclass private method use in an extending class', function(done: () => any) {
+        it('-> class w/ superclass private method use', function(done: () => any) {
             TAM.ensureResult(`
                 class Point {
                     public int x;
