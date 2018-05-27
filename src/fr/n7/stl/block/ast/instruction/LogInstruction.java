@@ -1,13 +1,9 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.instruction;
 
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
-import fr.n7.stl.block.ast.type.NamedType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Library;
@@ -17,11 +13,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import static fr.n7.stl.block.ast.type.AtomicType.*;
 
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a printer instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a printer instruction. */
 public class LogInstruction implements Instruction {
 
 	protected Expression parameter;
@@ -32,25 +24,16 @@ public class LogInstruction implements Instruction {
 		this.parameter = value;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "System.out.println(" + this.parameter + ");\n";
 	}
-	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
-	 */
+
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return parameter.resolve(scope);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#checkType()
-	 */
 	@Override
 	public boolean checkType() {
         parameterType = parameter.getType();
@@ -61,17 +44,11 @@ public class LogInstruction implements Instruction {
                 || parameterType == StringType;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#allocateMemory(fr.n7.stl.tam.ast.Register, int)
-	 */
 	@Override
 	public int allocateMemory(Register register, int offset) {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();

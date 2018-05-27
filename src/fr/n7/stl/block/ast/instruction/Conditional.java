@@ -12,15 +12,13 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import java.util.Optional;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a conditional instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a conditional instruction. */
 public class Conditional implements Instruction {
 
 	protected Expression condition;
+
 	protected Block thenBranch;
+
 	protected Optional<Block> elseBranch;
 
 	public Conditional(Expression _condition, Block _then, Block _else) {
@@ -35,17 +33,11 @@ public class Conditional implements Instruction {
 		this.elseBranch = Optional.empty();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "if (" + this.condition + " )" + this.thenBranch + ((this.elseBranch.isPresent())?(" else " + this.elseBranch.get()):"");
 	}
-	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
-	 */
+
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return condition.resolve(scope)
@@ -53,9 +45,6 @@ public class Conditional implements Instruction {
 				&& (! elseBranch.isPresent() || elseBranch.get().resolve(scope));
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#checkType()
-	 */
 	@Override
 	public boolean checkType() {
 		boolean b = condition.getType() == AtomicType.BooleanType;
@@ -71,9 +60,6 @@ public class Conditional implements Instruction {
 		return b;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#allocateMemory(fr.n7.stl.tam.ast.Register, int)
-	 */
 	@Override
 	public int allocateMemory(Register register, int offset) {
 	    thenBranch.allocateMemory(register, offset);
@@ -81,9 +67,6 @@ public class Conditional implements Instruction {
         return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Instruction#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
 		Fragment fragment = factory.createFragment();
@@ -115,7 +98,6 @@ public class Conditional implements Instruction {
 		if (elseBranch.isPresent()) {
 		    type = type.merge(elseBranch.get().getReturnType());
 		}
-
         return type;
 	}
 

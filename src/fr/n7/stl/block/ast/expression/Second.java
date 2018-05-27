@@ -9,36 +9,26 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node  for an expression extracting the second component in a couple.
- * @author Marc Pantel
- */
+/** Implementation of the ABSTRACT Syntax Tree node  for an expression extracting the second component in a couple. */
 public class Second implements Expression {
 
-	/**
-	 * AST node for the expression whose value must whose second element is extracted by the expression.
-	 */
+	/** AST node for the expression whose value must whose second element is extracted by the expression. */
 	private Expression target;
+
     private CoupleType targetType;
 
-    /**
-	 * Builds an ABSTRACT Syntax Tree node for an expression extracting the second component of a couple.
+    /** Builds an ABSTRACT Syntax Tree node for an expression extracting the second component of a couple.
 	 * @param _target : AST node for the expression whose value must whose second element is extracted by the expression.
 	 */
 	public Second(Expression _target) {
 		this.target = _target;
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
+	@Override
 	public String toString() {
 		return "(snd " + this.target + ")";
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getType()
-	 */
 	@Override
 	public Type getType() {
         Type targetType = target.getType();
@@ -50,17 +40,11 @@ public class Second implements Expression {
         return this.targetType.getSecond();
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
-	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return target.resolve(scope);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         final int firstLength = this.targetType.getFirst().length();

@@ -1,20 +1,14 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.scope;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/**
- * Implementation of a hierarchical scope using maps.
- * @author Marc Pantel
- *
- */
+/** Implementation of a hierarchical scope using maps. */
 public class SymbolTable implements HierarchicalScope<Declaration> {
-	
+
 	private Map<String, Declaration> declarations;
+
 	private Scope<Declaration> context;
 
 	public SymbolTable() {
@@ -26,9 +20,6 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
 		this.context = _context;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.scope.Scope#get(java.lang.String)
-	 */
 	@Override
 	public Declaration get(String name) {
 		if (this.declarations.containsKey(name)) {
@@ -42,25 +33,16 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.scope.Scope#contains(java.lang.String)
-	 */
 	@Override
 	public boolean contains(String name) {
 		return (this.declarations.containsKey(name));
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.scope.Scope#accepts(fr.n7.stl.block.ast.scope.Declaration)
-	 */
 	@Override
 	public boolean accepts(Declaration declaration) {
 		return (! this.contains(declaration.getName()));
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.scope.Scope#register(fr.n7.stl.block.ast.scope.Declaration)
-	 */
 	@Override
 	public void register(Declaration declaration) {
         if (this.accepts(declaration)) {
@@ -79,9 +61,6 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
                 declarations.put(alias, declaration);
     }
 
-    /* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.scope.HierarchicalScope#knows(java.lang.String)
-	 */
 	@Override
 	public boolean knows(String name) {
 		if (this.contains(name)) {
@@ -98,10 +77,7 @@ public class SymbolTable implements HierarchicalScope<Declaration> {
 			}
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
 		StringBuilder _local = new StringBuilder();
