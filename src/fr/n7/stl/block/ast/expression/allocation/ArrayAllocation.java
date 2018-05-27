@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package fr.n7.stl.block.ast.expression.allocation;
 
 import fr.n7.stl.block.ast.expression.BinaryOperator;
@@ -14,6 +17,10 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import static fr.n7.stl.block.ast.type.AtomicType.ErrorType;
 
+/**
+ * @author Marc Pantel
+ *
+ */
 public class ArrayAllocation implements Expression {
 
 	protected String name;
@@ -30,11 +37,17 @@ public class ArrayAllocation implements Expression {
 		this.size = _size;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "new " + ((this.element == null)?this.name:this.element) + "[ " + this.size + " ]"; 
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
+	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return (element != null || scope.knows(name))
@@ -42,12 +55,18 @@ public class ArrayAllocation implements Expression {
                 && size.resolve(scope);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getType()
+	 */
 	@Override
 	public Type getType() {
 		if (size.getType() != AtomicType.IntegerType) return ErrorType;
 	    return new ArrayType(element == null ? new NamedType(name) : element);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
+	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
