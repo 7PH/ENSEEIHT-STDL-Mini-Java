@@ -1054,15 +1054,15 @@ describe('# Resolve / CheckType hard tests', function () {
         it('-> chained abstract method w/ implemented method', function(done: () => any) {
             TAM.ensureResult(`
                 abstract class Point { 
-                    public abstract void getX();
+                    public abstract void compute();
                 }
 
                 abstract class PointNomme extends Point {
-                    public abstract void getX();
+                    public abstract void compute();
                 }
 
                 class PointNommeColore extends PointNomme {
-                    public void getX() {}
+                    public void compute() {}
                 }`,
                 {
                     resolve: true,
@@ -1073,13 +1073,36 @@ describe('# Resolve / CheckType hard tests', function () {
         it('-> chained abstract method w/ implemented method II', function(done: () => any) {
             TAM.ensureResult(`
                 abstract class Point { 
-                    public abstract void getX();
+                    public abstract void compute();
                 }
 
                 abstract class PointNomme extends Point {}
 
                 class PointNommeColore extends PointNomme {
-                    public void getX() {}
+                    public void compute() {}
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained abstract method w/ implemented method III', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void compute();
+                }
+
+                abstract class PointNomme extends Point {
+                    public abstract void compute();
+                    public abstract int getX();
+                }
+
+                class PointNommeColore extends PointNomme {
+                    public void compute() {}
+                    public int getX() {
+                        return 5;
+                    }
                 }`,
                 {
                     resolve: true,
@@ -1090,7 +1113,7 @@ describe('# Resolve / CheckType hard tests', function () {
         it('-> chained abstract method w/ unimplemented method', function(done: () => any) {
             TAM.ensureResult(`
                 abstract class Point { 
-                    public abstract void getX();
+                    public abstract void compute();
                 }
 
                 abstract class PointNomme extends Point { }
@@ -1104,6 +1127,130 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
+        it('-> chained abstract method w/ unimplemented method II', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void compute();
+                }
+
+                abstract class PointNomme extends Point {
+                    public abstract void compute();
+                }
+
+                class PointNommeColore extends PointNomme {
+                }`,
+                {
+                    resolve: false,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained abstract method w/ unimplemented method III', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void compute();
+                    public abstract int getX();
+                }
+
+                abstract class PointNomme extends Point {
+                    public void compute() {}
+
+                    public abstract int getX();
+                }
+
+                class PointNommeColore extends PointNomme {
+
+                }`,
+                {
+                    resolve: false,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained abstract method w/ far attribute use', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point {
+                    public int x;
+                    public abstract void compute();
+                    public abstract int getX();
+                }
+
+                abstract class PointNomme extends Point {
+                }
+
+                class PointNommeColore extends PointNomme {
+                    public void compute() { }
+                    public int getX() {
+                        return this.x;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained method ', function(done: () => any) {
+            //p.get().translate(1, 2)
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                    public int getX() {
+                        return this.x;
+                    }
+                    public int getY() {
+                        return this.y;
+                    }
+                    public void translate(int x, int y) {
+                        this.x = this.x + x;
+                        this.y = this.y + y;
+                    }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+                    public Point getP1() {
+                        return this.p1;
+                    }
+                    public Point getP2() {
+                        return this.p2;
+                    }
+                    public void translate(int tau) {
+                        this.getP1().translate(tau, tau);
+                        this.getP2().translate(tau, tau);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained method w/ attribute use', function(done: () => any) {
+            //p.get().translate(1, 2)
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+                    public void translate(int tau) {
+                        this.p1.x = this.p1.x + tau;
+                        this.p1.y = this.p1.y + tau;
+                        this.p2.x = this.p2.x + tau;
+                        this.p2.y = this.p2.y + tau;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        
     });
 });
 
@@ -1152,5 +1299,34 @@ describe('# TAM code', function() {
             });
         done();
     });
-
+    /*
+    it('-> extends w/ overloading', function(done: () => any) {
+        TAM.ensureResult(`
+            class Point {
+                public int x;
+                public int getX() {
+                    return this.x;
+                }
+                public void setX() {
+                    this.x = 5;
+                }
+            }
+            class Point2 extends Point {
+                public void setX() {
+                    this.x = 10;
+                }
+                public Point2() {}
+                public static void main (String args[]) {
+                    Point2 p2 = new Point2();
+                    p2.setX();
+                    System.out.println(p2.getX());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    */
 });
