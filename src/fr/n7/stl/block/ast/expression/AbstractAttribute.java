@@ -1,6 +1,8 @@
 package fr.n7.stl.block.ast.expression;
 
 
+import fr.n7.stl.block.ast.object.AbstractThisUse;
+import fr.n7.stl.block.ast.object.AccessModifier;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -38,10 +40,19 @@ public abstract class AbstractAttribute extends DefinitionAccess {
             Logger.error("Class " + classDeclaration.getName() + " has no attribute member " + name);
             return false;
         }
+        
+        AttributeDefinition tmp = classDeclaration.getAttributeDeclaration(name);
+     
+        
+        if(tmp.getAccessModifier() == AccessModifier.PUBLIC || tmp.getParent() == ((AbstractThisUse) scope.get("this")).programDeclaration ) {
+        	this.attributeDefinition = tmp;
+        	return true;
+        } else {
+        	Logger.error("Could not access definition " + this.name + " of class " + tmp.getParent().getName() + ". The definition does not exist or is private.");
+        	return false;
+        }
 
-        this.attributeDefinition = classDeclaration.getAttributeDeclaration(name);
 
-        return true;
     }
 
     /**

@@ -8,6 +8,8 @@ public abstract class Definition implements Declaration, Instruction {
 	protected AccessModifier accessModifier;
 
     protected DefinitionModifier definitionModifier;
+    
+    protected ClassDeclaration parent;
 
 	public AccessModifier getAccessModifier() {
 		return this.accessModifier;
@@ -23,6 +25,14 @@ public abstract class Definition implements Declaration, Instruction {
 
 	public void setDefinitionModifier(DefinitionModifier _definitionModifier) {
 		this.definitionModifier = _definitionModifier;
+	}
+
+	public ClassDeclaration getParent() {
+		return parent;
+	}
+
+	public void setParent(ClassDeclaration parent) {
+		this.parent = parent;
 	}
 
 	public boolean isStatic() {
