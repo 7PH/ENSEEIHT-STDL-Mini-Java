@@ -1,7 +1,6 @@
 package fr.n7.stl.block.ast.expression;
 
 
-import fr.n7.stl.block.ast.expression.accessible.DefinitionAccess;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
