@@ -942,10 +942,81 @@ describe('# Resolve / CheckType hard tests', function () {
                 }
                 class ColoredPoint extends Point {
                     private String color;
-                    public Segment(int a, int b, String color) {
+                    public ColoredPoint(int a, int b, String color) {
                         this.x = a;
                         this.y = b;
                         this.color = color;
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ superclass public method use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    public int getX() {
+                        return this.x;
+                    }
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+                    public ColoredPoint(int a, int b, String color) {
+                        this.x = a;
+                        this.y = b;
+                        this.color = color;
+                    }
+                    public void translateX(int a) {
+                        this.x = this.getX() + a;
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ private method use in inner class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    private int getX() {
+                        return this.x;
+                    }
+                    public void translateX(int a) {
+                        this.x = this.getX() + a;
+                    }
+                }
+                `,
+                {
+                    resolve: true,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> class w/ superclass private method use in an extending class', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    private int getX() {
+                        return this.x;
+                    }
+                }
+                class ColoredPoint extends Point {
+                    private String color;
+                    public ColoredPoint(int a, int b, String color) {
+                        this.x = a;
+                        this.y = b;
+                        this.color = color;
+                    }
+                    public void translateX(int a) {
+                        this.x = this.getX() + a;
                     }
                 }`,
                 {

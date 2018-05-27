@@ -1,9 +1,14 @@
-class Thing { }
-
-class Box<T extends Thing> {
-    private Thing t;
-
-    public void set(T t) { 
-        this.t = t; 
+class Point {
+    private int x;
+    private int y;
+}
+class Segment {
+    private Point p1;
+    private Point p2;
+    public void translate(int tau) {
+        this.p1.x = this.p1.x + tau;
+        this.p1.y = this.p1.y + tau;
+        this.p2.x = this.p2.x + tau;
+        this.p2.y = this.p2.y + tau;
     }
 }
