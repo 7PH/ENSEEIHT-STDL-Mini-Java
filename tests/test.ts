@@ -1400,6 +1400,29 @@ describe('# Resolve / CheckType hard tests', function () {
 });
 
 /* ###############################################
+ * ##     RESOLVE/CHECKTYPE TESTS - PART IV     ##
+ * ###############################################
+ */
+describe('# Resolve / CheckType impossible tests', function () {
+    this.slow(SLOW_TEST_MS);
+
+    /* ********************* */
+    describe('# About X-Files', function() {
+        it('-> 51 Area', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+    });
+});
+
+/* ###############################################
  * ##               TAM CODE TESTS              ##
  * ###############################################
  */
