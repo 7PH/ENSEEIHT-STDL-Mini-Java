@@ -10,10 +10,6 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
 public class AttributeAssignment extends AbstractAttribute implements AssignableExpression {
-	
-	private InstanceType objectType;
-	
-	private AttributeDefinition attribute;
 
     public AttributeAssignment(String target, String name) {
         super(target, name);

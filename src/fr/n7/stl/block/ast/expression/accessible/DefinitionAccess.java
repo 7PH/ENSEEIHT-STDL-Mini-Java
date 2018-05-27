@@ -1,5 +1,6 @@
-package fr.n7.stl.block.ast.expression;
+package fr.n7.stl.block.ast.expression.accessible;
 
+import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AbstractThisUse;
 import fr.n7.stl.block.ast.object.InstanceType;

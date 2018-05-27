@@ -3,7 +3,6 @@ package fr.n7.stl.block.ast.expression.accessible;
 import fr.n7.stl.block.ast.expression.AbstractUse;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
-import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
