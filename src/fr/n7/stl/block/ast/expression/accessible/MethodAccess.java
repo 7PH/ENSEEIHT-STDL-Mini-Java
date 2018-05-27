@@ -67,13 +67,6 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             return false;
         }
 
-        // Define a new scope for it
-    	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
-
-    	if (! methodDefinition.resolve(newScope)) {
-        	Logger.error("The method " + methodDefinition.getName() + " call could not be resolved.");
-        	return false;    		
-        }
         return true;
     }
 
