@@ -1410,8 +1410,8 @@ describe('# Resolve / CheckType impossible tests', function () {
     describe('# About X-Files', function() {
         it('-> 51 Area', function(done: () => any) {
             TAM.ensureResult(`
-                class Point {
-
+                class A {
+                
                 }`,
                 {
                     resolve: true,
@@ -1427,6 +1427,7 @@ describe('# Resolve / CheckType impossible tests', function () {
  * ###############################################
  */
 describe('# TAM code', function() {
+    /*
     it('-> public static void main()', function(done: () => any) {
         TAM.ensureResult(`
             class Main {
@@ -1438,10 +1439,11 @@ describe('# TAM code', function() {
             }`,
             {
                 resolve: true,
-                checkType : true
+                checkType : true, 
+                output: ["3"]
             });
         done();
-    });
+    }); */ /*
     it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
         TAM.ensureResult(`
             class SecretNumber {
@@ -1463,11 +1465,11 @@ describe('# TAM code', function() {
             }`,
             {
                 resolve: true,
-                checkType : true
+                checkType: true,
+                output: ["6"]
             });
         done();
-    });
-    /*
+    }); */ /*
     it('-> extends w/ overloading', function(done: () => any) {
         TAM.ensureResult(`
             class Point {
@@ -1492,9 +1494,9 @@ describe('# TAM code', function() {
             }`,
             {
                 resolve: true,
-                checkType : true
+                checkType : true,
+                output: ["10"]
             });
         done();
-    });
-    */
+    }); */
 });
