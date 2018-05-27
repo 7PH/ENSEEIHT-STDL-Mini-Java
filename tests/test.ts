@@ -914,7 +914,7 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
-        it('-> this call in static void', function(done: () => any) {
+        it('-> this reference in static context', function(done: () => any) {
             TAM.ensureResult(`
                 class Color {
                     public String color;
@@ -928,7 +928,7 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
-        it('-> static void call in another class', function(done: () => any) {
+        it('-> call of static method from another class', function(done: () => any) {
             TAM.ensureResult(`
                 class ColorRed {
                     public static final String ROUGE = "rouge";
