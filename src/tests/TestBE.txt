@@ -1,18 +1,5 @@
-class Random {
-    private int x;
-
-    public Random(int y) {
-        this.x = y;
-    }
-
-    public int getRandom() {
-        return 5;
-    }
-}
-class Main {
-    public static void main (String args[]) {
-        Random random = new Random(6);
-        int value = random.getRandom();
-        System.out.println(value);
-    }
+class Box<T> {
+    private T t;
+    public void set(T t) { this.t = t; }
+    public T get() { return this.t; }
 }
