@@ -44,11 +44,11 @@ public class InstanceType implements Type {
 		 * /!\ Verifier les types génériques
 		 */
 
-		// If "this" reffers to a generic type check if they are the same.
+		// If "this" refers to a generic type check if they are the same.
 		if (this.genericDeclaration != null) {
 			if (other instanceof InstanceType) {
 				if (((InstanceType) other).getGenericDeclaration() != null) {
-					// other reffers to a generic type : check if they have the same name
+					// other refers to a generic type : check if they have the same name
 					GenericType g = ((InstanceType) other).getGenericDeclaration();
 					if (g.getName().equals(this.genericDeclaration.getName())) {
 						// They have the same name : they are compatible.
@@ -59,12 +59,13 @@ public class InstanceType implements Type {
 					}
 				} else {
 					// other is not a generic type : check if this.generic type extends other
-					 if (!this.genericDeclaration.getExtendedTypes().contains((InstanceType) other)) {
-						Logger.error("Generic type " + this.genericDeclaration + " is not compatible with the type " + other);
-						return false;
-					 } else {
-						 return true;
-					 }
+					for (InstanceType it : this.genericDeclaration.getExtendedTypes()) {
+						if (it.equalsTo(other)) {
+							return true;
+						}
+					}
+					Logger.error("Generic type " + this.genericDeclaration.getName() + " is not compatible with " + other);
+					return false;
 				}
 			} else {
 				Logger.error("Generic type " + this.name + " is not compatible with the atomic type " + other);
@@ -255,7 +256,7 @@ public class InstanceType implements Type {
 			return false;
 		} else {
 			InstanceType _typeO = (InstanceType) _o;
-			if (this.name.equals(_typeO) && this.typeInstantiations.equals(_typeO.getTypeInstantiations())) {
+			if (this.name.equals(_typeO.name) && this.typeInstantiations.equals(_typeO.getTypeInstantiations())) {
 				// TODO ? Do we need to check if it refers to the same declaration ?
 				return true;
 			} else {

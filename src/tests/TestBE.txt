@@ -1,5 +1,9 @@
-class Box<T> {
-    private T t;
-    public void set(T t) { this.t = t; }
-    public T get() { return this.t; }
+class Thing { }
+
+class Box<T extends Thing> {
+    private Thing t;
+
+    public void set(T t) { 
+        this.t = t; 
+    }
 }
