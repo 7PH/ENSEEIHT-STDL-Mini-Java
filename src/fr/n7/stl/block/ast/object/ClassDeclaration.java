@@ -1,6 +1,5 @@
 package fr.n7.stl.block.ast.object;
 
-import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -134,8 +133,8 @@ public class ClassDeclaration extends ProgramDeclaration {
                 return false;
         }
 
-        // Verify if every superclass abstract methods are implemented
-        if (this.extendedClass.size() > 0) {
+        // Verify if every superclass abstract methods are implemented if the class is not abstract
+        if ((this.extendedClass.size() > 0) && !this.isAbstract()) {
             InstanceType tp = this.extendedClass.get(0);
             // Check if the superclass is well a simple class
             if (tp.getDeclaration() instanceof InterfaceDeclaration) {
@@ -143,18 +142,23 @@ public class ClassDeclaration extends ProgramDeclaration {
                 return false;
             }
             ClassDeclaration classDeclaration = (ClassDeclaration) tp.getDeclaration();
-            for (Definition d : classDeclaration.getDefinitions()) {
-                if (d instanceof MethodDefinition) {
-                    MethodDefinition md = (MethodDefinition) d;
-
-                    // For each abstract method of the superclass, we check if it is implemented
-                    if (md.isAbstract()
-                            && ! definesMethod(md.getSignature().getMethodName(), false)) {
-                        Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
+            boolean ret = checkForSuperClassMethods(classDeclaration);
+            if (!ret) {
+                return false;
+            }
+            if (classDeclaration.getExtendedClass().size() > 0) {
+                Logger.error("" + classDeclaration.getExtendedClass());
+                InstanceType superClass = classDeclaration.getExtendedClass().get(0);
+                while (superClass != null) {
+                    ClassDeclaration cd = (ClassDeclaration) superClass.getDeclaration();
+                    boolean ret2 = checkForSuperClassMethods(cd);
+                    if (!ret2) {
                         return false;
                     }
+                    superClass = ((cd.getExtendedClass().size() > 0) ? cd.getExtendedClass().get(0) : null);
                 }
             }
+
         }
 
         // Define a new scope for methods/attributes
@@ -171,6 +175,20 @@ public class ClassDeclaration extends ProgramDeclaration {
         return true;
     }
 
+    private boolean checkForSuperClassMethods(ClassDeclaration cd) {
+        for (Definition d : cd.getDefinitions()) {
+            if (d instanceof MethodDefinition) {
+                MethodDefinition md = (MethodDefinition) d;
+                // For each abstract method of the superclass, we check if it is implemented
+                if (md.isAbstract() && ! definesMethod(md.getSignature().getMethodName(), false)) {
+                    Logger.error("The class " + this.getName() + ", by extending " + cd.getName() + ", needs to implement the method " + md.getName() + ".");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /*
 	private List<Signature> getClassSignatures() {
 		List<Signature> classSignatures = new LinkedList<>();
 		for (Definition d : this.definitions) {
@@ -179,7 +197,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 			}
 		}
 		return classSignatures;
-	}
+	}*/
 
 	@Override
 	public boolean checkType() {

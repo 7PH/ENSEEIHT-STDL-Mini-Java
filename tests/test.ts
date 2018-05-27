@@ -977,6 +977,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
     });
+
     /* ********************* */
     describe('# About generics', function() {
         it('-> basic tests', function(done: () => any) {
@@ -1042,6 +1043,63 @@ describe('# Resolve / CheckType hard tests', function () {
                 }`,
                 {
                     resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+    });
+
+    /* ********************* */
+    describe('# About chains', function() {
+        it('-> chained abstract method w/ implemented method', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void getX();
+                }
+
+                abstract class PointNomme extends Point {
+                    public abstract void getX();
+                }
+
+                class PointNommeColore extends PointNomme {
+                    public void getX() {}
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained abstract method w/ implemented method II', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void getX();
+                }
+
+                abstract class PointNomme extends Point {}
+
+                class PointNommeColore extends PointNomme {
+                    public void getX() {}
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> chained abstract method w/ unimplemented method', function(done: () => any) {
+            TAM.ensureResult(`
+                abstract class Point { 
+                    public abstract void getX();
+                }
+
+                abstract class PointNomme extends Point { }
+
+                class PointNommeColore extends PointNomme {
+
+                }`,
+                {
+                    resolve: false,
                     checkType : true
                 });
             done();

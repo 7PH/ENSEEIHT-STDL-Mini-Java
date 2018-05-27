@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fr.n7.stl.block.ast.ASTNode;
-import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
