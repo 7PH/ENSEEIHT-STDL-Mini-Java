@@ -8,19 +8,35 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/** ABSTRACT Syntax Tree node for a binary expression. */
+/**
+ * ABSTRACT Syntax Tree node for a binary expression.
+ * @author Marc Pantel
+ *
+ */
+
+/**
+ * @author Marc Pantel
+ *
+ */
 public class BinaryExpression implements Expression {
 
-	/** AST node for the expression whose value is the left parameter for the binary expression. */
+	/**
+	 * AST node for the expression whose value is the left parameter for the binary expression.
+	 */
 	protected Expression left;
 	
-	/** AST node for the expression whose value is the left parameter for the binary expression. */
+	/**
+	 * AST node for the expression whose value is the left parameter for the binary expression.
+	 */
 	protected Expression right;
 	
-	/** Binary operator computed by the Binary Expression. */
+	/**
+	 * Binary operator computed by the Binary Expression.
+	 */
 	protected BinaryOperator operator;
 	
-	/** Builds a binary expression ABSTRACT Syntax Tree node from the left and right sub-expressions
+	/**
+	 * Builds a binary expression ABSTRACT Syntax Tree node from the left and right sub-expressions
 	 * and the binary operation.
 	 * @param _left : Expression for the left parameter.
 	 * @param _operator : Binary Operator.
@@ -32,11 +48,17 @@ public class BinaryExpression implements Expression {
 		this.operator = _operator;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "(" + this.left + " " + this.operator + " " + this.right + ")";
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
+	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		boolean _left = this.left.resolve(scope);
@@ -44,6 +66,9 @@ public class BinaryExpression implements Expression {
 		return _left && _right;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getType()
+	 */
 	@Override
 	public Type getType() {
 		Type _left = this.left.getType();
@@ -118,6 +143,9 @@ public class BinaryExpression implements Expression {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
+	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
 		Fragment result = factory.createFragment();

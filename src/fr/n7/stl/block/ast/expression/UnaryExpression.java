@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.expression.accessible.AccessibleExpression;
@@ -9,14 +12,18 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/** Implementation of the ABSTRACT Syntax Tree node for an unary operation expression. */
+/**
+ * Implementation of the ABSTRACT Syntax Tree node for an unary operation expression.
+ * @author Marc Pantel
+ *
+ */
 public class UnaryExpression implements Expression {
 
 	private UnaryOperator operator;
-
 	private Expression parameter;
 	
-	/** Builds a unary expression ABSTRACT Syntax Tree node from the parameter sub-expression
+	/**
+	 * Builds a unary expression ABSTRACT Syntax Tree node from the parameter sub-expression
 	 * and the unary operation.
 	 * @param _operator : Unary Operator.
 	 * @param _parameter : Expression for the parameter.
@@ -26,16 +33,25 @@ public class UnaryExpression implements Expression {
 		this.parameter = _parameter;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "(" + this.operator + " " + this.parameter + ")";
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
+	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return this.parameter.resolve(scope);
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getType()
+	 */
 	@Override
 	public Type getType() {
 		Type resultType = this.parameter.getType();
@@ -64,6 +80,9 @@ public class UnaryExpression implements Expression {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
+	 */
 	@Override
 	public Fragment getCode(TAMFactory _factory) {
 		Fragment _result = this.parameter.getCode(_factory);

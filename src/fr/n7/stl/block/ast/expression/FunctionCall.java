@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.instruction.Instruction;
@@ -13,20 +16,29 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import java.util.List;
 
-/** ABSTRACT Syntax Tree node for a function call expression. */
+/**
+ * ABSTRACT Syntax Tree node for a function call expression.
+ * @author Marc Pantel
+ * @TODO resolve
+ *
+ */
 public class FunctionCall implements Expression, Instruction {
 
-	/** Name of the called function.
+	/**
+	 * Name of the called function.
 	 * TODO : Should be an expression.
 	 */
 	protected String name;
 	
-	/** Declaration of the called function after name resolution.
+	/**
+	 * Declaration of the called function after name resolution.
 	 * TODO : Should rely on the VariableUse class.
 	 */
 	protected FunctionDeclaration function;
 	
-	/** List of AST nodes that computes the values of the parameters for the function call. */
+	/**
+	 * List of AST nodes that computes the values of the parameters for the function call.
+	 */
 	protected List<Expression> arguments;
 	
 	/**
@@ -39,6 +51,9 @@ public class FunctionCall implements Expression, Instruction {
 		this.arguments = _arguments;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		//String _result = ((this.function == null) ? this.name : this.function) + "(";
@@ -49,6 +64,9 @@ public class FunctionCall implements Expression, Instruction {
 		return  _result + ")";
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.HierarchicalScope)
+	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 	    if (! scope.knows(name)) return false;
@@ -60,6 +78,9 @@ public class FunctionCall implements Expression, Instruction {
         return true;
 	}
 
+    /* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getType()
+	 */
 	@Override
 	public Type getType() {
 	    List<ParameterDeclaration> parameterDeclarations = function.getParameters();
@@ -73,17 +94,25 @@ public class FunctionCall implements Expression, Instruction {
 		return function.getType();
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
+	 */
     @Override
     public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
+
         //int parametersLength = function.getParametersLength();
+
 		for (Expression argument : arguments)
 		    fragment.append(argument.getCode(factory));
+
         fragment.add(factory.createPush(function.getType().length()));
         fragment.add(factory.createCall(function.getStartLabel(), Register.SB));
         fragment.add(factory.createPop(function.getType().length(), function.getParametersLength()));
+
         return fragment;
     }
+
 
     /* @TODO */
     @Override

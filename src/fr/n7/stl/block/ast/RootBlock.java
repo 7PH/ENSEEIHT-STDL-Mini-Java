@@ -8,8 +8,8 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import java.util.List;
 
 public class RootBlock extends Block {
-
-    /** Constructor for the root block.
+    /**
+     * Constructor for the root block.
      * @param _instructions
      */
     public RootBlock(List<Instruction> _instructions) {

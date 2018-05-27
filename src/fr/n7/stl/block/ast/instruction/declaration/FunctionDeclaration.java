@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package fr.n7.stl.block.ast.instruction.declaration;
 
 import fr.n7.stl.block.ast.Block;
@@ -14,29 +17,39 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import java.util.Iterator;
 import java.util.List;
 
-/** ABSTRACT Syntax Tree node for a function declaration. */
+/**
+ * ABSTRACT Syntax Tree node for a function declaration.
+ * @author Marc Pantel
+ */
 public class FunctionDeclaration implements Instruction, Declaration {
 
-	/** Name of the function */
+	/**
+	 * Name of the function
+	 */
 	protected String name;
 	
-	/** AST node for the returned type of the function */
+	/**
+	 * AST node for the returned type of the function
+	 */
 	protected Type type;
 	
-	/** List of AST nodes for the formal parameters of the function */
+	/**
+	 * List of AST nodes for the formal parameters of the function
+	 */
 	protected List<ParameterDeclaration> parameters;
 	
-	/** AST node for the body of the function */
+	/**
+	 * AST node for the body of the function
+	 */
 	protected Block body;
 
 	/** Offset of the function */
-	private int offset;
-
-	private Register register;
-
+    private int offset;
+    private Register register;
     private String startLabel;
 
-    /** Builds an AST node for a function declaration
+    /**
+	 * Builds an AST node for a function declaration
 	 * @param _name : Name of the function
 	 * @param _type : AST node for the returned type of the function
 	 * @param _parameters : List of AST nodes for the formal parameters of the function
@@ -52,7 +65,10 @@ public class FunctionDeclaration implements Instruction, Declaration {
 	public List<ParameterDeclaration> getParameters() {
 		return parameters;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		String _result = this.type + " " + this.name + " (";
@@ -66,16 +82,25 @@ public class FunctionDeclaration implements Instruction, Declaration {
 		return _result + ") " + this.body;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Declaration#getName()
+	 */
 	@Override
 	public String getName() {
 		return this.name;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.Declaration#getType()
+	 */
 	@Override
 	public Type getType() {
 		return this.type;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.instruction.Instruction#resolve(fr.n7.stl.block.ast.scope.Scope)
+	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		if (! scope.accepts(this)) return false;
@@ -102,6 +127,9 @@ public class FunctionDeclaration implements Instruction, Declaration {
         return ++ FunctionDeclaration.ID;
     }
 
+    /* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.instruction.Instruction#checkType()
+	 */
 	@Override
 	public boolean checkType() {
 	    for (ParameterDeclaration parameterDeclaration: parameters) {
@@ -123,6 +151,9 @@ public class FunctionDeclaration implements Instruction, Declaration {
 	    return length;
     }
 
+	/* (non-Javadoc)
+	 * @see fr.n7.stl.block.ast.instruction.Instruction#allocateMemory(fr.n7.stl.tam.ast.Register, int)
+	 */
 	@Override
 	public int allocateMemory(Register register, int offset) {
 	    this.register = register;
