@@ -892,6 +892,14 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
     });
+});
+
+/* ###############################################
+ * ##     RESOLVE/CHECKTYPE TESTS - PART III    ##
+ * ###############################################
+ */
+describe('# Resolve / CheckType hard tests', function () {
+    this.slow(SLOW_TEST_MS);
 
     /* ********************* */
     describe('# About modifier', function() { 
@@ -969,7 +977,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
     });
-
+    /* ********************* */
     describe('# About generics', function() {
         it('-> basic tests', function(done: () => any) {
             TAM.ensureResult(`
@@ -984,7 +992,6 @@ describe('# Resolve / CheckType medium tests', function () {
                 });
             done();
         });
-
         it('-> generic attribute', function(done: () => any) {
             TAM.ensureResult(`
                 class Box<T> {
@@ -996,7 +1003,6 @@ describe('# Resolve / CheckType medium tests', function () {
                 });
             done();
         });
-
         it('-> generic methods', function(done: () => any) {
             TAM.ensureResult(`
                 class Box<T> {
@@ -1010,7 +1016,6 @@ describe('# Resolve / CheckType medium tests', function () {
                 });
             done();
         });
-
         it('-> generic with wrong checktype affectation', function(done: () => any) {
             TAM.ensureResult(`
                 class Box<T, X> {
@@ -1024,7 +1029,6 @@ describe('# Resolve / CheckType medium tests', function () {
                 });
             done();
         });
-
         it('-> generic type extending a class', function(done: () => any) {
             TAM.ensureResult(`
                 class Thing { }
@@ -1042,55 +1046,53 @@ describe('# Resolve / CheckType medium tests', function () {
                 });
             done();
         });
-
     });
+});
 
-
-
-    describe('# TAM code', function() {
-        it('-> public static void main()', function(done: () => any) {
-            TAM.ensureResult(`
-                class Main {
-                    public static void main (String args[]) {
-                        int a = 1;
-                        int b = 2;
-                        System.out.println(a + b);
-                    }
-                }`,
-                {
-                    resolve: true,
-                    checkType : true
-                });
-            done();
-        });
-
-
-        it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
-            TAM.ensureResult(`
-                class SecretNumber {
-                    private int number;
-                
-                    public SecretNumber() {
-                        this.number = 6;
-                    }
-                
-                    public int get() {
-                        return this.number;
-                    }
-                
-                    public static void main (String args[]) {
-                        SecretNumber secretNumber = new SecretNumber();
-                        int number = secretNumber.get();
-                        System.out.println(number);
-                    }
-                }`,
-                {
-                    resolve: true,
-                    checkType : true
-                });
-            done();
-        });
-
+/* ###############################################
+ * ##               TAM CODE TESTS              ##
+ * ###############################################
+ */
+describe('# TAM code', function() {
+    it('-> public static void main()', function(done: () => any) {
+        TAM.ensureResult(`
+            class Main {
+                public static void main (String args[]) {
+                    int a = 1;
+                    int b = 2;
+                    System.out.println(a + b);
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
+        TAM.ensureResult(`
+            class SecretNumber {
+                private int number;
+            
+                public SecretNumber() {
+                    this.number = 6;
+                }
+            
+                public int get() {
+                    return this.number;
+                }
+            
+                public static void main (String args[]) {
+                    SecretNumber secretNumber = new SecretNumber();
+                    int number = secretNumber.get();
+                    System.out.println(number);
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
     });
 
 });
