@@ -1191,7 +1191,6 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method ', function(done: () => any) {
-            //p.get().translate(1, 2)
             TAM.ensureResult(`
                 class Point {
                     private int x;
@@ -1228,7 +1227,6 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method w/ attribute use', function(done: () => any) {
-            //p.get().translate(1, 2)
             TAM.ensureResult(`
                 class Point {
                     public int x;
