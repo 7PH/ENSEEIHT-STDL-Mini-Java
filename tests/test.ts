@@ -1226,7 +1226,7 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
-        it('-> chained method w/ attribute use', function(done: () => any) {
+        it('-> chained method w/ public attribute use', function(done: () => any) {
             TAM.ensureResult(`
                 class Point {
                     public int x;
@@ -1248,7 +1248,28 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
-        
+        it('-> chained method w/ private attribute use', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+                    public void translate(int tau) {
+                        this.p1.x = this.p1.x + tau;
+                        this.p1.y = this.p1.y + tau;
+                        this.p2.x = this.p2.x + tau;
+                        this.p2.y = this.p2.y + tau;
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType : true
+                });
+            done();
+        });
     });
 });
 
