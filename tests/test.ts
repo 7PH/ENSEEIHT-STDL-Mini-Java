@@ -1316,6 +1316,42 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
+        it('-> chained method w/ private one', function(done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    private int y;
+                    public int getX() {
+                        return this.x;
+                    }
+                    public int getY() {
+                        return this.y;
+                    }
+                    private void translate(int x, int y) {
+                        this.x = this.x + x;
+                        this.y = this.y + y;
+                    }
+                }
+                class Segment {
+                    private Point p1;
+                    private Point p2;
+                    public Point getP1() {
+                        return this.p1;
+                    }
+                    public Point getP2() {
+                        return this.p2;
+                    }
+                    public void translate(int tau) {
+                        this.getP1().translate(tau, tau);
+                        this.getP2().translate(tau, tau);
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType : true
+                });
+            done();
+        });
         it('-> chained method w/ public attribute use', function(done: () => any) {
             TAM.ensureResult(`
                 class Point {
