@@ -18,7 +18,7 @@ public abstract class DefinitionAccess implements Instruction, Expression {
     protected String name;
 
     protected Expression object;
-    
+
     protected InstanceType objectType;
 
     protected ProgramDeclaration programDeclaration;
@@ -39,33 +39,34 @@ public abstract class DefinitionAccess implements Instruction, Expression {
     public final boolean resolve(HierarchicalScope<Declaration> scope) {
 
         if (object == null) {
-            if (! scope.knows(target)) {
+            // Recover declaration from scope
+            if (!scope.knows(target)) {
                 Logger.error("MethodAccess: Unknown identifier: " + target);
                 return false;
             }
-
             Declaration declaration = scope.get(target);
+            
             if (declaration instanceof AbstractThisUse) {
-                this.programDeclaration = ((AbstractThisUse)declaration).programDeclaration;
+                this.programDeclaration = ((AbstractThisUse) declaration).programDeclaration;
             } else if (declaration instanceof VariableDeclaration) {
-                if (! (declaration.getType() instanceof  InstanceType)) {
-                    // appel de méthode sur une variable non objet
+                if (!(declaration.getType() instanceof InstanceType)) {
+                    // Method call on a non-object variable
                     Logger.error("Calling a method on a non-object " + target);
                     return false;
                 }
-                InstanceType type = (InstanceType)declaration.getType();
+                InstanceType type = (InstanceType) declaration.getType();
                 this.programDeclaration = type.getDeclaration();
             } else {
                 this.programDeclaration = (ProgramDeclaration) scope.get(target);
             }
             this.objectType = (InstanceType) programDeclaration.getType();
         } else {
-            if (! object.resolve(scope)) {
+            if (!object.resolve(scope)) {
                 Logger.error("Could not resolve attribute assignment because of: " + object + ".");
                 return false;
             }
             Type type = object.getType();
-            if (! (type instanceof InstanceType)) {
+            if (!(type instanceof InstanceType)) {
                 Logger.error(object + " is not a InstanceType.");
                 return false;
             }

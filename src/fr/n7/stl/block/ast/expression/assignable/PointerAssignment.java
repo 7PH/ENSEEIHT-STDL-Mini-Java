@@ -7,24 +7,16 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for an expression whose computation assigns the content of a pointed cell.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for an expression whose computation assigns the content of a pointed cell. */
 public class PointerAssignment extends AbstractPointer implements AssignableExpression {
 
-	/**
-	 * Construction for the implementation of a pointer content assignment expression ABSTRACT Syntax Tree node.
+	/** Construction for the implementation of a pointer content assignment expression ABSTRACT Syntax Tree node.
 	 * @param _pointer ABSTRACT Syntax Tree for the pointer expression in a pointer content assignment expression.
 	 */
 	public PointerAssignment(Expression _pointer) {
 		super(_pointer);
 	}
-	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.impl.PointerAccessImpl#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
+
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         int offset = ((VariableAssignment)pointer).declaration.getOffset();
@@ -35,5 +27,5 @@ public class PointerAssignment extends AbstractPointer implements AssignableExpr
 	    fragment.add(factory.createStoreI(size)); // store data
 	    return fragment;
 	}
-	
+
 }

@@ -18,10 +18,13 @@ public class AttributeAccess extends AbstractAttribute implements Expression {
     }
 
     @Override
-    public Fragment getCode(TAMFactory factory) {
-        Fragment fragment = factory.createFragment();
+    public boolean checkType() {
+        return false;
+    }
 
-        return fragment;
+    @Override
+    public Type getReturnType() {
+        return null;
     }
 
     @Override
@@ -30,12 +33,8 @@ public class AttributeAccess extends AbstractAttribute implements Expression {
     }
 
     @Override
-    public boolean checkType() {
-        return false;
-    }
-
-    @Override
-    public Type getReturnType() {
-        return null;
+    public Fragment getCode(TAMFactory factory) {
+        Fragment fragment = factory.createFragment();
+        return fragment;
     }
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.value;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -10,24 +7,14 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * @author Marc Pantel
- *
- */
 public enum BooleanValue implements Value {
-	
-	/**
-	 * Represents the True value.
-	 */
+
+	/** Represents the True value. */
 	True,
-	/**
-	 * Represents the False value.
-	 */
+
+	/** Represents the False value. */
 	False;
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Enum#toString()
-	 */
+
 	public String toString() {
 		switch (this) {
 		case False: return "false";
@@ -37,25 +24,16 @@ public enum BooleanValue implements Value {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
-	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getType()
-	 */
 	@Override
 	public Type getType() {
 		return AtomicType.BooleanType;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory _factory) {
 		Fragment _code = _factory.createFragment();
@@ -71,5 +49,5 @@ public enum BooleanValue implements Value {
 		}
 		return _code;
 	}
-	
+
 }

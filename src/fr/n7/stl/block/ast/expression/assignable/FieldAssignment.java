@@ -6,15 +6,10 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for an expression whose computation assigns a field in a record.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for an expression whose computation assigns a field in a record. */
 public class FieldAssignment extends AbstractField implements AssignableExpression {
 
-	/**
-	 * Construction for the implementation of a record field assignment expression ABSTRACT Syntax Tree node.
+	/** Construction for the implementation of a record field assignment expression ABSTRACT Syntax Tree node.
 	 * @param record ABSTRACT Syntax Tree for the record part in a record field assignment expression.
 	 * @param name Name of the field in the record field assignment expression.
 	 */
@@ -22,15 +17,10 @@ public class FieldAssignment extends AbstractField implements AssignableExpressi
 		super(record, name);
 	}
 	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.impl.FieldAccessImpl#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         int offset = ((VariableAssignment)record).declaration.getOffset();
-
         FieldDeclaration field = null;
-
         int lengthBefore = 0;
         for (FieldDeclaration fieldDeclaration: recordType.getFields()) {
             if (fieldDeclaration.getName().equals(name)) {
@@ -39,7 +29,6 @@ public class FieldAssignment extends AbstractField implements AssignableExpressi
             }
             lengthBefore += fieldDeclaration.getType().length();
         }
-
         Fragment fragment = factory.createFragment();
         fragment.add(factory.createLoadL(offset));
         fragment.add(factory.createLoadL(lengthBefore));

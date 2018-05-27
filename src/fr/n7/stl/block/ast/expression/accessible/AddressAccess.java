@@ -9,10 +9,6 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * @author Marc Pantel
- *
- */
 public class AddressAccess implements AccessibleExpression {
 
 	protected AssignableExpression assignable;
@@ -21,33 +17,22 @@ public class AddressAccess implements AccessibleExpression {
 		this.assignable = _assignable;
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.expression.Expression#resolve(fr.n7.stl.block.ast.scope.Scope)
-	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-        return assignable.resolve(scope);
-    }
-	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getType()
-	 */
+		return assignable.resolve(scope);
+	}
+
 	@Override
 	public Type getType() {
-	    return new PointerType(assignable.getType());
+		return new PointerType(assignable.getType());
 	}
-	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.Expression#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
+
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-	    int offset = ((VariableAssignment) assignable).getDeclaration().getOffset();
-
-	    Fragment fragment = factory.createFragment();
-        fragment.add(factory.createLoadL(offset));
-        return fragment;
+		int offset = ((VariableAssignment) assignable).getDeclaration().getOffset();
+		Fragment fragment = factory.createFragment();
+		fragment.add(factory.createLoadL(offset));
+		return fragment;
 	}
-
 
 }

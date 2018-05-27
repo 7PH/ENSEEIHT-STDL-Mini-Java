@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractArray;
@@ -11,14 +8,10 @@ import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for an expression whose computation assigns a cell in an array.
- * @author Marc Pantel
- */
+/** ABSTRACT Syntax Tree node for an expression whose computation assigns a cell in an array. */
 public class ArrayAssignment extends AbstractArray implements AssignableExpression {
 
-	/**
-	 * Construction for the implementation of an array element assignment expression ABSTRACT Syntax Tree node.
+	/** Construction for the implementation of an array element assignment expression ABSTRACT Syntax Tree node.
 	 * @param _array ABSTRACT Syntax Tree for the array part in an array element assignment expression.
 	 * @param _index ABSTRACT Syntax Tree for the index part in an array element assignment expression.
 	 */
@@ -26,14 +19,9 @@ public class ArrayAssignment extends AbstractArray implements AssignableExpressi
 		super(_array, _index);
 	}
 	
-	/* (non-Javadoc)
-	 * @see fr.n7.stl.block.ast.impl.ArrayAccessImpl#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-	    // assignemnt => VariableUse
         int offset = ((VariableAssignment)array).declaration.getOffset();
-
         Fragment fragment = factory.createFragment();
         fragment.append(index.getCode(factory));
         fragment.add(factory.createLoadL(((ArrayType)array.getType()).getType().length()));
@@ -43,6 +31,5 @@ public class ArrayAssignment extends AbstractArray implements AssignableExpressi
 	    fragment.add(factory.createStoreI(((ArrayType)array.getType()).getType().length()));
         return fragment;
 	}
-
 	
 }
