@@ -914,6 +914,39 @@ describe('# Resolve / CheckType hard tests', function () {
                 });
             done();
         });
+        it('-> this call in static void', function(done: () => any) {
+            TAM.ensureResult(`
+                class Color {
+                    public String color;
+                    public static void main(String args[]) {
+                        this.color = "rouge";
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
+        it('-> static void call in another class', function(done: () => any) {
+            TAM.ensureResult(`
+                class ColorRed {
+                    public static final String ROUGE = "rouge";
+                    public static String getColor() {
+                        return this.ROUGE;
+                    }
+                } 
+                class ColorUse {
+                    public static void main (String args[]) {
+                        ColorRed.getColor();
+                    }
+                }`,
+                {
+                    resolve: false,
+                    checkType: true
+                });
+            done();
+        });
         it('-> class w/ private method use in inner class', function(done: () => any) {
             TAM.ensureResult(`
                 class Point {
