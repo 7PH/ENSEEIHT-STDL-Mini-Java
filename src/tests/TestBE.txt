@@ -1,9 +1,11 @@
-class Point {
-    private int x;
-    private int y;
+class Random {
+    private int fooBar;
 
-    public Point() {
-        this.x = 1;
-        this.y = 2;
+    public void foo () {
+        int b = this.bar();
+    }
+
+    public int bar() {
+        return this.fooBar;
     }
 }

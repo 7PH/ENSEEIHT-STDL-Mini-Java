@@ -590,14 +590,14 @@ describe('# Resolve / CheckType medium tests', function () {
         it('-> method call in inner class', function(done: () => any) {
             TAM.ensureResult(`
                 class Random {
-                    private int x;
+                    private int fooBar;
 
-                    public static void main (String args[]) {
-                        this.getRandom();
+                    public void foo () {
+                        int b = this.bar();
                     }
                     
-                    public int getRandom() {
-                        return 5;
+                    public int bar() {
+                        return fooBar;
                     }
                 }`,
                 {
@@ -967,7 +967,7 @@ describe('# Resolve / CheckType medium tests', function () {
         });
     });
 
-        describe('# About generics', function() {
+    describe('# About generics', function() {
         it('-> basic tests', function(done: () => any) {
             TAM.ensureResult(`
                 class A<T> { }
@@ -1034,6 +1034,54 @@ describe('# Resolve / CheckType medium tests', function () {
 
                     public void set(T t) { 
                         this.t = t; 
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
+    });
+
+
+
+    describe('# TAM code', function() {
+        it('-> public static void main()', function(done: () => any) {
+            TAM.ensureResult(`
+                class Main {
+                    public static void main (String args[]) {
+                        int a = 1;
+                        int b = 2;
+                        System.out.println(a + b);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+
+
+        it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
+            TAM.ensureResult(`
+                class SecretNumber {
+                    private int number;
+                
+                    public SecretNumber() {
+                        this.number = 6;
+                    }
+                
+                    public int get() {
+                        return this.number;
+                    }
+                
+                    public static void main (String args[]) {
+                        SecretNumber secretNumber = new SecretNumber();
+                        int number = secretNumber.get();
+                        System.out.println(number);
                     }
                 }`,
                 {

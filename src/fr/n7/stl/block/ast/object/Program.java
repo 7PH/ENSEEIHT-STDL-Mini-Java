@@ -52,8 +52,8 @@ public class Program implements ASTNode {
             if (! (declaration instanceof ClassDeclaration))
                 continue;
             ClassDeclaration classDeclaration = (ClassDeclaration) declaration;
-            MethodDefinition main = classDeclaration.getMethodDefinitionBySignature(mainSignature.getName());
-            if (main != null) return main;
+            List<MethodDefinition> main = classDeclaration.getMethodDefinitionsBySignature(mainSignature, false);
+            if (main.size() > 0) return main.get(0);
         }
 
         return null;

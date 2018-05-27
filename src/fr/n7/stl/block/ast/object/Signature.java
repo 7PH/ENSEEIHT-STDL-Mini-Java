@@ -23,6 +23,8 @@ public class Signature implements Declaration {
 		this.name = name;
 		this.parameters = parameters;
 	}
+
+	public String getMethodName() { return name; }
 	
 	/** Get signature name.
 	 * @return the name of the signature followed by the parameters types.
@@ -74,4 +76,11 @@ public class Signature implements Declaration {
         return name;
 	}
 
+	@Override
+    public boolean equals(Object object) {
+        if (! (object instanceof Signature)) return false;
+        Signature other = (Signature) object;
+        return other.getName().equals(getName())
+                && other.getType().equalsTo(getType());
+    }
 }

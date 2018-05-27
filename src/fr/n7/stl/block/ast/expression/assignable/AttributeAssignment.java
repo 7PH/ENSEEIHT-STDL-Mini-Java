@@ -27,7 +27,6 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
 	@Override
 	public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
-        System.out.println("@TODO");
         return fragment;
     }
 

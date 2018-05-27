@@ -36,6 +36,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
+
         // Resolve parameters
         for (Expression parameter: parameters) {
             if (! parameter.resolve(scope)) {
@@ -43,10 +44,12 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
                 return false;
             }
         }
+
        
         // Check if the method exists
         if (programDeclaration instanceof ClassDeclaration) {
-            this.methodDefinition = ((ClassDeclaration) programDeclaration).getMethodDefinitionBySignature(name);
+            this.methodDefinition = ((ClassDeclaration) programDeclaration)
+                    .getMethodDefinitionsByMethodName(name, true).get(0);
         } else {
             // TODO
             this.methodDefinition = null;
@@ -76,7 +79,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public Type getType() {
-    	throw new SemanticsUndefinedException("getType method is undefined for MethodCall.");
+        return methodDefinition.getType();
     }
 
     @Override
@@ -107,17 +110,17 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public int allocateMemory(Register register, int offset) {
-    	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodCall.");
+    	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodAccess.");
     }
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-    	throw new SemanticsUndefinedException("getCode method is undefined for MethodCall.");
+    	throw new SemanticsUndefinedException("getCode method is undefined for MethodAccess.");
     }
 
     @Override
     public Type getReturnType() {
-    	throw new SemanticsUndefinedException("getReturnType method is undefined for MethodCall.");
+        return methodDefinition.getReturnType();
     }
 
     @Override

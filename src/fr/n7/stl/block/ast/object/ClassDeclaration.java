@@ -1,5 +1,7 @@
 package fr.n7.stl.block.ast.object;
 
+import fr.n7.stl.block.ast.expression.Expression;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
@@ -10,6 +12,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,26 +67,59 @@ public class ClassDeclaration extends ProgramDeclaration {
         return getAttributeDeclaration(name, returnPrivates) != null;
     }
 
-    public MethodDefinition getMethodDefinitionBySignature(String name) {
+    // will check for: name
+    public List<MethodDefinition> getMethodDefinitionsByMethodName(String name, boolean recursive) {
+        List<MethodDefinition> matches = new ArrayList<>();
         for (Definition definition: definitions) {
+
             if (! (definition instanceof MethodDefinition))
                 continue;
+
             MethodDefinition method = (MethodDefinition) definition;
-            if (method.getSignature().getName().equals(name)) {
-                return method;
-            }
+            if (method.getSignature().getMethodName().equals(name))
+                matches.add(method);
         }
-        return null;
+        // go check superclass
+        if (recursive && extendedClass.size() > 0)
+            matches.addAll(((ClassDeclaration)extendedClass.get(0).getDeclaration()).getMethodDefinitionsByMethodName(name, true));
+        return matches;
     }
 
-    public boolean definesMethod(String name) {
-        return getMethodDefinitionBySignature(name) != null;
+    // will check for: name + params
+    public List<MethodDefinition> getMethodDefinitionsByMethodNameAndParams(String name, List<ParameterDeclaration> params, boolean returnIfCompatible, boolean recursive) {
+        List<MethodDefinition> matches = getMethodDefinitionsByMethodName(name, recursive);
+        matches.removeIf(definition -> {
+            List<ParameterDeclaration> defParams = definition.getSignature().getParameters();
+            if (defParams.size() != params.size()) return true;
+            for (int i = 0; i < params.size(); ++ i) {
+                if (! returnIfCompatible && ! params.get(i).getType().equalsTo(defParams.get(i).getType()))
+                    return true;
+                if (! params.get(i).getType().compatibleWith(defParams.get(i).getType()))
+                    return true;
+            }
+            return false;
+        });
+        return matches;
     }
 
-    public boolean definesMethod(Signature signature) { return definesMethod(signature.getName()); }
+    // will check for: return type + name + params
+    public List<MethodDefinition> getMethodDefinitionsBySignature(Signature signature, boolean recursive) {
+        List<MethodDefinition> matches = getMethodDefinitionsByMethodNameAndParams(signature.getMethodName(), signature.getParameters(), true, recursive);
+        matches.removeIf(definition -> ! definition.getSignature().getType().equalsTo(signature.getType()));
+        return matches;
+    }
 
-    public boolean hasMethod(String name) {
-        return definesMethod(name) || (extendedClass.size() > 0 && ((ClassDeclaration)extendedClass.get(0).getDeclaration()).definesMethod(name));
+    public MethodDefinition getMethodDefinitionBySignature(Signature signature, boolean recursive) {
+        List<MethodDefinition> matches = getMethodDefinitionsBySignature(signature, recursive);
+        return matches.size() > 0 ? matches.get(0) : null;
+    }
+
+    public boolean definesMethod(String name, boolean recursive) {
+        return getMethodDefinitionsByMethodName(name, recursive).size() > 0;
+    }
+
+    public boolean definesMethod(Signature signature, boolean recursive) {
+        return definesMethod(signature.getMethodName(), recursive);
     }
 
     @Override
@@ -112,7 +148,8 @@ public class ClassDeclaration extends ProgramDeclaration {
                     MethodDefinition md = (MethodDefinition) d;
 
                     // For each abstract method of the superclass, we check if it is implemented
-                    if (md.isAbstract() && ! definesMethod(md.getSignature().getName())) {
+                    if (md.isAbstract()
+                            && ! definesMethod(md.getSignature().getMethodName(), false)) {
                         Logger.error("The class, by extending " + classDeclaration.getName() + ", needs to implement the method " + md.getName() + ".");
                         return false;
                     }
@@ -165,7 +202,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
             InterfaceDeclaration interfaceDeclaration = (InterfaceDeclaration) tp.getDeclaration();
             for (Signature signature: interfaceDeclaration.getSignatures()) {
-                if (! definesMethod(signature)) {
+                if (! definesMethod(signature, false)) {
                     Logger.error("The class, by implementing " + tp.getDeclaration().getName() + ", needs to implement the method " + signature.getName().split(" ")[0] + ".");
                     return false;
                 }
