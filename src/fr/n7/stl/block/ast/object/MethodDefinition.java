@@ -106,6 +106,12 @@ public class MethodDefinition extends Definition {
 
         HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
 
+        // 'this' only available in non-static methods
+        if (! isStatic()) {
+            AbstractThisUse abstractThisUse = new AbstractThisUse(parent);
+            abstractThisUse.resolve(newScope);
+        }
+
         // @TODO Do something with parameters?
         for (ParameterDeclaration parameterDeclaration: signature.getParameters()) {
             parameterDeclaration.getType().resolve(scope);

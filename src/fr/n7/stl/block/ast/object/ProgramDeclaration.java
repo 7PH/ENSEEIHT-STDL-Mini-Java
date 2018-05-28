@@ -37,10 +37,6 @@ public abstract class ProgramDeclaration implements Declaration {
         for (GenericType g : className.getGenerics()) {
         	subScope.register(g);
         }
-        
-        // register 'this' keyword in scope
-        AbstractThisUse abstractThisUse = new AbstractThisUse(this);
-        abstractThisUse.resolve(subScope);
 
         for (InstanceType extended: extendedClass) {
             if (! extended.resolve(subScope)) {

@@ -139,7 +139,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
         for (InstanceType tp: this.implementedClasses) {
-            if (!tp.resolve(scope))
+            if (! tp.resolve(scope))
                 return false;
         }
 
@@ -171,13 +171,12 @@ public class ClassDeclaration extends ProgramDeclaration {
 
         }
 
-        // Define a new scope for methods/attributes
-        HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
+        HierarchicalScope<Declaration> subScope = new SymbolTable(scope);
 
         // Resolve for each definition in the new scope
         for (Definition definition: definitions) {
-        	definition.setParent(this);
-            if (! definition.resolve(newScope)) {
+            definition.setParent(this);
+            if (! definition.resolve(subScope)) {
                 Logger.error("Could not resolve class " + getName() + " because of an unresolvable definition: " + definition.getClass().getCanonicalName());
                 return false;
             }
