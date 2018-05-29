@@ -95,7 +95,7 @@ public class ObjectAllocation implements Expression {
 
                 // Verify compatibility between declared and used type
                 if (! parameterType.compatibleWith(declaredType)) {
-                    Logger.error("Parameter " + parameterType + " use in " + constructor.getName() + " method is not compatible with declared one : " + declaredParam + ".");
+                    Logger.error("Parameter '" + parameterType + "' not compatible with '" + declaredParam + "' in '" + constructor.getName() + "'");
                     return AtomicType.ErrorType;
                 }
             }

@@ -115,10 +115,9 @@ public class VariableDeclaration implements Declaration, Instruction {
 	 */
 	@Override
 	public boolean checkType() {
-        boolean b = value.getType().compatibleWith(type);
-		if (!b)
+		if (! value.getType().compatibleWith(type))
 			throw new RuntimeException("Value type : " + value.getType().toString() + " is not compatible with " + type.toString());
-		return b;
+        return true;
 	}
 
 	/* (non-Javadoc)
