@@ -636,15 +636,6 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new IdentifierAccess(nom);
 				:}
-			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante
-             	{:
-					RESULT = new FunctionCall( nom, parametres );
-				:}
-			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante
-             	{:
-					List<Expression> _parametres = new LinkedList<Expression>();
-					RESULT = new FunctionCall( nom, _parametres );
-				:}
 			| UL_Nombre_Entier:entier
              	{:
 					RESULT = new IntegerValue( entier );
@@ -673,6 +664,14 @@ Expression ::= /* Affectable:affectable UL_Egal Expression:expression
              	{:
 					RESULT = new ArrayAllocation(type, taille);
 				:}
+			| UL_Identificateur:method UL_Parenthese_Ouvrante UL_Parenthese_Fermante
+			    {:
+			        RESULT = new MethodAccess("this", method, new LinkedList<>());
+			    :}
+			| UL_Identificateur:method UL_Parenthese_Ouvrante Expressions:parameters UL_Parenthese_Fermante
+			    {:
+			        RESULT = new MethodAccess("this", method, parameters);
+			    :}
 			| DefinitionAccess:methodAccess
 				{:
 					RESULT = methodAccess;
