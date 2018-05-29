@@ -106,29 +106,17 @@ public class ObjectAllocation implements Expression {
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-        // Create fragment
         Fragment fragment = factory.createFragment();
         
-        if (!(this.type instanceof InstanceType)) {
-            throw new SemanticsUndefinedException("This case was not yet implemented in ObjectAllocation");
-        }
-        InstanceType it = (InstanceType) this.type;
         // Load class attributes
-        if (!(it.getDeclaration() instanceof ClassDeclaration)) {
-            throw new SemanticsUndefinedException("This case was not yet implemented in ObjectAllocation");
-        }
-        ClassDeclaration cd = (ClassDeclaration) it.getDeclaration();
-        int attributesSize = 0;
-        for (AttributeDefinition a : cd.getAttributes()) {
-            attributesSize += a.getType().length();
-        }
+        ClassDeclaration cd = (ClassDeclaration) ((InstanceType)type).getDeclaration();
+        int classSize = cd.getAllAttributesSizes();
+
         // Allocate memory
-        fragment.add(factory.createLoadL(attributesSize));  // Push the value of the size required by attributes on the pile
-        fragment.add(Library.MAlloc);                       // Pop this value which is on the top to allocate size in the heap 
-                                                            // Adress of allocation is on the top of the pile
-        // Load the good class constructor
-        // Allocate memory for it
-        // Use it to filled attribute with parameters
+        fragment.add(factory.createLoadL(classSize)); // Push the value of the size required by attributes on the pile
+        fragment.add(Library.MAlloc); // Pop this value which is on the top to allocate size in the heap
+        // Adress of allocation is on the top of the pile
+        // @TODO Load the good class constructor
 
         return fragment;
     }

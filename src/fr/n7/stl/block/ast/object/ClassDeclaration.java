@@ -1,7 +1,5 @@
 package fr.n7.stl.block.ast.object;
 
-import fr.n7.stl.block.ast.Block;
-import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -13,15 +11,15 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ClassDeclaration extends ProgramDeclaration {
 	
 	private ClassModifier modifier;
 
 	private List<Definition> definitions;
+
+	public final Map<AttributeDefinition, Integer> attrRelativeOffset = new HashMap<>();
 	
 	public ClassDeclaration(ClassModifier modifier, ClassName name, List<InstanceType> extension, List<InstanceType> implementation, List<Definition> definitions) {
 		this.modifier = modifier;
@@ -58,6 +56,48 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     public AttributeDefinition getAttributeDeclaration(String name) {
         return getAttributeDeclaration(name, true);
+    }
+
+    public boolean hasSuper() { return extendedClass.size() > 0; }
+
+    public ClassDeclaration getSuper() { return ((ClassDeclaration) extendedClass.get(0).getDeclaration()); }
+
+    public int getAttributeAbsoluteOffset(AttributeDefinition attr) {
+	    if (! attrRelativeOffset.containsKey(attr)) {
+	        // attr is not here: maybe in super?
+	        if (! hasSuper()) {
+	            // error
+	            return -1;
+            } else {
+                return getSuper().getAttributeAbsoluteOffset(attr);
+            }
+        } else {
+            // attr is here
+            int size = hasSuper() ? getSuper().getAllAttributesSizes() : 0;
+            size += attrRelativeOffset.get(attr);
+            return size;
+        }
+	}
+
+	private void assignAttributesRelativeOffsets() {
+	    int offset = 0;
+	    for (Definition definition: definitions) {
+	        if (! (definition instanceof AttributeDefinition)) continue;
+            AttributeDefinition attr = (AttributeDefinition) definition;
+            attrRelativeOffset.put(attr, offset);
+            offset += attr.getType().length();
+        }
+    }
+
+    public int getAllAttributesSizes() {
+	    int size = 0;
+	    if (extendedClass.size() > 0)
+            size += ((ClassDeclaration)extendedClass.get(0).getDeclaration()).getAllAttributesSizes();
+	    for (Definition definition: definitions) {
+	        if (definition instanceof AttributeDefinition)
+	            size += definition.getType().length();
+        }
+        return size;
     }
 
     public List<AttributeDefinition> getAttributes() {
