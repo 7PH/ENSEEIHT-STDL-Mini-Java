@@ -123,6 +123,11 @@ public class ClassDeclaration extends ProgramDeclaration {
         return matches.size() > 0 ? matches.get(0) : null;
     }
 
+    public List<MethodDefinition> getConstructors() {
+	    // @TODO get also the parent constructors??
+        return getMethodDefinitionsByMethodName("", true);
+    }
+
     public boolean definesMethod(String name, boolean recursive) {
         return getMethodDefinitionsByMethodName(name, recursive).size() > 0;
     }

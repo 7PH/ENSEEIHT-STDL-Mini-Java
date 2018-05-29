@@ -13,6 +13,7 @@ import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
+import javax.lang.model.type.ErrorType;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,70 +30,73 @@ public class ObjectAllocation implements Expression {
 
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-        boolean b = true;
 
     	// Resolve type part
-    	if (!this.type.resolve(scope)) {
+    	if (! type.resolve(scope)) {
     		Logger.error("Could not resolve object instantiation because of the type " + this.type.toString() + ".");
-    		b = false;
+    		return false;
         }
+
+        // resolving parameters
+        for (Expression parameter: parameters)
+            if (! parameter.resolve(scope))
+                return false;
 
         // Verify that the object allocation is about a class
-        if (this.type instanceof InstanceType) {
-            if (! (((InstanceType) this.type).getDeclaration() instanceof ClassDeclaration)) {
-                Logger.error("Could not instantiate " + this.type.toString() + ", it is an interface.");
-    		    b = false;
-            }
+        if (! (type instanceof InstanceType)) {
+            Logger.error("Trying to instantiate non-class type");
+            return false;
         }
 
-        // @TODO resolve in new scope?
-        for (Expression parameter: parameters) {
-    	    parameter.resolve(scope);
+        if (! (((InstanceType) type).getDeclaration() instanceof ClassDeclaration)) {
+            Logger.error("Trying to instantiate an interface: " + type.toString());
+            return false;
         }
 
     	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
-    	for (Expression e : parameters) {
-    		if(! e.resolve(newScope)) {
-    			Logger.error("Could not resolve object insantiation because the constructor parameter " + e.toString() + " could not be resolved.");
-    			b = false;
-    		}
+    	for (Expression expression : parameters) {
+    		if(! expression.resolve(newScope))
+    			return false;
     	}
     	
-    	return b;    	
+    	return true;
+    }
+
+    private List<MethodDefinition> getConstructors() {
+        return ((ClassDeclaration)((InstanceType)type).getDeclaration()).getConstructors();
     }
 
     @Override
     public Type getType() {
 
+        // parameters ok?
+        for (Expression parameter: parameters)
+            if (parameter.getType().equalsTo(AtomicType.ErrorType))
+                return AtomicType.ErrorType;
+
         // Check if a constructor is present
-        List<Constructor> listeConstructors = this.getConstructors();
-        if (listeConstructors.size() == 0) {
-            Logger.error("You need to define a constructor before using one.");
+        List<MethodDefinition> constructors = getConstructors();
+        if (constructors.size() == 0) {
+            Logger.error("No constructor for class " + type);
             return AtomicType.ErrorType;
         }
 
         // Check that the parameters
-        for (Constructor c : listeConstructors) {
-            List<ParameterDeclaration> declaredParam = c.getSignature().getParameters();
+        for (MethodDefinition constructor: constructors) {
+            List<ParameterDeclaration> declaredParam = constructor.getSignature().getParameters();
             if (declaredParam.size() != parameters.size()) {
-                Logger.error(c.getName() + " expected " + declaredParam.size() + " arguments, " + parameters.size() + " given.");
+                Logger.error(constructor.getName() + " expected " + declaredParam.size() + " arguments, " + parameters.size() + " given.");
                 return AtomicType.ErrorType;
-            } else {
-                for (int i = 0; i < parameters.size(); i ++) {
-                    Type parameterType = parameters.get(i).getType();
-                    Type declaredType = declaredParam.get(i).getType();
+            }
 
-                    // Verify if a type is an ErrorType
-                    if (! parameterType.equalsTo(AtomicType.ErrorType)) {
-                        // Verify compatibility between declared and used type
-                        if (! parameterType.compatibleWith(declaredType)) {
-                            Logger.error("Parameter " + parameterType + " use in " + c.getName() + " method is not compatible with declared one : " + declaredParam + ".");
-                            return AtomicType.ErrorType;
-                        }
-                    } else {
-                        Logger.error("Parameter " + parameterType + " use in " + c.getName() + "method is an ErrorType.");
-                        return AtomicType.ErrorType;
-                    }
+            for (int i = 0; i < parameters.size(); i ++) {
+                Type parameterType = parameters.get(i).getType();
+                Type declaredType = declaredParam.get(i).getType();
+
+                // Verify compatibility between declared and used type
+                if (! parameterType.compatibleWith(declaredType)) {
+                    Logger.error("Parameter " + parameterType + " use in " + constructor.getName() + " method is not compatible with declared one : " + declaredParam + ".");
+                    return AtomicType.ErrorType;
                 }
             }
         }
@@ -132,21 +136,5 @@ public class ObjectAllocation implements Expression {
     @Override
     public String toString() {
         return "new " + type + "()";
-    }
-
-    public List<Constructor> getConstructors() {
-        List<Constructor> constructorList = new LinkedList<>();
-        if (this.type instanceof InstanceType) {
-            InstanceType it = (InstanceType) this.type;
-            if (it.getDeclaration() instanceof ClassDeclaration) {
-                ClassDeclaration cd = (ClassDeclaration) it.getDeclaration();
-                for (Definition d : cd.getDefinitions()) {
-                    if (d instanceof Constructor) {
-                        constructorList.add((Constructor) d);
-                    }
-                }
-            }
-        }
-        return constructorList;
     }
 }
