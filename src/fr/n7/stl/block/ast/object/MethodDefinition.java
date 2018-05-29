@@ -143,24 +143,30 @@ public class MethodDefinition extends Definition {
 	
 	@Override
     public boolean checkType() {
-        boolean ok = true;
+        boolean ok;
 
         // body?
-        ok &= body == null || body.checkType();
-        
-        if(body != null) {
-        	boolean isWild = this.getSignature().getType().equals(AtomicType.VoidType) && body.getReturnType().equals(AtomicType.Wildcard);
-        	
-        	if(!isWild && !body.getReturnType().compatibleWith(this.getSignature().getType())) {
-        		ok = false;
-        		Logger.error("The method " + this.getName() + " should return a " + this.getSignature().getType() + " but its body returns a non compatible type : " + body.getReturnType());
-        	}        	
-        }       	
+        ok = body == null || body.checkType();
 
         // parameters ok?
-        for (ParameterDeclaration p : this.signature.getParameters()) {
+        for (ParameterDeclaration p: this.signature.getParameters()) {
             if (p.getType().equalsTo(AtomicType.ErrorType)) {
                 Logger.error("Error in parameter " + p + " of " + this.getName());
+                ok = false;
+            }
+        }
+        
+        if (body != null) {
+            // method has a body, we have to check the return type
+            Type returnType = body.getReturnType();
+            if (returnType.equalsTo(AtomicType.Wildcard)) {
+                // that means the body has no return instruction
+                returnType = AtomicType.VoidType;
+            }
+
+            if (! returnType.compatibleWith(getSignature().getType())) {
+                // not compatible
+                Logger.error("Wrong return type for body of method " + getSignature().getName());
                 ok = false;
             }
         }
