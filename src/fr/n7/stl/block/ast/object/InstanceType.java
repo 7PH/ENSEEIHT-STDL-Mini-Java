@@ -63,8 +63,22 @@ public class InstanceType implements Type {
             if (declaration2 != declaration)
                 return false;
         } else {
-            if (instanceType.getDeclaration() != null)
-                return false;
+            if (instanceType.getGenericDeclaration() != genericDeclaration) {
+                // does 'this' extends in some manner the other type?
+                // for instance:
+                //   class Box<T extends A> { }
+                //   -> T is compatible with A
+                boolean ok = false;
+                for (InstanceType type: getGenericDeclaration().getExtendedTypes()) {
+                    // @TODO: how it should be done:
+                    //if (instanceType.compatibleWith(type))
+                    if (instanceType.name.equals(type.name))
+                        ok = true;
+                }
+                return ok;
+            } else {
+                return true;
+            }
         }
 
         return true;
@@ -101,12 +115,14 @@ public class InstanceType implements Type {
             // This is an instance of the generic type.
             this.genericDeclaration = (GenericType) scopeDeclaration;
 
+            /* @TODO make this or not ??
             for (Type type: genericDeclaration.getExtendedTypes()) {
                 if (! compatibleWith(type)) {
                     Logger.error("Could not instantiate generic type '" + this + "' because it does not extends '" + type + "'");
                     return false;
                 }
             }
+            */
         } else {
             Logger.error(this.name + " is not a class nor an interface and cannot be instantiated. " + scope.get(this.name).getClass().getName() );
             return false;

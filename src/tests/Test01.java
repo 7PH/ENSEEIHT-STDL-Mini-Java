@@ -1,12 +1,11 @@
 package tests;
 
-class Point { public int x; public int y; }
+class Thing { }
 
-public class Test01 {
-    public static void main(String args[]) {
-        // Type -> UL_Ident '[' (+ suite)
-        Point[] MyPoints = new Point[10];
-        // ArrayAccess -> UL_Ident '[' (+ suite)
-        MyPoints[0] = new Point();
+class Box<T extends Thing> {
+    private Thing t;
+
+    public void set(T t) {
+        this.t = t;
     }
 }
