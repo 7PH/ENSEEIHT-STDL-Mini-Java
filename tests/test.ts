@@ -1756,7 +1756,6 @@ describe('# Resolve / CheckType impossible tests', function () {
  * ###############################################
  */
 describe('# TAM code', function() {
-    /*
     it('-> public static void main()', function(done: () => any) {
         TAM.ensureResult(`
             class Main {
@@ -1768,11 +1767,33 @@ describe('# TAM code', function() {
             }`,
             {
                 resolve: true,
-                checkType : true, 
+                checkType : true,
                 output: ["3"]
             });
         done();
-    }); */ /*
+    });
+    it('-> object instantiation, attribute access and assignment', function(done: () => any) {
+        TAM.ensureResult(`
+            class Integer {
+                public int value;
+                public Integer() { }
+            }
+            
+            class Main {
+                public static void main() {
+                    Integer integer = new Integer();
+                    integer.value = 12;
+                    System.out.println(integer.value);
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true,
+                output: ["12"]
+            });
+        done();
+    });
+    /*
     it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
         TAM.ensureResult(`
             class SecretNumber {

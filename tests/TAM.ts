@@ -52,14 +52,16 @@ export class TAM {
 
     public static parseAndExecute(fileName: string): TAMResult {
         let parsed: TAMResult = TAM.parse(fileName);
-        //if (parsed.resolve && parsed.checkType)
-        //    parsed.output = TAM.executeTam(parsed.TAM);
+        if (parsed.resolve && parsed.checkType)
+            parsed.output = TAM.executeTam(parsed.TAM);
         return parsed;
     }
 
     public static ensureResult(code: string, expected: TAMExpectedResult): void {
         const fileName: string = TAM.storeCodeInTmp(code);
-        const result: TAMResult = TAM.parseAndExecute(fileName);
+        const result: TAMResult = TAM.parse(fileName);
+        if (typeof expected.output != "undefined")
+            result.output = TAM.executeTam(result.TAM);
         const logger: string = result.logger.trim();
 
         //if (logger.length > 0)

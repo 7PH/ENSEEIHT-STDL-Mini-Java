@@ -232,6 +232,8 @@ public class ClassDeclaration extends ProgramDeclaration {
         if (getMethodDefinitionsByMethodName("", false).size() == 0) {
             this.definitions.add(new Constructor(this.getName(), new LinkedList<>(), new Block(new LinkedList<>())));
         }
+
+        assignAttributesRelativeOffsets();
         return true;
     }
 

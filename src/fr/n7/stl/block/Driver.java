@@ -92,7 +92,7 @@ class Driver {
         jsonObject.put("resolve", parser.resolve);
         jsonObject.put("checkType", parser.checkType);
         jsonObject.put("logger", Logger.getAll());
-        //jsonObject.put("TAM", tamCode);
+        jsonObject.put("TAM", "" + parser.fragment);
         System.out.print(jsonObject);
     }
 

@@ -14,6 +14,8 @@ public abstract class DefinitionAccess implements Instruction, Expression {
 
     protected String target;
 
+    protected VariableDeclaration declaration;
+
     protected String name;
 
     protected Expression object;
@@ -43,20 +45,22 @@ public abstract class DefinitionAccess implements Instruction, Expression {
                 return false;
             }
 
-            Declaration declaration = scope.get(target);
-            if (declaration instanceof AbstractThisUse) {
-                this.programDeclaration = ((AbstractThisUse)declaration).programDeclaration;
-            } else if (declaration instanceof VariableDeclaration) {
-                if (! (declaration.getType() instanceof  InstanceType)) {
+            Declaration decl = scope.get(target);
+            if (decl instanceof AbstractThisUse) {
+                this.programDeclaration = ((AbstractThisUse)decl).programDeclaration;
+            } else if (decl instanceof VariableDeclaration) {
+                if (! (decl.getType() instanceof  InstanceType)) {
                     // appel de méthode sur une variable non objet
                     Logger.error("Calling a method on a non-object " + target);
                     return false;
                 }
-                InstanceType type = (InstanceType)declaration.getType();
+                InstanceType type = (InstanceType)decl.getType();
                 this.programDeclaration = type.getDeclaration();
             } else {
-                this.programDeclaration = (ProgramDeclaration) scope.get(target);
+                Logger.error("DefinitionAccess: trying to get a non-object property");
+                return false;
             }
+            this.declaration = (VariableDeclaration) decl;
             this.objectType = (InstanceType) programDeclaration.getType();
         } else {
             if (! object.resolve(scope)) {

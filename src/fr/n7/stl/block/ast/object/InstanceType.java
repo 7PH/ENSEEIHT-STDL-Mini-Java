@@ -12,7 +12,9 @@ import fr.n7.stl.util.Logger;
 
 public class InstanceType implements Type {
 
-	private String name;
+    public static final int OBJECT_ADDR_LENGTH = 1;
+
+    private String name;
 
 	/* Types génériques : <String> etc */
 	private List<InstanceType> typeInstantiations;
