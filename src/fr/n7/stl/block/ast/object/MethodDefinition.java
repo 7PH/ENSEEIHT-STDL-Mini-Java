@@ -32,10 +32,10 @@ public class MethodDefinition extends Definition {
         return ++ ID;
     }
 	
-	public MethodDefinition(Signature _signature, Block _body) {
-		this.signature = _signature;
-		this.body = _body;
-		this.abstractArgument = body == null;
+	public MethodDefinition(Signature signature, Block body) {
+		this.signature = signature;
+		this.body = body;
+		this.abstractArgument = this.body == null;
         this.startLabel = "method_start_" + MethodDefinition.getID();
 	}
 

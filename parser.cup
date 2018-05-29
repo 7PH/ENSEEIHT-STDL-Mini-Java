@@ -341,9 +341,9 @@ InstanceTypesWithEsperluette ::=
 
 InstanceType ::=
     UL_Identificateur:ident
-        {: RESULT = new InstanceType(ident); :}
-    | UL_Identificateur:ident UL_Inferieur InstanceTypes:InstanceTypes UL_Superieur
-        {: RESULT = new InstanceType(ident, InstanceTypes); :}
+        {: RESULT = new InstanceType(ident, new LinkedList<>()); :}
+    | UL_Identificateur:ident UL_Inferieur InstanceTypes:instanceTypes UL_Superieur
+        {: RESULT = new InstanceType(ident, instanceTypes); :}
     ;
 
 NullableType ::=
