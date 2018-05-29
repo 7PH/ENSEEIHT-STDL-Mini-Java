@@ -1,5 +1,7 @@
 package fr.n7.stl.block.ast.object;
 
+import fr.n7.stl.block.ast.Block;
+import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -186,7 +188,9 @@ public class ClassDeclaration extends ProgramDeclaration {
                 return false;
             }
         }
-
+        if (getMethodDefinitionsByMethodName("", false).size() == 0) {
+            this.definitions.add(new Constructor(this.getName(), new LinkedList<>(), new Block(new LinkedList<>())));
+        }
         return true;
     }
 

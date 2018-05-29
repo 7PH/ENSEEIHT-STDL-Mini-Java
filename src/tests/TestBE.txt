@@ -1,4 +1,35 @@
-class abc {
-    public void fun() {}
-    public void fun() {}
+class Box <T, H> {
+    private T t;
+    private H h;
+
+    public Box(T _t, H _h) {
+        t = _t;
+        h = _h;
+    }
+
+    public void setT(T _t) {
+        t = _t;
+    }
+
+    public T getT() {
+        return t;
+    }
+}
+
+class Integer {
+    public int value;
+
+    public Integer(int value) {
+        this.value = value;
+    }
+}
+
+class Test_genericite_00 {
+    public static void main (String args[]) {
+        Integer a = new Integer(1);
+        Integer b = new Integer(2);
+        Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
+
+        System.out.println(box.getT());
+    }
 }
