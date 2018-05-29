@@ -6,6 +6,7 @@ import java.util.List;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
@@ -14,24 +15,31 @@ public class InstanceType implements Type {
 	private String name;
 
 	/* Types génériques : <String> etc */
-	private List<InstanceType> typeInstantiations = new LinkedList<>();
+	private List<InstanceType> typeInstantiations;
 
 	private ProgramDeclaration declaration;
 	
 	private GenericType genericDeclaration;
 
-	public InstanceType(String name) {
-		this.name = name;
-	}
+    public InstanceType(String name, List<InstanceType> instantiations) {
+        this.name = name;
+        this.typeInstantiations = instantiations;
+    }
 
-	public InstanceType(String name, List<InstanceType> instantiations) {
-		this(name);
-		this.typeInstantiations = instantiations;
+	public InstanceType(String name) {
+		this(name, new LinkedList<>());
 	}
 
 	@Override
-	public boolean equalsTo(Type other) {		
-		return this.equals(other);
+	public boolean equalsTo(Type other) {
+        if (! (other instanceof InstanceType)) {
+            return false;
+        }
+
+        InstanceType instanceType = (InstanceType) other;
+
+        // TODO ? Do we need to check if it refers to the same declaration ?
+        return this.name.equals(instanceType.name) && this.typeInstantiations.equals(instanceType.getTypeInstantiations());
 	}
 	
 	@Override
@@ -46,31 +54,36 @@ public class InstanceType implements Type {
 
 		// If "this" refers to a generic type check if they are the same.
 		if (this.genericDeclaration != null) {
-			if (other instanceof InstanceType) {
-				if (((InstanceType) other).getGenericDeclaration() != null) {
-					// other refers to a generic type : check if they have the same name
-					GenericType g = ((InstanceType) other).getGenericDeclaration();
-					if (g.getName().equals(this.genericDeclaration.getName())) {
-						// They have the same name : they are compatible.
-						return true;
-					} else {
-						Logger.error("Generic type " + this.genericDeclaration + " is not compatible with the generic type " + g.getName());
-						return false;
-					}
-				} else {
-					// other is not a generic type : check if this.generic type extends other
-					for (InstanceType it : this.genericDeclaration.getExtendedTypes()) {
-						if (it.equalsTo(other)) {
-							return true;
-						}
-					}
-					Logger.error("Generic type " + this.genericDeclaration.getName() + " is not compatible with " + other);
-					return false;
-				}
-			} else {
-				Logger.error("Generic type " + this.name + " is not compatible with the atomic type " + other);
-				return false;
-			}
+
+		    if (other == AtomicType.Wildcard)
+		        return true;
+
+		    // An InstanceType can only be assigned to another
+			if (! (other instanceof InstanceType)) {
+                Logger.error("TypeInstantiation '" + this.name + "' is not compatible with '" + other + "'");
+                return false;
+            }
+
+            if (((InstanceType) other).getGenericDeclaration() != null) {
+                // other refers to a generic type : check if they have the same name
+                GenericType g = ((InstanceType) other).getGenericDeclaration();
+                if (g.getName().equals(this.genericDeclaration.getName())) {
+                    // They have the same name : they are compatible.
+                    return true;
+                } else {
+                    Logger.error("Generic type " + this.genericDeclaration + " is not compatible with the generic type " + g.getName());
+                    return false;
+                }
+            } else {
+                // other is not a generic type : check if this.generic type extends other
+                for (InstanceType it : genericDeclaration.getExtendedTypes()) {
+                    if (it.equalsTo(other)) {
+                        return true;
+                    }
+                }
+                Logger.error("Generic type " + genericDeclaration.getName() + " is not compatible with " + other);
+                return false;
+            }
 		}
 		
 		// If not, it's an InstanceType.
@@ -154,7 +167,7 @@ public class InstanceType implements Type {
 
 	@Override
 	public int length() {
-	    return 2; // @TODO
+	    return 1; // @TODO
     }
 
 	@Override
@@ -162,40 +175,39 @@ public class InstanceType implements Type {
 		if (! scope.knows(name)) {
 			Logger.error("InstanceType: Unknown reference to " + name);
 			return false;
-		} else {
-			if (scope.get(this.name) instanceof ProgramDeclaration) {
-				ProgramDeclaration declaration = (ProgramDeclaration) scope.get(this.name);
-				this.declaration = declaration;
-
-				if (this.typeInstantiations.size() > 0) {
-					/* Verifier que cette classe accepte les types génériques. */
-					if (declaration.getClassName().getGenerics().size() == 0) {
-						Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
-						return true;
-					} else if (declaration.getGenerics().size() == this.typeInstantiations.size() ) {
-						for (int i = 0; i < this.typeInstantiations.size(); i++) {
-							// TODO : Verifier que les types generiques sont compatibles.
-							// ex : si déclaré MyClass<T extends X>
-							// declaration[i].compatibleWith(typeInstantiations[i])
-						}
-						return true;
-					} else {
-						Logger.error("Incorrect number of arguments for type " + this.name + ".");
-						return false;
-					}
-				} else {
-					return true;
-				}
-			} else if (scope.get(this.name) instanceof GenericType) {
-				// This is an instance of the generic type.
-				this.genericDeclaration = (GenericType) scope.get(this.name);
-	
-				return true;
-			} else {
-				Logger.error(this.name + " is not a class nor an interface and cannot be instantiated. " + scope.get(this.name).getClass().getName() );
-				return false;
-			}
 		}
+
+        if (scope.get(name) instanceof ProgramDeclaration) {
+            this.declaration = (ProgramDeclaration) scope.get(this.name);
+
+            if (this.typeInstantiations.size() > 0) {
+                /* Verifier que cette classe accepte les types génériques. */
+                if (declaration.getClassName().getGenerics().size() == 0) {
+                    Logger.warning(this.name + " is a raw type. References to generic type should be parameterized.");
+                    return true;
+                } else if (declaration.getGenerics().size() == this.typeInstantiations.size() ) {
+                    for (int i = 0; i < this.typeInstantiations.size(); i++) {
+                        // TODO : Verifier que les types generiques sont compatibles.
+                        // ex : si déclaré MyClass<T extends X>
+                        // declaration[i].compatibleWith(typeInstantiations[i])
+                    }
+                    return true;
+                } else {
+                    Logger.error("Incorrect number of arguments for type " + this.name + ".");
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } else if (scope.get(this.name) instanceof GenericType) {
+            // This is an instance of the generic type.
+            this.genericDeclaration = (GenericType) scope.get(this.name);
+
+            return true;
+        } else {
+            Logger.error(this.name + " is not a class nor an interface and cannot be instantiated. " + scope.get(this.name).getClass().getName() );
+            return false;
+        }
 	}
 
 	@Override
@@ -248,22 +260,6 @@ public class InstanceType implements Type {
 		//	Get the attribute list of it
 		//	  Get the correct attribute thanks to his name field
 		return null;
-	}
-	
-	@Override
-	public boolean equals(Object _o) {
-		if (!(_o instanceof InstanceType)) {
-			return false;
-		} else {
-			InstanceType _typeO = (InstanceType) _o;
-			if (this.name.equals(_typeO.name) && this.typeInstantiations.equals(_typeO.getTypeInstantiations())) {
-				// TODO ? Do we need to check if it refers to the same declaration ?
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
 	}
 
 }

@@ -46,10 +46,9 @@ public class Return implements Instruction {
      */
     @Override
     public boolean checkType() {
-    	boolean b = value.getType() != AtomicType.ErrorType;
-    	if (!b)
-    		throw new RuntimeException("You return a ErrorType");
-    	return b;
+    	if (value.getType() == AtomicType.ErrorType)
+    		throw new RuntimeException("You returned an ErrorType");
+    	return true;
     }
 
     /* (non-Javadoc)

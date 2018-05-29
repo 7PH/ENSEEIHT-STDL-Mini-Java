@@ -28,7 +28,7 @@ public enum AtomicType implements Type {
 	 */
 	@Override
 	public boolean equalsTo(Type other) {
-		return this == other;
+		return this == other || this == Wildcard;
 	}
 
 	/* (non-Javadoc)
@@ -36,20 +36,24 @@ public enum AtomicType implements Type {
 	 */
 	@Override
 	public boolean compatibleWith(Type other) {
-		if (this.equalsTo(other)) {
+		if (equalsTo(other)) {
 			return true;
-		} else if (other instanceof NamedType) {
-            return compatibleWith(((NamedType) other).getType());
-        } else {
-			switch (this) {
-				case NullType :
-				    return ((other != ErrorType) && (other != VoidType));
-				case IntegerType:
-				    return (other == FloatingType);
-				default:
-				    return false;
-			}
 		}
+
+		if (other instanceof NamedType) {
+            return compatibleWith(((NamedType) other).getType());
+        }
+
+        switch (this) {
+            case NullType :
+                return ((other != ErrorType) && (other != VoidType));
+
+            case IntegerType:
+                return (other == FloatingType);
+
+            default:
+                return false;
+        }
 	}
 
 	/* (non-Javadoc)
@@ -99,7 +103,7 @@ public enum AtomicType implements Type {
 		case IntegerType: return "int";
 		case StringType: return "String";
         case VoidType: return "void";
-        case Wildcard: return "any";
+        case Wildcard: return "*";
 		case NullType: return "unit";
 		default: throw new IllegalArgumentException( "The default case should never be triggered.");
 		}

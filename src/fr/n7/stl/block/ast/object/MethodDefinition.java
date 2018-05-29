@@ -159,12 +159,13 @@ public class MethodDefinition extends Definition {
         if (body != null) {
             // method has a body, we have to check the return type
             Type returnType = body.getReturnType();
-            if (returnType.equalsTo(AtomicType.Wildcard)) {
+            if (returnType == AtomicType.Wildcard) {
                 // that means the body has no return instruction
-                returnType = AtomicType.VoidType;
+                //returnType = AtomicType.VoidType;
             }
 
-            if (! returnType.compatibleWith(getSignature().getType())) {
+            Type other = getSignature().getType();
+            if (! returnType.compatibleWith(other)) {
                 // not compatible
                 Logger.error("Wrong return type for body of method " + getSignature().getName());
                 ok = false;
