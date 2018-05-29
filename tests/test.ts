@@ -1882,6 +1882,50 @@ describe('# TAM code', function() {
             done();
         });
     });
+    describe('# methods', function() {
+        it('-> method call without parameter', function (done: () => any) {
+            TAM.ensureResult(`
+                class Person {
+                    public void sayHello() {
+                        System.out.println("Hello");
+                    }
+                }
+                
+                class Main {
+                    public static void main() {
+                        Person person = new Person();
+                        person.sayHello();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["\"Hello\""]
+                });
+            done();
+        });
+        it('-> method call with multiple atomic type parameters', function (done: () => any) {
+            TAM.ensureResult(`
+                class Person {
+                    public void addForMe(int a, int b) {
+                        System.out.println(a + b);
+                    }
+                }
+                
+                class Main {
+                    public static void main() {
+                        Person person = new Person();
+                        person.addForMe(10, 23);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["33"]
+                });
+            done();
+        });
+    });
     /*
     it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
         TAM.ensureResult(`

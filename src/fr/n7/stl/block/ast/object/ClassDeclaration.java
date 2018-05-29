@@ -228,6 +228,10 @@ public class ClassDeclaration extends ProgramDeclaration {
                 Logger.error("Could not resolve class " + getName() + " because of an unresolvable definition: " + definition.getClass().getCanonicalName());
                 return false;
             }
+
+            // assign parameters offset for getCode
+            if (definition instanceof MethodDefinition)
+                ((MethodDefinition)definition).getSignature().assignParametersRelativeOffset();
         }
         if (getMethodDefinitionsByMethodName("", false).size() == 0) {
             this.definitions.add(new Constructor(this.getName(), new LinkedList<>(), new Block(new LinkedList<>())));

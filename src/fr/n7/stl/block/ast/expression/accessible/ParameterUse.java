@@ -32,8 +32,8 @@ public class ParameterUse extends AbstractUse {
     public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
         fragment.add(factory.createLoad(
-                Register.SB,
-                parameterDeclaration.getMethodDefinition().getOffset(),
+                Register.LB,
+                 3 + parameterDeclaration.getOffset(),
                 parameterDeclaration.getType().length()));
         return fragment;
     }

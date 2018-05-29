@@ -8,6 +8,8 @@ import fr.n7.stl.block.ast.expression.AbstractUse;
 import fr.n7.stl.block.ast.instruction.declaration.ConstantDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
+import fr.n7.stl.block.ast.object.AbstractThisUse;
+import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -52,6 +54,11 @@ public class IdentifierAccess extends AbstractIdentifier implements AccessibleEx
         } else if (declaration instanceof ConstantDeclaration) {
             // TODO : refactor the management of Constants
             this.expression = new ConstantUse((ConstantDeclaration) declaration);
+            return true;
+        } else if (declaration instanceof AttributeDefinition) {
+            AttributeAccess attributeAccess = new AttributeAccess("this", name);
+            attributeAccess.resolve(scope);
+            this.expression = attributeAccess;
             return true;
         }
 

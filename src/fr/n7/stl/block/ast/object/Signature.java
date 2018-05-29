@@ -44,7 +44,15 @@ public class Signature implements Declaration {
 
         return name;
     }
-	
+
+    public void assignParametersRelativeOffset() {
+	    int offset = 0;
+	    for (ParameterDeclaration parameter: parameters) {
+	        parameter.setOffset(offset);
+	        offset += parameter.getType().length();
+        }
+    }
+
 	/** Get signature type.
 	 * @return the type of the signature
 	 */

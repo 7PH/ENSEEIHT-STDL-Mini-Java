@@ -10,7 +10,7 @@ import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
-public abstract class DefinitionAccess implements Instruction, Expression {
+public abstract class DefinitionAccess extends AbstractUse implements Instruction, Expression {
 
     protected String target;
 

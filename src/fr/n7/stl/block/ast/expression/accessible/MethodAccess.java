@@ -112,13 +112,21 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public int allocateMemory(Register register, int offset) {
-    	throw new SemanticsUndefinedException("allocateMemory method is undefined for MethodAccess.");
+        return 0;
     }
 
     @Override
     public Fragment getCode(TAMFactory factory) {
-                // TODO
-    	throw new SemanticsUndefinedException("getCode method is undefined for MethodAccess.");
+        Fragment fragment = factory.createFragment();
+
+        for (Expression argument: parameters)
+            fragment.append(argument.getCode(factory));
+
+        fragment.add(factory.createPush(methodDefinition.getType().length()));
+        fragment.add(factory.createCall(methodDefinition.getStartLabel(), Register.SB));
+        fragment.add(factory.createPop(methodDefinition.getType().length(), methodDefinition.getParametersLength()));
+
+        return fragment;
     }
 
     @Override
