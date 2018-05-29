@@ -6,7 +6,6 @@ import java.util.List;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
-import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
@@ -56,14 +55,25 @@ public class InstanceType implements Type {
         if (! (other instanceof InstanceType))
             return false;
 
+
         InstanceType instanceType = (InstanceType) other;
         if (declaration != null) {
             // this one is a class/interface type, like 'Box'. Other has to be too
             Declaration declaration2 = instanceType.getDeclaration();
 
             // could be improved
-            if (declaration2 != declaration)
+            if (declaration2 != declaration) {
+                // if a superclass is compatible with the other, it's OK
+                for (InstanceType superClassT: declaration.getExtendedClass())
+                    if (superClassT.compatibleWith(other))
+                        return true;
+                // idem for an interface
+                for (InstanceType implemented: declaration.getImplementedClasses())
+                    if (implemented.compatibleWith(other))
+                        return true;
+                // nope
                 return false;
+            }
         } else {
             if (instanceType.getGenericDeclaration() != genericDeclaration) {
                 // does 'this' extends in some manner the other type?
