@@ -1756,42 +1756,131 @@ describe('# Resolve / CheckType impossible tests', function () {
  * ###############################################
  */
 describe('# TAM code', function() {
-    it('-> public static void main()', function(done: () => any) {
-        TAM.ensureResult(`
-            class Main {
-                public static void main (String args[]) {
-                    int a = 1;
-                    int b = 2;
-                    System.out.println(a + b);
-                }
-            }`,
-            {
-                resolve: true,
-                checkType : true,
-                output: ["3"]
-            });
-        done();
+    this.slow(1000);
+
+    describe('# public static void main()', function() {
+        it('-> System.out.println(-)', function(done: () => any) {
+            TAM.ensureResult(`
+                class Main {
+                    public static void main () {
+                        int a = 1;
+                        int b = 2;
+                        System.out.println(a + b);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true,
+                    output: ["3"]
+                });
+            done();
+        });
     });
-    it('-> object instantiation, attribute access and assignment', function(done: () => any) {
-        TAM.ensureResult(`
-            class Integer {
-                public int value;
-                public Integer() { }
-            }
-            
-            class Main {
-                public static void main() {
-                    Integer integer = new Integer();
-                    integer.value = 12;
-                    System.out.println(integer.value);
+
+    describe('# attributes', function() {
+        it('-> object instantiation, attribute access and assignment', function (done: () => any) {
+            TAM.ensureResult(`
+                class Integer {
+                    public int value;
+                    public Integer() { }
                 }
-            }`,
-            {
-                resolve: true,
-                checkType : true,
-                output: ["12"]
-            });
-        done();
+                
+                class Main {
+                    public static void main() {
+                        Integer integer = new Integer();
+                        integer.value = 12;
+                        System.out.println(integer.value);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["12"]
+                });
+            done();
+        });
+        it('-> idem with multiple attributes', function (done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    public int x;
+                    public int y;
+                    public Point() { }
+                }
+                
+                class Main {
+                    public static void main() {
+                        Point point = new Point();
+                        point.x = 1;
+                        point.y = 2;
+                        System.out.println(point.x);
+                        System.out.println(point.y);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["1", "2"]
+                });
+            done();
+        });
+        it('-> attributes in superclass', function (done: () => any) {
+            TAM.ensureResult(`
+                class SemiPoint1 {
+                    public int x;
+                }
+                
+                class Point extends SemiPoint1 {
+                    public int y;
+                    public Point() { }
+                }
+                
+                class Main {
+                    public static void main() {
+                        Point point = new Point();
+                        point.x = 1;
+                        point.y = 2;
+                        System.out.println(point.x);
+                        System.out.println(point.y);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["1", "2"]
+                });
+            done();
+        });
+        it('-> attributes of type Object', function (done: () => any) {
+            TAM.ensureResult(`
+                class Integer {
+                    public int value;
+                    public Integer() { }
+                }
+                
+                class Point {
+                    public Integer x;
+                    public Integer y;
+                    public Point() { }
+                }
+                
+                class Main {
+                    public static void main() {
+                        Point point = new Point();
+                        point.x = new Integer();
+                        point.x.value = 13;
+                        point.y = new Integer();
+                        point.y.value = 17;
+                        System.out.println(point.x.value);
+                        System.out.println(point.y.value);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["13", "17"]
+                });
+            done();
+        });
     });
     /*
     it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
