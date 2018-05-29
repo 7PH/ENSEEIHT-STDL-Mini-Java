@@ -87,6 +87,7 @@ public class Program implements ASTNode {
         //fragment.add(factory.createPop(main.getType().length(), main.getParametersLength()));
 
         // ok
+        fragment.add(factory.createHalt());
         return fragment;
     }
 

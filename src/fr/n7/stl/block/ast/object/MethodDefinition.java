@@ -196,6 +196,7 @@ public class MethodDefinition extends Definition {
         fragment2.add(factory.createLoad(Register.LB, - 1 - getReturnType().length() - getParametersLength(), getParametersLength()));
         fragment2.append(body.getCode(factory));
         fragment2.addPrefix(startLabel + ":");
+        fragment2.add(factory.createReturn(0, 0));
         fragment2.addSuffix(endLabel + ":");
 
         fragment1.append(fragment2);
