@@ -75,6 +75,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public Fragment getCode(TAMFactory factory) {
+		// TODO
 		throw new SemanticsUndefinedException("getCode method not implemented yet in InterfaceDeclaration");
 	}
 

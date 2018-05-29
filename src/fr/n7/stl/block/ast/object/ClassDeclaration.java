@@ -228,7 +228,9 @@ public class ClassDeclaration extends ProgramDeclaration {
                 return false;
             }
         }
-
+        if (getMethodDefinitionsByMethodName("", false).size() == 0) {
+            this.definitions.add(new Constructor(this.getName(), new LinkedList<>(), new Block(new LinkedList<>())));
+        }
         return true;
     }
 

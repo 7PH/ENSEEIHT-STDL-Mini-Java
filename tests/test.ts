@@ -773,7 +773,7 @@ describe('# Resolve / CheckType medium tests', function () {
                 }`,
                 {
                     resolve: true,
-                    checkType: false
+                    checkType: true
                 });
             done();
         });
@@ -1440,18 +1440,314 @@ describe('# Resolve / CheckType impossible tests', function () {
     this.slow(SLOW_TEST_MS);
 
     /* ********************* */
-    describe('# About X-Files', function() {
-        it('-> 51 Area', function(done: () => any) {
-            TAM.ensureResult(`
-                class A {
-                
-                }`,
-                {
-                    resolve: true,
-                    checkType : true
-                });
-            done();
-        });
+    it('-> interface I', function(done: () => any) {
+        TAM.ensureResult(`
+            interface I1 {
+                int getI1();
+            }
+            interface I2 extends I1 {
+                int getI2();
+            }
+            class C implements I2 {
+                public int getI1() {
+                    return 1;
+                }
+                public int getI2() {
+                    return 2;
+                }
+            }
+            class Test_Interface_Inheritance {
+                public static void main(String args[]) {
+                    I1 c = new C();
+                    System.out.println(c.getI1());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> array', function(done: () => any) {
+        TAM.ensureResult(`
+            class Test_array {
+                public static void main(String args[]) {
+                    int t[] = new int[5];
+                    t[3] = 4;
+                    System.out.println(t[3]);
+                    int ta[] = {1, 2, 3, 4};
+                    ta[0] = ta[1];
+                    System.out.println(ta[0]);
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> attribute use w/out "this"', function(done: () => any) {
+        TAM.ensureResult(`
+            class Integer {
+                private int in;
+            
+                public Integer(int _i) {
+                    in = _i;
+                }
+            
+                public int get() {
+                    return in;
+                }
+            }
+            
+            class Test_constructor_one_parameter {
+                public static void main(String args[]) {
+                    Integer i = new Integer(42);
+                    System.out.println(i.get());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> method use w/out "this"', function(done: () => any) {
+        TAM.ensureResult(`
+            class Integer {
+                private int in;
+
+                public int get() {
+                    return in;
+                }
+
+                public void test() {
+                    int a = get();
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic I', function(done: () => any) {
+        TAM.ensureResult(`
+            class Box <T, H> {
+                private T t;
+                private H h;
+            
+                public Box(T _t, H _h) {
+                    this.t = _t;
+                    this.h = _h;
+                }
+            
+                public void setT(T _t) {
+                    this.t = _t;
+                }
+            
+                public T getT() {
+                    return this.t;
+                }
+            }
+            
+            class Integer {
+                public int value;
+            
+                public Integer(int value) {
+                    this.value = value;
+                }
+            }
+            
+            class Test_genericite_00 {
+                public static void main (String args[]) {
+                    Integer a = new Integer(1);
+                    Integer b = new Integer(2);
+                    Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
+            
+                    System.out.println(box.getT());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic II', function(done: () => any) {
+        TAM.ensureResult(`
+            class Box <T, H> {
+                private T t;
+                private H h;
+            
+                public Box(T _t, H _h) {
+                    this.t = _t;
+                    this.h = _h;
+                }
+            
+                public void setT(T _t) {
+                    this.t = _t;
+                }
+            
+                public T getT() {
+                    return this.t;
+                }
+            }
+            
+            class Integer {
+                public int value;
+            
+                public Integer(int value) {
+                    this.value = value;
+                }
+            }
+            
+            class Test_genericite_00 {
+                public static void main (String args[]) {
+                    Integer a = new Integer(1);
+                    Integer b = new Integer(2);
+                    Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
+                    box.setT(new Integer(3));
+                    System.out.println(box.getT());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic III', function(done: () => any) {
+        TAM.ensureResult(`
+            interface Integer {
+                int getInteger();
+            }
+            
+            class IntegerImpl implements Integer {
+                private int i;
+            
+                public IntegerImpl(int _i) {
+                    this.i = _i;
+                }
+            
+                public int getInteger() {
+                    return this.i;
+                }
+            }
+            
+            class Mask <T extends Integer> {
+                private T t;
+            
+                public Mask(T _t) {
+                    this.t = _t;
+                }
+            
+                public T getValue() {
+                    return this.t;
+                }
+            }
+            
+            class Test_genericite_02 {
+                public static void main(String args[]) {
+                    IntegerImpl ii = new IntegerImpl(1);
+                    Mask<Integer> i = new Mask<Integer>(ii);
+            
+                    System.out.println(i.getValue().getInteger());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic IV', function(done: () => any) {
+        TAM.ensureResult(`
+            class Carton { public int i; }
+            class Box <T extends Carton> {
+                private T t;
+                public Box() { }
+            }
+            class A { }
+            class Main {
+                public static void main(String args[]) {
+                    Box<A> b = new Box<A>();
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : false
+            });
+        done();
+    });
+    it('-> generic V', function(done: () => any) {
+        TAM.ensureResult(`
+            class Carton { public int i; }
+            class Box <T extends Carton> {
+                private T t;
+                public Box() { }
+            }
+            class A extends Carton { }
+            class Main {
+                public static void main(String args[]) {
+                    Box<A> b = new Box<A>();
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic VI w/ Wildcard', function(done: () => any) {
+        TAM.ensureResult(`
+            class Carton {}
+            
+            class Box <T extends Carton> {
+                private T t;
+                public void set(T _t) { this.t = _t; }
+                public T get() { return this.t; }
+            }
+            class WildCard {
+                public static void main(String args[]) {
+                    Box<?> b = new Box<Carton>();
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> generic VII', function(done: () => any) {
+        TAM.ensureResult(`
+            interface I1 { int getI1(); }
+            
+            interface I2 { int getI2(); }
+            
+            interface I3 extends I2, I1 { int getI3(); }
+            
+            interface I4 extends I1, I3 { int getI4(); }
+            
+            class C implements I4 {
+                public int getI1() { return 1; }
+                public int getI2() { return 2; }
+                public int getI3() { return 3; }
+                public int getI4() { return 4; }
+            }
+            
+            class Test_interface_inheritance_02 {
+                public static void main(String args[]) {
+                    C c = new C();
+                    System.out.println(c.getI1());
+                    System.out.println(c.getI2());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
     });
 });
 

@@ -20,6 +20,7 @@ public class AttributeAccess extends AbstractAttribute implements Expression {
 
     @Override
     public Fragment getCode(TAMFactory factory) {
+        // TODO
         Fragment fragment = factory.createFragment();
 
         ClassDeclaration cd = attributeDefinition.getParent();

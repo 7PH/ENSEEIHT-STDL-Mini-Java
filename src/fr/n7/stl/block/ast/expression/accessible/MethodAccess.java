@@ -117,6 +117,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
     @Override
     public Fragment getCode(TAMFactory factory) {
+                // TODO
     	throw new SemanticsUndefinedException("getCode method is undefined for MethodAccess.");
     }
 
