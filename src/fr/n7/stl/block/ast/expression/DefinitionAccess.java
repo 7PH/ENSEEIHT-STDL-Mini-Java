@@ -2,6 +2,7 @@ package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AbstractThisUse;
+import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.object.InstanceType;
 import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.object.ProgramDeclaration;
@@ -46,21 +47,27 @@ public abstract class DefinitionAccess extends AbstractUse implements Instructio
             }
 
             Declaration decl = scope.get(target);
+            // the goal of this block
+            // is to set 'declaration' and 'programDeclaration' attributes
             if (decl instanceof AbstractThisUse) {
+                this.declaration = (VariableDeclaration) decl;
                 this.programDeclaration = ((AbstractThisUse)decl).programDeclaration;
             } else if (decl instanceof VariableDeclaration) {
-                if (! (decl.getType() instanceof  InstanceType)) {
+                if (!(decl.getType() instanceof InstanceType)) {
                     // appel de méthode sur une variable non objet
                     Logger.error("Calling a method on a non-object " + target);
                     return false;
                 }
-                InstanceType type = (InstanceType)decl.getType();
+                InstanceType type = (InstanceType) decl.getType();
+                this.declaration = (VariableDeclaration) decl;
                 this.programDeclaration = type.getDeclaration();
+            } else if (decl instanceof ClassDeclaration) {
+                // static access
+                this.programDeclaration = ((ClassDeclaration) decl);
             } else {
-                Logger.error("DefinitionAccess: trying to get a non-object property");
+                Logger.error("DefinitionAccess: trying to get a non-object property: " + target);
                 return false;
             }
-            this.declaration = (VariableDeclaration) decl;
             this.objectType = (InstanceType) programDeclaration.getType();
         } else {
             if (! object.resolve(scope)) {
