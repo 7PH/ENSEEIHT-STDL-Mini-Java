@@ -64,11 +64,11 @@ public class InstanceType implements Type {
             // could be improved
             if (declaration2 != declaration) {
                 // if a superclass is compatible with the other, it's OK
-                for (InstanceType superClassT: declaration.getExtendedClass())
+                for (InstanceType superClassT: declaration.getExtendsList())
                     if (superClassT.compatibleWith(other))
                         return true;
                 // idem for an interface
-                for (InstanceType implemented: declaration.getImplementedClasses())
+                for (InstanceType implemented: declaration.getImplementsList())
                     if (implemented.compatibleWith(other))
                         return true;
                 // nope

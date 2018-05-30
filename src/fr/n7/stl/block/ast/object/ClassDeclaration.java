@@ -25,8 +25,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 	public ClassDeclaration(ClassModifier modifier, ClassName name, List<InstanceType> extension, List<InstanceType> implementation, List<Definition> definitions) {
 		this.modifier = modifier;
 		this.className = name;
-		this.extendedClass = extension;
-		this.implementedClasses = implementation;
+		this.extendsList = extension;
+		this.implementsList = implementation;
 		this.definitions = definitions;
 	}
 
@@ -49,8 +49,8 @@ public class ClassDeclaration extends ProgramDeclaration {
                     && (returnPrivates || definition.getAccessModifier() == AccessModifier.PUBLIC))
                 return (AttributeDefinition) definition;
         }
-        if (extendedClass.size() > 0) {
-            return ((ClassDeclaration) extendedClass.get(0).getDeclaration()).getAttributeDeclaration(name, false);
+        if (extendsList.size() > 0) {
+            return ((ClassDeclaration) extendsList.get(0).getDeclaration()).getAttributeDeclaration(name, false);
         }
         return null;
     }
@@ -59,9 +59,9 @@ public class ClassDeclaration extends ProgramDeclaration {
         return getAttributeDeclaration(name, true);
     }
 
-    public boolean hasSuper() { return extendedClass.size() > 0; }
+    public boolean hasSuper() { return extendsList.size() > 0; }
 
-    public ClassDeclaration getSuper() { return ((ClassDeclaration) extendedClass.get(0).getDeclaration()); }
+    public ClassDeclaration getSuper() { return ((ClassDeclaration) extendsList.get(0).getDeclaration()); }
 
     public int getAttributeAbsoluteOffset(AttributeDefinition attr) {
 	    if (! attrRelativeOffset.containsKey(attr)) {
@@ -92,8 +92,8 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     public int getAllAttributesSizes() {
 	    int size = 0;
-	    if (extendedClass.size() > 0)
-            size += ((ClassDeclaration)extendedClass.get(0).getDeclaration()).getAllAttributesSizes();
+	    if (extendsList.size() > 0)
+            size += ((ClassDeclaration) extendsList.get(0).getDeclaration()).getAllAttributesSizes();
 	    for (Definition definition: definitions) {
 	        if (definition instanceof AttributeDefinition)
 	            size += definition.getType().length();
@@ -132,8 +132,8 @@ public class ClassDeclaration extends ProgramDeclaration {
                 matches.add(method);
         }
         // go check superclass
-        if (recursive && extendedClass.size() > 0)
-            matches.addAll(((ClassDeclaration)extendedClass.get(0).getDeclaration()).getMethodDefinitionsByMethodName(name, true));
+        if (recursive && extendsList.size() > 0)
+            matches.addAll(((ClassDeclaration) extendsList.get(0).getDeclaration()).getMethodDefinitionsByMethodName(name, true));
         return matches;
     }
 
@@ -181,19 +181,19 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
-        if (extendedClass.size() > 0 && extendedClass.get(0).getDeclaration().getName().equals(this.getName())) {
+        if (extendsList.size() > 0 && extendsList.get(0).getDeclaration().getName().equals(this.getName())) {
             Logger.error(this.getName() + " cannot extend self");
             return false;
         }
 
-        for (InstanceType tp: this.implementedClasses) {
+        for (InstanceType tp: this.implementsList) {
             if (! tp.resolve(scope))
                 return false;
         }
 
         // Verify if every superclass abstract methods are implemented if the class is not abstract
-        if ((this.extendedClass.size() > 0) && !this.isAbstract()) {
-            InstanceType tp = this.extendedClass.get(0);
+        if ((this.extendsList.size() > 0) && !this.isAbstract()) {
+            InstanceType tp = this.extendsList.get(0);
             // Check if the superclass is well a simple class
             if (tp.getDeclaration() instanceof InterfaceDeclaration) {
                 Logger.error("The class " + this.getName() + " extends the interface "+ tp.getDeclaration().getName() + " which is not correct.");
@@ -204,16 +204,16 @@ public class ClassDeclaration extends ProgramDeclaration {
             if (!ret) {
                 return false;
             }
-            if (classDeclaration.getExtendedClass().size() > 0) {
-                Logger.error("" + classDeclaration.getExtendedClass());
-                InstanceType superClass = classDeclaration.getExtendedClass().get(0);
+            if (classDeclaration.getExtendsList().size() > 0) {
+                Logger.error("" + classDeclaration.getExtendsList());
+                InstanceType superClass = classDeclaration.getExtendsList().get(0);
                 while (superClass != null) {
                     ClassDeclaration cd = (ClassDeclaration) superClass.getDeclaration();
                     boolean ret2 = checkForSuperClassMethods(cd);
                     if (!ret2) {
                         return false;
                     }
-                    superClass = ((cd.getExtendedClass().size() > 0) ? cd.getExtendedClass().get(0) : null);
+                    superClass = ((cd.getExtendsList().size() > 0) ? cd.getExtendsList().get(0) : null);
                 }
             }
 
@@ -270,7 +270,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 		boolean b = true;
 
         // Verify that implementedClass contains only interfaces
-        for (InstanceType tp: extendedClass) {
+        for (InstanceType tp: extendsList) {
             if (! (tp.getDeclaration() instanceof ClassDeclaration)) {
                 Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
                 b = false;
@@ -278,7 +278,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
         // Verify that each interface method is implemented
-        for (InstanceType tp: implementedClasses) {
+        for (InstanceType tp: implementsList) {
             if (! (tp.getDeclaration() instanceof InterfaceDeclaration)) {
                 Logger.error("Class " + getName() + " cannot implements " + tp + ". This is not an interface.");
                 return false;
@@ -294,7 +294,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
         // Verify that there is no more one superclass
-        if (this.extendedClass.size() > 1 ) {
+        if (this.extendsList.size() > 1 ) {
             Logger.error("A simple class like " + this.getName() + " can not have more than one superclass.");
             return false;
         }
@@ -349,14 +349,14 @@ public class ClassDeclaration extends ProgramDeclaration {
 	public String toString() {
 		String result = "class " + className.toString();
 
-		if (extendedClass.size() > 0)
-		    result += " extends " + extendedClass.get(0);
+		if (extendsList.size() > 0)
+		    result += " extends " + extendsList.get(0);
 
-		if (implementedClasses.size() > 0) {
+		if (implementsList.size() > 0) {
 		    result += " implements ";
-		    for (int i = 0; i < implementedClasses.size() - 1; ++ i)
-                result += implementedClasses.get(i) + ", ";
-		    result += implementedClasses.get(implementedClasses.size() - 1);
+		    for (int i = 0; i < implementsList.size() - 1; ++ i)
+                result += implementsList.get(i) + ", ";
+		    result += implementsList.get(implementsList.size() - 1);
         }
 
         result += " {" + "\n";

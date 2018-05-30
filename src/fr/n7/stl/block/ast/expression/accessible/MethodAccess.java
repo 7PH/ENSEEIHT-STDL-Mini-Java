@@ -1,6 +1,5 @@
 package fr.n7.stl.block.ast.expression.accessible;
 
-import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.DefinitionAccess;
 import fr.n7.stl.block.ast.object.*;
 import fr.n7.stl.block.ast.expression.Expression;
@@ -8,7 +7,6 @@ import fr.n7.stl.block.ast.instruction.Instruction;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
-import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
@@ -19,8 +17,12 @@ import fr.n7.stl.util.Logger;
 import java.util.List;
 
 public class MethodAccess extends DefinitionAccess implements Instruction, Expression {
-    
+
+    /* If a class */
     private MethodDefinition methodDefinition;
+
+    /* If an interface */
+    private Signature signatureDeclaration;
 
     private List<Expression> parameters;
 
@@ -45,7 +47,6 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             }
         }
 
-       
         // Check if the method exists
         if (programDeclaration instanceof ClassDeclaration) {
             MethodDefinition tmp  = ((ClassDeclaration) programDeclaration).getMethodDefinitionsByMethodName(name, true).get(0);

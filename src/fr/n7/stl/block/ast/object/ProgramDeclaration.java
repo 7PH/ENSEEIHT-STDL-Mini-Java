@@ -16,9 +16,9 @@ public abstract class ProgramDeclaration implements Declaration {
 	
 	protected ClassName className;
 	
-	protected List<InstanceType> extendedClass = new LinkedList<>();
+	protected List<InstanceType> extendsList = new LinkedList<>();
 	
-	protected List<InstanceType> implementedClasses = new LinkedList<>();
+	protected List<InstanceType> implementsList = new LinkedList<>();
 
 	protected Type type;
 
@@ -38,14 +38,14 @@ public abstract class ProgramDeclaration implements Declaration {
         	subScope.register(g);
         }
 
-        for (InstanceType extended: extendedClass) {
+        for (InstanceType extended: extendsList) {
             if (! extended.resolve(subScope)) {
                 Logger.error("Could not resolve extended class " + extended + " from " + getName());
                 return false;
             }
         }
 
-        for (InstanceType implemented: implementedClasses) {
+        for (InstanceType implemented: implementsList) {
             if (! implemented.resolve(subScope)) {
                 Logger.error("Could not resolve implemented class " + implemented + " from " + getName());
                 return false;
@@ -90,12 +90,12 @@ public abstract class ProgramDeclaration implements Declaration {
 	    return type;
 	}
 
-	public List<InstanceType> getExtendedClass() {
-		return extendedClass;
+	public List<InstanceType> getExtendsList() {
+		return extendsList;
 	}
 
-	public List<InstanceType> getImplementedClasses() {
-		return implementedClasses;
+	public List<InstanceType> getImplementsList() {
+		return implementsList;
 	}
 
 }

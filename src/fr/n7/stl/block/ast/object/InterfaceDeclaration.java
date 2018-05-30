@@ -26,7 +26,7 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	public InterfaceDeclaration(ClassName name, List<InstanceType> extendedClass, List<Signature> signatures) {
 		this.className = name;
 		this.signatures = signatures;
-        this.extendedClass = extendedClass;
+        this.extendsList = extendedClass;
 	}
 
 	public List<Signature> getSignatures() {
@@ -53,14 +53,14 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	@Override
 	public boolean checkType() {
         // Check if the superclasses are well superinterface
-        for (InstanceType tp: extendedClass) {
+        for (InstanceType tp: extendsList) {
             if (tp.getDeclaration() instanceof ClassDeclaration) {
                 Logger.error("The interface " + this.getName() + " extends the class "+ tp.getDeclaration().getName() + " which is not correct.");
                 return false;
             }
         }
 
-        if (implementedClasses.size() > 0) {
+        if (implementsList.size() > 0) {
             Logger.error("Interface " + getName() + " cannot implements another");
             return false;
         }
@@ -88,9 +88,9 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 	public String toString() {
 		String result = "interface " + className;
 
-		if (extendedClass.size() > 0) {
+		if (extendsList.size() > 0) {
 		    result += " extends ";
-            for (InstanceType extended: extendedClass)
+            for (InstanceType extended: extendsList)
                 result += extended + ", ";
             result = result.substring(0, result.length() - 2);
 		}
