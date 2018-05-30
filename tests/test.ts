@@ -1436,11 +1436,11 @@ describe('# Resolve / CheckType hard tests', function () {
  * ##     RESOLVE/CHECKTYPE TESTS - PART IV     ##
  * ###############################################
  */
-describe('# Resolve / CheckType impossible tests', function () {
+describe('# Resolve / CheckType final tests', function () {
     this.slow(SLOW_TEST_MS);
 
     /* ********************* */
-    it('-> interface I', function(done: () => any) {
+    it('-> use method interface', function(done: () => any) {
         TAM.ensureResult(`
             interface I1 {
                 int getI1();
@@ -1456,7 +1456,7 @@ describe('# Resolve / CheckType impossible tests', function () {
                     return 2;
                 }
             }
-            class Test_Interface_Inheritance {
+            class Test {
                 public static void main(String args[]) {
                     I1 c = new C();
                     System.out.println(c.getI1());
@@ -1468,9 +1468,9 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> array', function(done: () => any) {
+    it('-> arrays', function(done: () => any) {
         TAM.ensureResult(`
-            class Test_array {
+            class Test {
                 public static void main(String args[]) {
                     int t[] = new int[5];
                     t[3] = 4;
@@ -1490,19 +1490,39 @@ describe('# Resolve / CheckType impossible tests', function () {
         TAM.ensureResult(`
             class Integer {
                 private int in;
-            
                 public Integer(int _i) {
                     in = _i;
                 }
-            
                 public int get() {
                     return in;
                 }
             }
-            
-            class Test_constructor_one_parameter {
+            class Test {
                 public static void main(String args[]) {
-                    Integer i = new Integer(42);
+                    Integer i = new Integer(1);
+                    System.out.println(i.get());
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true
+            });
+        done();
+    });
+    it('-> attribute and parameter with same names', function(done: () => any) {
+        TAM.ensureResult(`
+            class Integer {
+                private int in;
+                public Integer(int in) {
+                    in = in;
+                }
+                public int get() {
+                    return in;
+                }
+            }
+            class Test {
+                public static void main(String args[]) {
+                    Integer i = new Integer(1);
                     System.out.println(i.get());
                 }
             }`,
@@ -1516,11 +1536,9 @@ describe('# Resolve / CheckType impossible tests', function () {
         TAM.ensureResult(`
             class Integer {
                 private int in;
-
                 public int get() {
                     return in;
                 }
-
                 public void test() {
                     int a = get();
                 }
@@ -1531,7 +1549,7 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic I', function(done: () => any) {
+    it('-> double generic example', function(done: () => any) {
         TAM.ensureResult(`
             class Box <T, H> {
                 private T t;
@@ -1559,7 +1577,7 @@ describe('# Resolve / CheckType impossible tests', function () {
                 }
             }
             
-            class Test_genericite_00 {
+            class Test {
                 public static void main (String args[]) {
                     Integer a = new Integer(1);
                     Integer b = new Integer(2);
@@ -1572,35 +1590,29 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic II', function(done: () => any) {
+    it('-> double generic example w/ generic method use', function(done: () => any) {
         TAM.ensureResult(`
             class Box <T, H> {
                 private T t;
                 private H h;
-            
                 public Box(T _t, H _h) {
                     this.t = _t;
                     this.h = _h;
                 }
-            
                 public void setT(T _t) {
                     this.t = _t;
                 }
-            
                 public T getT() {
                     return this.t;
                 }
             }
-            
             class Integer {
                 public int value;
-            
                 public Integer(int value) {
                     this.value = value;
                 }
             }
-            
-            class Test_genericite_00 {
+            class Test {
                 public static void main (String args[]) {
                     Integer a = new Integer(1);
                     Integer b = new Integer(2);
@@ -1614,37 +1626,30 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic III', function(done: () => any) {
+    it('-> difficult generic', function(done: () => any) {
         TAM.ensureResult(`
             interface Integer {
                 int getInteger();
             }
-            
             class IntegerImpl implements Integer {
                 private int i;
-            
                 public IntegerImpl(int _i) {
                     this.i = _i;
                 }
-            
                 public int getInteger() {
                     return this.i;
                 }
             }
-            
             class Mask <T extends Integer> {
                 private T t;
-            
                 public Mask(T _t) {
                     this.t = _t;
                 }
-            
                 public T getValue() {
                     return this.t;
                 }
             }
-            
-            class Test_genericite_02 {
+            class Test {
                 public static void main(String args[]) {
                     IntegerImpl ii = new IntegerImpl(1);
                     Mask<Integer> i = new Mask<Integer>(ii);
@@ -1656,26 +1661,7 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic IV', function(done: () => any) {
-        TAM.ensureResult(`
-            class Carton { public int i; }
-            class Box <T extends Carton> {
-                private T t;
-                public Box() { }
-            }
-            class A { }
-            class Main {
-                public static void main(String args[]) {
-                    Box<A> b = new Box<A>();
-                }
-            }`,
-            {
-                resolve: true,
-                checkType : false
-            });
-        done();
-    });
-    it('-> generic V', function(done: () => any) {
+    it('-> generic w/ extends', function(done: () => any) {
         TAM.ensureResult(`
             class Carton { public int i; }
             class Box <T extends Carton> {
@@ -1694,7 +1680,26 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic VI w/ Wildcard', function(done: () => any) {
+    it('-> generic w/ missing extends', function(done: () => any) {
+        TAM.ensureResult(`
+            class Carton { public int i; }
+            class Box <T extends Carton> {
+                private T t;
+                public Box() { }
+            }
+            class A { }
+            class Main {
+                public static void main(String args[]) {
+                    Box<A> b = new Box<A>();
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : false
+            });
+        done();
+    });
+    it('-> generic w/ wildcard', function(done: () => any) {
         TAM.ensureResult(`
             class Carton {}
             
@@ -1714,24 +1719,19 @@ describe('# Resolve / CheckType impossible tests', function () {
             });
         done();
     });
-    it('-> generic VII', function(done: () => any) {
+    it('-> big generic', function(done: () => any) {
         TAM.ensureResult(`
             interface I1 { int getI1(); }
-            
             interface I2 { int getI2(); }
-            
             interface I3 extends I2, I1 { int getI3(); }
-            
             interface I4 extends I1, I3 { int getI4(); }
-            
             class C implements I4 {
                 public int getI1() { return 1; }
                 public int getI2() { return 2; }
                 public int getI3() { return 3; }
                 public int getI4() { return 4; }
             }
-            
-            class Test_interface_inheritance_02 {
+            class Test {
                 public static void main(String args[]) {
                     C c = new C();
                     System.out.println(c.getI1());
