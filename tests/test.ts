@@ -1758,9 +1758,11 @@ describe('# Resolve / CheckType final tests', function () {
                     }
                 }
                 class Test {
-                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
-                    Generic<?> wildcardReference = concreteTypeReference;
-                    UpperBound ub = wildcardReference.read();
+                    public static void main(String args[]) {
+                        Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                        Generic<?> wildcardReference = concreteTypeReference;
+                        UpperBound ub = wildcardReference.read();
+                    }
                 }`,
                 {
                     resolve: true,
@@ -1782,10 +1784,12 @@ describe('# Resolve / CheckType final tests', function () {
                     }
                 }
                 class Test {
-                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
-                    Generic<?> wildcardReference = concreteTypeReference;
-                    UpperBound ub = wildcardReference.read();
-                    wildcardReference.write(new Object()); // type error
+                    public static void main(String args[]) {
+                        Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                        Generic<?> wildcardReference = concreteTypeReference;
+                        UpperBound ub = wildcardReference.read();
+                        wildcardReference.write(new Object()); // type error
+                    }
                 }`,
                 {
                     resolve: true,
@@ -1807,10 +1811,12 @@ describe('# Resolve / CheckType final tests', function () {
                     }
                 }
                 class Test {
-                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
-                    Generic<?> wildcardReference = concreteTypeReference;
-                    UpperBound ub = wildcardReference.read();
-                    wildcardReference.write(new UpperBound()); // type error
+                    public static void main(String args[]) {
+                        Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                        Generic<?> wildcardReference = concreteTypeReference;
+                        UpperBound ub = wildcardReference.read();
+                        wildcardReference.write(new UpperBound()); // type error
+                    }
                 }`,
                 {
                     resolve: true,
@@ -1832,10 +1838,12 @@ describe('# Resolve / CheckType final tests', function () {
                     }
                 }
                 class Test {
-                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
-                    Generic<?> wildcardReference = concreteTypeReference;
-                    UpperBound ub = wildcardReference.read();
-                    concreteTypeReference.write(new UpperBound()); // OK
+                    public static void main(String args[]) {
+                        Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                        Generic<?> wildcardReference = concreteTypeReference;
+                        UpperBound ub = wildcardReference.read();
+                        concreteTypeReference.write(new UpperBound()); // OK
+                    }
                 }`,
                 {
                     resolve: true,
