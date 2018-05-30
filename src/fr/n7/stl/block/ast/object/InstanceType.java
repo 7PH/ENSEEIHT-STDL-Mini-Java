@@ -55,14 +55,25 @@ public class InstanceType implements Type {
         if (! (other instanceof InstanceType))
             return false;
 
-
         InstanceType instanceType = (InstanceType) other;
-        if (declaration != null) {
-            // this one is a class/interface type, like 'Box'. Other has to be too
-            Declaration declaration2 = instanceType.getDeclaration();
 
-            // could be improved
-            if (declaration2 != declaration) {
+        if (instanceType.getDeclaration() == null) {
+            // if the other is a generic type like 'T extends Stuff'
+
+            if (declaration == null) {
+                // this one is also a generic type
+                // we're trying to match 'T1 extends Foo' against 'T2 extends Bar'
+
+                // same declaration, this is the same type
+                if (getGenericDeclaration() == instanceType.getGenericDeclaration()) return true;
+
+                // if one constraint on this type is compatible with the other
+                for (InstanceType superClassT: genericDeclaration.getExtendedTypes())
+                    if (superClassT.compatibleWith(other))
+                        return true;
+            } else {
+                // this one is a "class" type like 'Integer'
+
                 // if a superclass is compatible with the other, it's OK
                 for (InstanceType superClassT: declaration.getExtendsList())
                     if (superClassT.compatibleWith(other))
@@ -71,29 +82,39 @@ public class InstanceType implements Type {
                 for (InstanceType implemented: declaration.getImplementsList())
                     if (implemented.compatibleWith(other))
                         return true;
-                // nope
-                return false;
             }
         } else {
-            if (instanceType.getGenericDeclaration() != genericDeclaration) {
-                // does 'this' extends in some manner the other type?
-                // for instance:
-                //   class Box<T extends A> { }
-                //   -> T is compatible with A
-                boolean ok = false;
-                for (InstanceType type: getGenericDeclaration().getExtendedTypes()) {
-                    // @TODO: how it should be done:
-                    //if (instanceType.compatibleWith(type))
-                    if (instanceType.name.equals(type.name))
-                        ok = true;
-                }
-                return ok;
+            // other is a class/interface
+
+            if (declaration != null) {
+                // this one too
+
+                if (declaration == instanceType.getDeclaration())
+                    return true;
+
+                // if a superclass is compatible with the other, it's OK
+                for (InstanceType superClassT : declaration.getExtendsList())
+                    if (superClassT.compatibleWith(other))
+                        return true;
+                // idem for an interface
+                for (InstanceType implemented : declaration.getImplementsList())
+                    if (implemented.compatibleWith(other))
+                        return true;
             } else {
-                return true;
+                // we're trying to set a generic type 'T extends Foo' in an object (eg: 'Foo').
+                // this can only work if one the superclass of 'T' is compatible with 'Foo'
+
+                if (instanceType.name.equals(name))
+                    return true;
+
+                // if one constraint on this type is compatible with the other
+                for (InstanceType superClassT: genericDeclaration.getExtendedTypes())
+                    if (superClassT.compatibleWith(other))
+                        return true;
             }
         }
 
-        return true;
+        return false;
 	}
 
 	@Override
@@ -112,6 +133,9 @@ public class InstanceType implements Type {
 			Logger.error("InstanceType: Unknown reference to '" + name + "'");
 			return false;
 		}
+
+		for (InstanceType type: typeInstantiations)
+		    type.resolve(scope);
 
 		Declaration scopeDeclaration = scope.get(name);
         if (scopeDeclaration instanceof ProgramDeclaration) {
