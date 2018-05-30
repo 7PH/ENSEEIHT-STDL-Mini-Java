@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast;
 
 import fr.n7.stl.block.ast.instruction.Instruction;
@@ -17,23 +14,20 @@ import fr.n7.stl.util.Logger;
 
 import java.util.List;
 
-/**
+/** 
  * Represents a Block node in the ABSTRACT Syntax Tree node for the Bloc language.
  * Declares the various semantics attributes for the node.
  * 
  * A block contains declarations. It is thus a Scope even if a separate SymbolTable is used in
  * the attributed semantics in order to manage declarations.
- * 
- * @author Marc Pantel
- *
  */
 public class Block {
 
-	/**
-	 * Sequence of instructions contained in a block.
-	 */
+	/** Sequence of instructions contained in a block. */
 	protected List<Instruction> instructions;
-    protected int allocated;
+
+	protected int allocated;
+
     private int offset;
 
     /**

@@ -8,22 +8,15 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a type declaration.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a type declaration. */
 public class TypeDeclaration implements Declaration, Instruction {
 
-	/**
-	 * Name of the declared type
-	 */
+	/** Name of the declared type */
 	private String name;
 	
-	/**
-	 * AST node for the type associated to the name
-	 */
+	/** AST node for the type associated to the name */
 	private Type type;
 
 	/**
@@ -51,8 +44,12 @@ public class TypeDeclaration implements Declaration, Instruction {
     /**
      */
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (! scope.accepts(this)) return false;
-		if (! type.resolve(scope)) return false;
+		if (! scope.accepts(this)) {
+			Logger.error("The type " + this.name + " is already declared in this block.");
+			return false;
+		}
+		if (! type.resolve(scope))
+			return false;
 		scope.register(this);
 		return true;
 	}

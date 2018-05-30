@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.type;
 
 import fr.n7.stl.block.ast.instruction.declaration.TypeDeclaration;
@@ -8,12 +5,7 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.util.Logger;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a named type.
- * 
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a named type. */
 public class NamedType implements Type {
 
 	private TypeDeclaration declaration;

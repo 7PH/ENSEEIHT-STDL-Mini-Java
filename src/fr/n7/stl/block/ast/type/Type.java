@@ -1,15 +1,9 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.type;
 
 import fr.n7.stl.block.ast.ASTNode;
 
-/**
- * Gathers the common services provided by types.
+/** Gathers the common services provided by types.
  * Must be implemented by all the classes representing types in the language.
- * @author Marc Pantel
- *
  */
 public interface Type extends ASTNode {
 	

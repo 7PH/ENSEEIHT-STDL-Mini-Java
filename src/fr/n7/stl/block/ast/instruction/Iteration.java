@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.instruction;
 
 import fr.n7.stl.block.ast.Block;
@@ -13,14 +10,11 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a conditional instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a conditional instruction. */
 public class Iteration implements Instruction {
 
 	protected Expression condition;
+
 	protected Block body;
 
 	public Iteration(Expression _condition, Block _body) {

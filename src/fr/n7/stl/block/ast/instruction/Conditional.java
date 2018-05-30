@@ -12,15 +12,13 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import java.util.Optional;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a conditional instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a conditional instruction. */
 public class Conditional implements Instruction {
 
 	protected Expression condition;
+
 	protected Block thenBranch;
+
 	protected Optional<Block> elseBranch;
 
 	public Conditional(Expression _condition, Block _then, Block _else) {

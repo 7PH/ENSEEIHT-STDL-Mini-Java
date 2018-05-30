@@ -55,20 +55,7 @@ public class SequenceType implements Type {
 				}
 				return _result;
 			} else {
-				if (other instanceof RecordType) {
-					return this.equalsTo(((RecordType) other).erase());
-				} else {
-					if (other instanceof CoupleType) {
-						if (this.types.size() == 2) {
-							return this.types.get(0).equalsTo(((CoupleType) other).getFirst()) &&
-									this.types.get(1).equalsTo(((CoupleType) other).getSecond());
-						} else {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
+				return false;
 			}
 		}
 	}
@@ -98,15 +85,6 @@ public class SequenceType implements Type {
             while (_iter.hasNext() && _result)
                 _result = _result && _iter.next().equalsTo(_element);
             return _result;
-        } else if (other instanceof RecordType) {
-		    return this.compatibleWith(((RecordType) other).erase());
-        } else if (other instanceof CoupleType) {
-            /*
-		    if (this.types.size() == 2) {
-                return this.types.get(0).compatibleWith(((CoupleType)_other).getFirst()) &&
-                        this.types.get(1).compatibleWith(((CoupleType)_other).getSecond());
-            }*/
-            return false;
         } else if (other instanceof NamedType) {
             return compatibleWith(((NamedType) other).getType());
         }
