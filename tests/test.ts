@@ -1699,7 +1699,7 @@ describe('# Resolve / CheckType final tests', function () {
             });
         done();
     });
-    it('-> generic VI w/ wildcard', function(done: () => any) {
+    it('-> generic w/ wildcard', function(done: () => any) {
         TAM.ensureResult(`
             class Carton {}
             
@@ -1719,7 +1719,7 @@ describe('# Resolve / CheckType final tests', function () {
             });
         done();
     });
-    it('-> generic VII', function(done: () => any) {
+    it('-> big generic', function(done: () => any) {
         TAM.ensureResult(`
             interface I1 { int getI1(); }
             interface I2 { int getI2(); }
