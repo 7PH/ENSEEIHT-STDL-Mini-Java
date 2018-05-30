@@ -1,6 +1,7 @@
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractIdentifier;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -55,6 +56,13 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
             AttributeDefinition ad = ((AttributeDefinition) declaration);
             this.register = ad.getRegister();
             this.offset = ad.getRelativeOffset();
+            this.declaration = declaration;
+            return true;
+        } else if (declaration instanceof ParameterDeclaration) {
+            // we can assign to an attribute so it's ok
+            ParameterDeclaration pd = ((ParameterDeclaration) declaration);
+            this.register = Register.LB;
+            this.offset = pd.getOffset();
             this.declaration = declaration;
             return true;
         } else {
