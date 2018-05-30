@@ -78,6 +78,8 @@ public class InstanceType implements Type {
                 if (instanceType.getGenericDeclaration().getExtendedTypes().size() == 0)
                     return true;
 
+                // @TODO here
+
                 // if a superclass is compatible with the other, it's OK
                 for (InstanceType superClassT: declaration.getExtendsList())
                     if (superClassT.compatibleWith(other))

@@ -1648,8 +1648,6 @@ describe('# Resolve / CheckType impossible tests', function () {
                 public static void main(String args[]) {
                     IntegerImpl ii = new IntegerImpl(1);
                     Mask<Integer> i = new Mask<Integer>(ii);
-            
-                    System.out.println(i.getValue().getInteger());
                 }
             }`,
             {
