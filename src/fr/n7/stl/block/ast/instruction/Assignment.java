@@ -76,7 +76,6 @@ public class Assignment implements Instruction, Expression {
 
 	/* (non-Javadoc)
 	 * @see fr.n7.stl.block.ast.Instruction#getCode(fr.n7.stl.tam.ast.TAMFactory)
-	 * @TODO
 	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {

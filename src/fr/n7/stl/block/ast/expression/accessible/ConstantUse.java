@@ -25,9 +25,8 @@ public class ConstantUse extends AbstractUse {
 	}
 
 	/* (non-Javadoc)
-         * @see fr.n7.stl.block.ast.expression.AbstractUse#getCode(fr.n7.stl.tam.ast.TAMFactory)
-         * @TODO
-         */
+     * @see fr.n7.stl.block.ast.expression.AbstractUse#getCode(fr.n7.stl.tam.ast.TAMFactory)
+     */
 	public Fragment getCode(TAMFactory factory) {
         Fragment _result = factory.createFragment();
         _result.add(factory.createLoadL(/*declaration.getOffset()*/0));
