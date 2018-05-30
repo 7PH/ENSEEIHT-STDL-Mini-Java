@@ -1699,26 +1699,6 @@ describe('# Resolve / CheckType final tests', function () {
             });
         done();
     });
-    it('-> generic w/ wildcard', function(done: () => any) {
-        TAM.ensureResult(`
-            class Carton {}
-            
-            class Box <T extends Carton> {
-                private T t;
-                public void set(T _t) { this.t = _t; }
-                public T get() { return this.t; }
-            }
-            class WildCard {
-                public static void main(String args[]) {
-                    Box<?> b = new Box<Carton>();
-                }
-            }`,
-            {
-                resolve: true,
-                checkType : true
-            });
-        done();
-    });
     it('-> big generic', function(done: () => any) {
         TAM.ensureResult(`
             interface I1 { int getI1(); }
@@ -1744,7 +1724,130 @@ describe('# Resolve / CheckType final tests', function () {
             });
         done();
     });
+    describe('# About wild card', function() {
+        it('-> generic w/ wildcard', function(done: () => any) {
+            TAM.ensureResult(`
+                class Carton {}
+                
+                class Box <T extends Carton> {
+                    private T t;
+                    public void set(T _t) { this.t = _t; }
+                    public T get() { return this.t; }
+                }
+                class WildCard {
+                    public static void main(String args[]) {
+                        Box<?> b = new Box<Carton>();
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> generic w/ wildcard and object use', function(done: () => any) {
+            TAM.ensureResult(`
+                class UpperBound {}
+                class Generic <T extends UpperBound> {
+                    private T t;
+                    void write(T t) {
+                        this.t = t;
+                    }
+                    T read() {
+                        return t;
+                    }
+                }
+                class Test {
+                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                    Generic<?> wildcardReference = concreteTypeReference;
+                    UpperBound ub = wildcardReference.read();
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+        it('-> generic w/ wildcard and error type', function(done: () => any) {
+            TAM.ensureResult(`
+                class Object {}
+                class UpperBound {}
+                class Generic <T extends UpperBound> {
+                    private T t;
+                    void write(T t) {
+                        this.t = t;
+                    }
+                    T read() {
+                        return t;
+                    }
+                }
+                class Test {
+                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                    Generic<?> wildcardReference = concreteTypeReference;
+                    UpperBound ub = wildcardReference.read();
+                    wildcardReference.write(new Object()); // type error
+                }`,
+                {
+                    resolve: true,
+                    checkType : false
+                });
+            done();
+        });
+        it('-> generic w/ wildcard and error type II', function(done: () => any) {
+            TAM.ensureResult(`
+                class Object {}
+                class UpperBound {}
+                class Generic <T extends UpperBound> {
+                    private T t;
+                    void write(T t) {
+                        this.t = t;
+                    }
+                    T read() {
+                        return t;
+                    }
+                }
+                class Test {
+                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                    Generic<?> wildcardReference = concreteTypeReference;
+                    UpperBound ub = wildcardReference.read();
+                    wildcardReference.write(new UpperBound()); // type error
+                }`,
+                {
+                    resolve: true,
+                    checkType : false
+                });
+            done();
+        });
+        it('-> generic w/ wildcard and error type II', function(done: () => any) {
+            TAM.ensureResult(`
+                class Object {}
+                class UpperBound {}
+                class Generic <T extends UpperBound> {
+                    private T t;
+                    void write(T t) {
+                        this.t = t;
+                    }
+                    T read() {
+                        return t;
+                    }
+                }
+                class Test {
+                    Generic<UpperBound> concreteTypeReference = new Generic<UpperBound>();
+                    Generic<?> wildcardReference = concreteTypeReference;
+                    UpperBound ub = wildcardReference.read();
+                    concreteTypeReference.write(new UpperBound()); // OK
+                }`,
+                {
+                    resolve: true,
+                    checkType : true
+                });
+            done();
+        });
+    });
 });
+
+
+
 
 /* ###############################################
  * ##               TAM CODE TESTS              ##
