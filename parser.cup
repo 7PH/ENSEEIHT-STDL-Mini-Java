@@ -122,9 +122,6 @@ non terminal ClassModifier              ClassModifier;
 non terminal List<InstanceType>         ClassExtension;
 non terminal List<InstanceType>	        ClassImplementation;
 non terminal DefinitionAccess			DefinitionAccess;
-non terminal String						InstanceTypeWithWildCardIdent;
-non terminal InstanceType				InstanceTypeWithWildCard;
-non terminal List<InstanceType>			InstanceTypesWithWildCard;
 
 /* Associativité et Priorité relative des opérateurs (du moins prioritaire au plus prioritaire) */
 /* Opérateur le moins prioritiaire */
@@ -328,19 +325,6 @@ InstanceTypes ::=
 			RESULT = InstanceTypes;
 		:};
 		
-InstanceTypesWithWildCard ::=
-    InstanceTypeWithWildCard:InstanceType
-        {:
-			List<InstanceType> InstanceTypes = new LinkedList<>();
-			InstanceTypes.add(InstanceType);
-			RESULT = InstanceTypes;
-        :}
-    | InstanceTypesWithWildCard:InstanceTypes UL_Virgule InstanceTypeWithWildCard:InstanceType
-        {:
-			InstanceTypes.add(InstanceType);
-			RESULT = InstanceTypes;
-		:};
-
 InstanceTypesWithEsperluette ::=
     InstanceType:InstanceType
         {:
@@ -357,23 +341,9 @@ InstanceTypesWithEsperluette ::=
 InstanceType ::=
     UL_Identificateur:ident
         {: RESULT = new InstanceType(ident, new LinkedList<>()); :}
-    | UL_Identificateur:ident UL_Inferieur InstanceTypesWithWildCard:instanceTypes UL_Superieur
+    | UL_Identificateur:ident UL_Inferieur InstanceTypes:instanceTypes UL_Superieur
         {: RESULT = new InstanceType(ident, instanceTypes); :}
     ;
-    
-InstanceTypeWithWildCard ::=
-    InstanceTypeWithWildCardIdent:ident
-        {: RESULT = new InstanceType(ident, new LinkedList<>()); :}
-    | UL_Identificateur:ident UL_Inferieur InstanceTypesWithWildCard:instanceTypes UL_Superieur
-        {: RESULT = new InstanceType(ident, instanceTypes); :}
-    ;
-    
-InstanceTypeWithWildCardIdent ::=
-	UL_Identificateur:ident
-		{: RESULT = ident; :}
-	| UL_Point_Interrogation 
-		{: RESULT = "?"; :}
-	;
 
 NullableType ::=
     UL_Type_Vide

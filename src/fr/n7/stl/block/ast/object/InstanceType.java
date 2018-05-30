@@ -6,6 +6,7 @@ import java.util.List;
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
+import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
@@ -47,12 +48,15 @@ public class InstanceType implements Type {
                 return false;
         }
 
-        Logger.warning("@TODO InstanceTYpe: double check");
+        Logger.warning("@TODO InstanceType: double check");
         return name.equals(instanceType.name);
 	}
 	
 	@Override
 	public boolean compatibleWith(Type other) {
+        if (other == AtomicType.Wildcard)
+            return true;
+
         if (! (other instanceof InstanceType))
             return false;
 

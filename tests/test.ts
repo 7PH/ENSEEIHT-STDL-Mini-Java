@@ -1750,10 +1750,10 @@ describe('# Resolve / CheckType final tests', function () {
                 class UpperBound {}
                 class Generic <T extends UpperBound> {
                     private T t;
-                    void write(T t) {
+                    public void write(T t) {
                         this.t = t;
                     }
-                    T read() {
+                    public T read() {
                         return t;
                     }
                 }
@@ -1776,10 +1776,10 @@ describe('# Resolve / CheckType final tests', function () {
                 class UpperBound {}
                 class Generic <T extends UpperBound> {
                     private T t;
-                    void write(T t) {
+                    public void write(T t) {
                         this.t = t;
                     }
-                    T read() {
+                    public T read() {
                         return t;
                     }
                 }
@@ -1803,10 +1803,10 @@ describe('# Resolve / CheckType final tests', function () {
                 class UpperBound {}
                 class Generic <T extends UpperBound> {
                     private T t;
-                    void write(T t) {
+                    public void write(T t) {
                         this.t = t;
                     }
-                    T read() {
+                    public T read() {
                         return t;
                     }
                 }
@@ -1830,10 +1830,10 @@ describe('# Resolve / CheckType final tests', function () {
                 class UpperBound {}
                 class Generic <T extends UpperBound> {
                     private T t;
-                    void write(T t) {
+                    public void write(T t) {
                         this.t = t;
                     }
-                    T read() {
+                    public T read() {
                         return t;
                     }
                 }
@@ -1862,7 +1862,7 @@ describe('# Resolve / CheckType final tests', function () {
  * ###############################################
  */
 describe('# TAM code', function() {
-    this.slow(1000);
+    this.slow(4000);
 
     describe('# public static void main()', function() {
         it('-> System.out.println(-)', function(done: () => any) {

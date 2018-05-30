@@ -35,7 +35,9 @@ public abstract class ProgramDeclaration implements Declaration {
 
         // register generic types in scope
         for (GenericType g : className.getGenerics()) {
-            g.resolve(scope);
+            if (! g.resolve(scope)) {
+                return false;
+            }
         	subScope.register(g);
         }
 
