@@ -1,6 +1,5 @@
 package fr.n7.stl.block.ast.object;
 
-import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -13,8 +12,6 @@ import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-import javax.lang.model.type.ErrorType;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ObjectAllocation implements Expression {
@@ -22,6 +19,8 @@ public class ObjectAllocation implements Expression {
     private Type type;
 
     private List<Expression> parameters;
+
+    private ClassDeclaration declaration;
 
     public ObjectAllocation(Type type, List<Expression> parameters) {
         this.type = type;
@@ -58,12 +57,14 @@ public class ObjectAllocation implements Expression {
     		if(! expression.resolve(newScope))
     			return false;
     	}
+
+        declaration = (ClassDeclaration) ((InstanceType) type).getDeclaration();
     	
     	return true;
     }
 
     private List<MethodDefinition> getConstructors() {
-        return ((ClassDeclaration)((InstanceType)type).getDeclaration()).getConstructors();
+        return declaration.getConstructors();
     }
 
     @Override
@@ -101,7 +102,43 @@ public class ObjectAllocation implements Expression {
             }
         }
 
+        if (! checkClassGenericsMatch((InstanceType) type)) {
+            return AtomicType.ErrorType;
+        }
+
         return type;
+    }
+
+    public boolean checkClassGenericsMatch(InstanceType type) {
+        if (declaration == null) return true;
+        List<InstanceType> typeInstantiations = type.getTypeInstantiations();
+        List<GenericType> genericTypes = declaration.getClassName().getGenerics();
+        if (genericTypes.size() != typeInstantiations.size()) {
+            Logger.error("Wrong number of generic type instantiated for class '" + declaration.getName() + "' " + genericTypes.size() + " - " + typeInstantiations.size());
+            return false;
+        }
+        for (int i = 0; i < typeInstantiations.size(); ++ i) {
+
+            // @TODO: Remove the following comment
+
+            // TODO : Verifier que les types generiques sont compatibles.
+            // ex : si déclaré MyClass<T extends X>
+            // declaration[i].compatibleWith(typeInstantiations[i])
+
+            Type type2 = typeInstantiations.get(i);
+            GenericType genericType = genericTypes.get(i);
+            // 'type' doit "matcher" 'genericType'
+            for (InstanceType constraint: genericType.getExtendedTypes()) {
+                // 'type' doit être enfant de 'constraint'
+                if (! type2.compatibleWith(constraint)) {
+                    // nop
+                    Logger.error("Unable to set '" + type2 + "' as generic type for '" + declaration.getName() + "'");
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

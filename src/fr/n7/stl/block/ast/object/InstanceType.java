@@ -57,6 +57,7 @@ public class InstanceType implements Type {
             return false;
 
         InstanceType instanceType = (InstanceType) other;
+        //System.out.println(this + " compatible with " + other + " " + (declaration == null) + " / " + (instanceType.getDeclaration() == null));
 
         if (instanceType.getDeclaration() == null) {
             // if the other is a generic type like 'T extends Stuff'
@@ -106,7 +107,8 @@ public class InstanceType implements Type {
 
                     // we could not satisfy this constraint
                     if (! ok) return false;
-                }*/
+                }
+                */
 
                 return true;
             }
@@ -195,37 +197,6 @@ public class InstanceType implements Type {
 
         return true;
 	}
-
-	public boolean checkClassGenericsMatch() {
-        if (declaration == null) return true;
-        List<GenericType> genericTypes = declaration.getClassName().getGenerics();
-        if (genericTypes.size() != typeInstantiations.size()) {
-            Logger.error("Wrong number of generic type instantiated for class '" + declaration.getName() + "' " + genericTypes.size() + " - " + typeInstantiations.size());
-            return false;
-        }
-        for (int i = 0; i < typeInstantiations.size(); ++ i) {
-
-            // @TODO: Remove the following comment
-
-            // TODO : Verifier que les types generiques sont compatibles.
-            // ex : si déclaré MyClass<T extends X>
-            // declaration[i].compatibleWith(typeInstantiations[i])
-
-            Type type = typeInstantiations.get(i);
-            GenericType genericType = genericTypes.get(i);
-            // 'type' doit "matcher" 'genericType'
-            for (InstanceType constraint: genericType.getExtendedTypes()) {
-                // 'type' doit être enfant de 'constraint'
-                if (! type.compatibleWith(constraint)) {
-                    // nop
-                    Logger.error("Unable to set '" + type + "' as generic type for '" + declaration.getName() + "'");
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 
 	@Override
 	public String toString() {
