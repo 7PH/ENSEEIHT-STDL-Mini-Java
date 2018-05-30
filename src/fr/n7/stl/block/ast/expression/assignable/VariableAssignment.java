@@ -1,11 +1,7 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractIdentifier;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
-import fr.n7.stl.block.ast.object.AbstractThisUse;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
@@ -15,11 +11,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/**
- * ABSTRACT Syntax Tree node for an expression whose computation assigns a variable.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for an expression whose computation assigns a variable. */
 public class VariableAssignment extends AbstractIdentifier implements AssignableExpression {
 	
 	protected Declaration declaration;
@@ -45,7 +37,8 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (! scope.knows(name)) {
+		if (! scope.knows(this.name)) {
+			Logger.error("The variable " + this.name + " is unknown.");
 		    return false;
         }
 
@@ -68,6 +61,7 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
             Logger.error("Assignment to non variable declaration " + name + ": " + declaration.getClass());
         }
 
+		Logger.error(this.name + " is not declared as Varaiable but as " + declaration.getClass());
         return false;
 	}
 	

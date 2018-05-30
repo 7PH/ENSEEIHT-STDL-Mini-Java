@@ -1,18 +1,9 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression;
 
-/**
- * Binary operators in the Bloc language.
- * @author Marc Pantel
- *
- */
+/** Binary operators in the Bloc language. */
 public enum BinaryOperator {
 	
-	/**
-	 * Numeric addition and String concatenation
-	 */
+	/** Numeric addition and String concatenation */
 	Add,
 	Substract,
 	Multiply,

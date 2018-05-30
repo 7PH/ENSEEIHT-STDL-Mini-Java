@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.allocation;
 
 import fr.n7.stl.block.ast.expression.BinaryOperator;
@@ -17,10 +14,6 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 import static fr.n7.stl.block.ast.type.AtomicType.ErrorType;
 
-/**
- * @author Marc Pantel
- *
- */
 public class ArrayAllocation implements Expression {
 
 	protected String name;

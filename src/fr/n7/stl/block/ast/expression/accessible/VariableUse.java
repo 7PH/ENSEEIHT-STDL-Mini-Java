@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.accessible;
 
 import fr.n7.stl.block.ast.expression.AbstractUse;
@@ -9,10 +6,7 @@ import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a variable use expression.
- * @author Marc Pantel
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a variable use expression. */
 public class VariableUse extends AbstractUse {
 	
 	protected VariableDeclaration declaration;

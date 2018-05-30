@@ -8,9 +8,7 @@ package fr.n7.stl.block.ast.expression;
  */
 public abstract class AbstractIdentifier implements Expression {
 
-	/**
-	 * Name of the variable.
-	 */
+	/** Name of the variable. */
 	protected String name;
 	
 	/**
@@ -20,8 +18,6 @@ public abstract class AbstractIdentifier implements Expression {
 	public AbstractIdentifier(String name) {
 		this.name = name;
 	}
-
-
 
 	@Override
 	public String toString() {

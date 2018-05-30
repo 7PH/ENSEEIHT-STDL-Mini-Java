@@ -6,7 +6,6 @@ package fr.n7.stl.block.ast;
 import fr.n7.stl.block.ast.expression.*;
 import fr.n7.stl.block.ast.expression.accessible.ArrayAccess;
 import fr.n7.stl.block.ast.expression.accessible.IdentifierAccess;
-import fr.n7.stl.block.ast.expression.accessible.PointerAccess;
 import fr.n7.stl.block.ast.expression.assignable.AssignableExpression;
 import fr.n7.stl.block.ast.expression.value.BooleanValue;
 import fr.n7.stl.block.ast.expression.value.IntegerValue;
@@ -76,8 +75,5 @@ public class BlockFactory {
 	public Expression createArrayAccess( Expression _array, Expression _index) {
 		return new ArrayAccess( _array, _index);
 	}
-	
-	public Expression createPointerAccess( Expression _pointer) {
-		return new PointerAccess( _pointer);
-	}
+
 }

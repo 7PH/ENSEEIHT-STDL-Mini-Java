@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.value;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -11,11 +8,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import org.apache.commons.text.*;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for an integer constant expression.
- * @author Marc Pantel
- *
- */
+
 public class CharacterValue implements Value {
 
 	private char value;

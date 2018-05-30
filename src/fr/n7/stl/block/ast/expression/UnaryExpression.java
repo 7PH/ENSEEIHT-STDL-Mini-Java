@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.expression.accessible.AccessibleExpression;
@@ -12,14 +9,11 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for an unary operation expression.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for an unary operation expression. */
 public class UnaryExpression implements Expression {
 
 	private UnaryOperator operator;
+
 	private Expression parameter;
 	
 	/**

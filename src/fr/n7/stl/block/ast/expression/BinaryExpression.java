@@ -8,31 +8,16 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/**
- * ABSTRACT Syntax Tree node for a binary expression.
- * @author Marc Pantel
- *
- */
-
-/**
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for a binary expression. */
 public class BinaryExpression implements Expression {
 
-	/**
-	 * AST node for the expression whose value is the left parameter for the binary expression.
-	 */
+	/** AST node for the expression whose value is the left parameter for the binary expression. */
 	protected Expression left;
 	
-	/**
-	 * AST node for the expression whose value is the left parameter for the binary expression.
-	 */
+	/** AST node for the expression whose value is the left parameter for the binary expression. */
 	protected Expression right;
 	
-	/**
-	 * Binary operator computed by the Binary Expression.
-	 */
+	/** Binary operator computed by the Binary Expression. */
 	protected BinaryOperator operator;
 	
 	/**

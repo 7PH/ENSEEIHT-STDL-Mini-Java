@@ -1,6 +1,3 @@
-/**
- *
- */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -11,11 +8,6 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for an expression extracting the first component in a couple.
- * @author Marc Pantel
- *
- */
 public class TypeCast implements Expression {
 
     protected String type;

@@ -478,15 +478,6 @@ Instruction ::= Declaration:declaration
 				{:
 					RESULT = new Assignment( affectable, expression);
 				:}
-			| UL_Identificateur:nom UL_Parenthese_Ouvrante Expressions:parametres UL_Parenthese_Fermante  UL_Point_Virgule
-             	{:
-					RESULT = new FunctionCall( nom, parametres );
-				:}
-			| UL_Identificateur:nom UL_Parenthese_Ouvrante UL_Parenthese_Fermante  UL_Point_Virgule
-             	{:
-					List<Expression> _parametres = new LinkedList<Expression>();
-					RESULT = new FunctionCall( nom, _parametres );
-				:}
 			| DefinitionAccess:methodAccess UL_Point_Virgule
 				{:
 					RESULT = methodAccess;
