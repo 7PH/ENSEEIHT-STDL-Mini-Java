@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast;
 
 import fr.n7.stl.block.ast.expression.*;
@@ -14,10 +11,6 @@ import fr.n7.stl.block.ast.instruction.*;
 
 import java.util.List;
 
-/**
- * @author Marc Pantel
- *
- */
 public class BlockFactory {
 
 	public Block createBlock(List<Instruction> _instructions) {

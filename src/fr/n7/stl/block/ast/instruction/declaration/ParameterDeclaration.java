@@ -1,26 +1,16 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.instruction.declaration;
 
 import fr.n7.stl.block.ast.object.MethodDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 
-/**
- * ABSTRACT Syntax Tree node for a formal parameter in a function declaration.
- * @author Marc Pantel
- */
+/** ABSTRACT Syntax Tree node for a formal parameter in a function declaration. */
 public class ParameterDeclaration implements Declaration {
 	
-	/**
-	 * Name of the formal parameter
-	 */
+	/** Name of the formal parameter */
 	protected String name;
 	
-	/**
-	 * AST node for the type of the formal parameter
-	 */
+	/** AST node for the type of the formal parameter */
 	protected Type type;
 	
 	/**

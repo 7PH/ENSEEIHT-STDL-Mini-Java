@@ -11,14 +11,11 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for an array type.
- * @author Marc Pantel
- *
- */
+/**Implementation of the ABSTRACT Syntax Tree node for an array type. */
 public class Assignment implements Instruction, Expression {
 
 	protected Expression value;
+
 	protected AssignableExpression assignable;
 
 	/**

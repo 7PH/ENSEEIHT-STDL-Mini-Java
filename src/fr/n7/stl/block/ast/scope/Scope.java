@@ -1,13 +1,6 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.scope;
 
-/**
- * Interface to mark a node in the ABSTRACT Syntax Tree as a Scope in the language.
- * @author Marc Pantel
- *
- */
+/** Interface to mark a node in the ABSTRACT Syntax Tree as a Scope in the language. */
 public interface Scope <D extends Declaration> {
 	
 	/**

@@ -9,27 +9,18 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a constant declaration instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a constant declaration instruction. */
 public class ConstantDeclaration implements Instruction, Declaration {
 
-	/**
-	 * Name of the constant
-	 */
+	/** Name of the constant */
 	protected String name;
 	
-	/**
-	 * AST node for the type of the constant
-	 */
+	/** AST node for the type of the constant */
 	protected Type type;
 	
-	/**
-	 * AST node for the expression that computes the value of the constant
-	 */
+	/** AST node for the expression that computes the value of the constant */
 	protected Expression value;
 
 	/**
@@ -80,9 +71,14 @@ public class ConstantDeclaration implements Instruction, Declaration {
 	 */
     @Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (! scope.accepts(this)) return false;
-		if (! type.resolve(scope)) return false;
-		if (! value.resolve(scope)) return false;
+		if (! scope.accepts(this)) {
+			Logger.error("The constant " + this.name + " is already declared in this block.");
+			return false;
+		}
+		if (! type.resolve(scope))
+			return false;
+		if (! value.resolve(scope))
+			return false;
 		scope.register(this);
 		return true;
 	}

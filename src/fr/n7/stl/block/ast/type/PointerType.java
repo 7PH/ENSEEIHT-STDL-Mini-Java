@@ -3,11 +3,7 @@ package fr.n7.stl.block.ast.type;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a pointer type.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a pointer type. */
 public class PointerType implements Type {
 
     protected Type element;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package fr.n7.stl.block.ast.instruction;
 
 import fr.n7.stl.block.ast.expression.Expression;
@@ -12,11 +9,7 @@ import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * Implementation of the ABSTRACT Syntax Tree node for a return instruction.
- * @author Marc Pantel
- *
- */
+/** Implementation of the ABSTRACT Syntax Tree node for a return instruction. */
 public class Return implements Instruction {
 
     protected Expression value;

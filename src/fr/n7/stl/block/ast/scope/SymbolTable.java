@@ -1,20 +1,14 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.scope;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/**
- * Implementation of a hierarchical scope using maps.
- * @author Marc Pantel
- *
- */
+/** Implementation of a hierarchical scope using maps. */
 public class SymbolTable implements HierarchicalScope<Declaration> {
 	
 	private Map<String, Declaration> declarations;
+
 	private Scope<Declaration> context;
 
 	public SymbolTable() {

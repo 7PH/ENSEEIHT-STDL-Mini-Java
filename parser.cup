@@ -23,7 +23,6 @@ import fr.n7.stl.block.ast.instruction.*;
 import fr.n7.stl.block.ast.instruction.declaration.*;
 import fr.n7.stl.block.ast.scope.*;
 import fr.n7.stl.block.ast.type.*;
-import fr.n7.stl.block.ast.type.declaration.*;
 import fr.n7.stl.tam.ast.impl.*;
 import fr.n7.stl.tam.ast.*;
 import fr.n7.stl.util.*;

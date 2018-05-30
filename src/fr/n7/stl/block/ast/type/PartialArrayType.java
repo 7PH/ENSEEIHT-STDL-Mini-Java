@@ -1,16 +1,7 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.type;
 
-/**
- * @author Marc Pantel
- *
- */
 public class PartialArrayType extends ArrayType implements PartialType {
 
-	/**
-	 */
 	public PartialArrayType() {
 		super(null);
 	}

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.instruction.declaration;
 
 import fr.n7.stl.block.ast.expression.Expression;
@@ -12,36 +9,24 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
-/**
- * ABSTRACT Syntax Tree node for a variable declaration instruction.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for a variable declaration instruction. */
 public class VariableDeclaration implements Declaration, Instruction {
 
-	/**
-	 * Name of the declared variable.
-	 */
+	/** Name of the declared variable. */
 	protected String name;
 	
-	/**
-	 * AST node for the type of the declared variable.
-	 */
+	/** AST node for the type of the declared variable. */
 	protected Type type;
 	
-	/**
-	 * AST node for the initial value of the declared variable.
-	 */
+	/** AST node for the initial value of the declared variable. */
 	protected Expression value;
 	
-	/**
-	 * Address register that contains the base address used to store the declared variable.
-	 */
+	/** Address register that contains the base address used to store the declared variable. */
 	protected Register register;
 	
-	/**
-	 * Offset from the base address used to store the declared variable
+	/** Offset from the base address used to store the declared variable
 	 * i.e. the size of the memory allocated to the previous declared variables
 	 */
 	protected int offset;
@@ -103,9 +88,14 @@ public class VariableDeclaration implements Declaration, Instruction {
 	 */
     @Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-	    if (! scope.accepts(this)) return false;
-	    if (! type.resolve(scope)) return false;
-	    if (! value.resolve(scope)) return false;
+		if (! scope.accepts(this)) {
+			Logger.error("The variable " + this.name + " is already declared in this block.");
+			return false;
+		}
+		if (! type.resolve(scope))
+			return false;
+		if (! value.resolve(scope))
+			return false;
 	    scope.register(this);
 	    return true;
 	}

@@ -1,13 +1,6 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast;
 
-/**
- * Runtime exception that is triggered when a semantics element is not implemented.
- * @author Marc Pantel
- *
- */
+/** Runtime exception that is triggered when a semantics element is not implemented. */
 public class SemanticsUndefinedException extends RuntimeException {
 
 	private static final long serialVersionUID = 7306556465369026268L;
