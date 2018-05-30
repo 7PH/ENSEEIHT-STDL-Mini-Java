@@ -46,7 +46,6 @@ public abstract class AbstractArray implements Expression {
 	/**
 	 * Synthesized Semantics attribute to compute the type of an expression.
 	 * @return Synthesized Type of the expression.
-     * @TODO getType
 	 */
 	public Type getType() {
 	    if (! index.getType().equalsTo(AtomicType.IntegerType))
