@@ -75,7 +75,8 @@ class Driver {
         System.out.println("Logger: " + Logger.getAll());
         System.out.println("===============================================");
         System.out.println("TAM         : ");
-        System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
+        if (parser.resolve && parser.checkType)
+            System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
         System.out.println("===============================================");
     }
 
