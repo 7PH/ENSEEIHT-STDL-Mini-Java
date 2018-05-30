@@ -3,10 +3,12 @@ package fr.n7.stl.block.ast.object;
 import java.util.LinkedList;
 import java.util.List;
 
+import fr.n7.stl.block.ast.ASTNode;
 import fr.n7.stl.block.ast.scope.Declaration;
+import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 
-public class GenericType implements Declaration {
+public class GenericType implements ASTNode, Declaration {
 
 	private String name;
 	
@@ -49,4 +51,12 @@ public class GenericType implements Declaration {
 	public Type getType() {
 		return null;
 	}
+
+    @Override
+    public boolean resolve(HierarchicalScope<Declaration> scope) {
+        for (InstanceType type: extendedTypes)
+            if (! type.resolve(scope))
+                return false;
+        return true;
+    }
 }

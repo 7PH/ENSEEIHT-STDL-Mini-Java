@@ -104,11 +104,6 @@ public class NamedType implements Type {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-
-    /**
-     * @TODO fix
-     * @return
-     */
 	@Override
 	public String toString() {
 		return name;

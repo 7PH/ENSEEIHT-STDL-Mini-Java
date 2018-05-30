@@ -22,25 +22,11 @@ public class Constructor extends MethodDefinition {
     @Override
     public boolean checkType() {
         boolean ok = true;
-
         if (this.getDefinitionModifier() != null) {
             Logger.error("Constructor " + this.getName() + " cannot have a static/final modifier");
             ok = false;
         }
-
-        // @TODO delete this note
-        // no need to display a second error.
-        // if an instruction within the body is not well typed,
-        // it will show an error in the Logger. no need to display it twice here.
-        // so i've deleted the 'if' block there
-        // {deleted code}
         ok &= body.checkType();
-
-        // @TODO delete this note
-        // no need to check parameters in MethodDefinition and here
-        // factorized in MethodDefinition
-        // {deleted code}
-
         return ok;
     }
 }
