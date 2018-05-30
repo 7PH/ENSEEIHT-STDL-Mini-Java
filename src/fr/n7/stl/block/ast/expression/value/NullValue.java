@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.value;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -10,15 +7,9 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * @author Marc Pantel
- *
- */
 public enum NullValue implements Value {
 	
-	/**
-	 * Represents the Null value.
-	 */
+	/** Represents the Null value. */
 	Null;
 	
 	/* (non-Javadoc)

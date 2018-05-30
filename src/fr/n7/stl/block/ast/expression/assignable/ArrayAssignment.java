@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractArray;
@@ -11,10 +8,7 @@ import fr.n7.stl.tam.ast.Library;
 import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for an expression whose computation assigns a cell in an array.
- * @author Marc Pantel
- */
+/** ABSTRACT Syntax Tree node for an expression whose computation assigns a cell in an array. */
 public class ArrayAssignment extends AbstractArray implements AssignableExpression {
 
 	/**

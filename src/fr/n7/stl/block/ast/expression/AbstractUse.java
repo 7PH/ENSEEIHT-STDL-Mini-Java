@@ -5,11 +5,7 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * Common elements between identifier use.
- * @author Marc Pantel
- *
- */
+/** Common elements between identifier use. */
 public abstract class AbstractUse {
 
 	protected abstract Declaration getDeclaration();

@@ -6,22 +6,15 @@ import fr.n7.stl.block.ast.type.ArrayType;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.block.ast.type.Type;
 
-/**
- * Common elements between left (Assignable) and right (Expression) end sides of assignments. These elements
+/** Common elements between left (Assignable) and right (Expression) end sides of assignments. These elements
  * share attributes, toString and getType methods.
- * @author Marc Pantel
- *
  */
 public abstract class AbstractArray implements Expression {
 
-	/**
-	 * AST node that represents the expression whose result is an array.
-	 */
+	/** AST node that represents the expression whose result is an array. */
 	protected Expression array;
 	
-	/**
-	 * AST node that represents the expression whose result is an integer value used to index the array.
-	 */
+	/** AST node that represents the expression whose result is an integer value used to index the array. */
 	protected Expression index;
 	
 	/**

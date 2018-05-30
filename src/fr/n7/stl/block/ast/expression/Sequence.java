@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -13,17 +10,11 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * ABSTRACT Syntax Tree node for an expression building a sequence of values.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for an expression building a sequence of values. */
 public class Sequence implements Expression {
 
 	
-	/**
-	 * List of AST nodes of the expressions computing the values in the sequence.
-	 */
+	/** List of AST nodes of the expressions computing the values in the sequence. */
 	protected List<Expression> values;
 
 	/**

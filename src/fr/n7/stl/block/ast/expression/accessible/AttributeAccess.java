@@ -5,7 +5,6 @@ import fr.n7.stl.block.ast.expression.BinaryOperator;
 import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
 import fr.n7.stl.block.ast.object.InstanceType;
-import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.Register;

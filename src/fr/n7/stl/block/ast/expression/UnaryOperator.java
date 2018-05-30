@@ -1,21 +1,10 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression;
 
-/**
- * @author Marc Pantel
- *
- */
 public enum UnaryOperator {
 	
-	/**
-	 * Boolean negation
-	 */
+	/** Boolean negation */
 	Negate,
-	/**
-	 * Numeric opposite
-	 */
+	/** Numeric opposite */
 	Opposite;
 
 	@Override

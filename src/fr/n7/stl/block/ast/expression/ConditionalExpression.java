@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.n7.stl.block.ast.expression;
 
 import fr.n7.stl.block.ast.scope.Declaration;
@@ -10,26 +7,16 @@ import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
 import fr.n7.stl.tam.ast.TAMFactory;
 
-/**
- * ABSTRACT Syntax Tree node for a conditional expression.
- * @author Marc Pantel
- *
- */
+/** ABSTRACT Syntax Tree node for a conditional expression. */
 public class ConditionalExpression implements Expression {
 
-	/**
-	 * AST node for the expression whose value is the condition for the conditional expression.
-	 */
+	/** AST node for the expression whose value is the condition for the conditional expression. */
 	protected Expression condition;
 	
-	/**
-	 * AST node for the expression whose value is the then parameter for the conditional expression.
-	 */
+	/** AST node for the expression whose value is the then parameter for the conditional expression. */
 	protected Expression thenExpression;
 	
-	/**
-	 * AST node for the expression whose value is the else parameter for the conditional expression.
-	 */
+	/** AST node for the expression whose value is the else parameter for the conditional expression. */
 	protected Expression elseExpression;
 	
 	/**
