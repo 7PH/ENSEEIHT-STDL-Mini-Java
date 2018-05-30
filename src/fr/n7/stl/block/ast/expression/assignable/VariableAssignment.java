@@ -6,11 +6,14 @@ package fr.n7.stl.block.ast.expression.assignable;
 import fr.n7.stl.block.ast.expression.AbstractIdentifier;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AbstractThisUse;
+import fr.n7.stl.block.ast.object.AttributeDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.tam.ast.Fragment;
+import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
+import fr.n7.stl.util.Logger;
 
 /**
  * ABSTRACT Syntax Tree node for an expression whose computation assigns a variable.
@@ -19,7 +22,11 @@ import fr.n7.stl.tam.ast.TAMFactory;
  */
 public class VariableAssignment extends AbstractIdentifier implements AssignableExpression {
 	
-	protected VariableDeclaration declaration;
+	protected Declaration declaration;
+
+	private Register register;
+
+	private int offset;
 
 	/**
 	 * Creates a variable assignment expression ABSTRACT Syntax Tree node.
@@ -29,7 +36,7 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 		super(name);
 	}
 
-    public VariableDeclaration getDeclaration() {
+    public Declaration getDeclaration() {
         return declaration;
     }
 
@@ -38,15 +45,27 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	 */
 	@Override
 	public boolean resolve(HierarchicalScope<Declaration> scope) {
-		if (! scope.knows(this.name)) {
+		if (! scope.knows(name)) {
 		    return false;
         }
 
-        Declaration declaration = scope.get(this.name);
+        Declaration declaration = scope.get(name);
 
         if (declaration instanceof VariableDeclaration) {
-            this.declaration = ((VariableDeclaration) declaration);
+            VariableDeclaration vr = ((VariableDeclaration) declaration);
+            this.register = vr.getRegister();
+            this.offset = vr.getOffset();
+            this.declaration = declaration;
             return true;
+        } else if (declaration instanceof AttributeDefinition) {
+            // we can assign to an attribute so it's ok
+            AttributeDefinition ad = ((AttributeDefinition) declaration);
+            this.register = ad.getRegister();
+            this.offset = ad.getRelativeOffset();
+            this.declaration = declaration;
+            return true;
+        } else {
+            Logger.error("Assignment to non variable declaration " + name + ": " + declaration.getClass());
         }
 
         return false;
@@ -66,7 +85,7 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	@Override
 	public Fragment getCode(TAMFactory factory) {
 		Fragment fragment = factory.createFragment();
-		fragment.add(factory.createStore(declaration.getRegister(), declaration.getOffset(), getType().length()));
+		fragment.add(factory.createStore(register, offset, getType().length()));
 		return fragment;
 	}
 

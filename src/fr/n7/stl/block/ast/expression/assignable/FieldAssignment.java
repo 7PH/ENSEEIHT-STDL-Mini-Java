@@ -27,7 +27,8 @@ public class FieldAssignment extends AbstractField implements AssignableExpressi
 	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-        int offset = ((VariableAssignment)record).declaration.getOffset();
+        //int offset = ((VariableAssignment)record).declaration.getOffset();
+        int offset = 0;
 
         FieldDeclaration field = null;
 

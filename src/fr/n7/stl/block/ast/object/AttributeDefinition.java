@@ -18,8 +18,10 @@ public class AttributeDefinition extends Definition {
 	private String name;
 	
 	private Expression value;
-	
-	public AttributeDefinition(Type type, String name) {
+
+    private Register register;
+
+    public AttributeDefinition(Type type, String name) {
 		this.type = type;
 		this.name = name;
 		this.value = null;
@@ -40,9 +42,20 @@ public class AttributeDefinition extends Definition {
 	public Type getType() {
 		return this.type;
 	}
-	
-	@Override
+
+
+	public int getRelativeOffset() {
+	    return parent.attrRelativeOffset.getOrDefault(this, -1);
+    }
+
+    public Register getRegister() {
+        return register;
+    }
+
+    @Override
     public int allocateMemory(Register register, int offset) {
+        this.register = register;
+
 	    if (isStatic()) {
 	        // a static attribute takes place directly on stack
             return type.length();

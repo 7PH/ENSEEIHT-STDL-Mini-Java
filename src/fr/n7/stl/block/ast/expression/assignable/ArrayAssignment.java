@@ -32,7 +32,8 @@ public class ArrayAssignment extends AbstractArray implements AssignableExpressi
 	@Override
 	public Fragment getCode(TAMFactory factory) {
 	    // assignemnt => VariableUse
-        int offset = ((VariableAssignment)array).declaration.getOffset();
+        //int offset = ((VariableAssignment)array).declaration.getOffset();
+        int offset = 0;
 
         Fragment fragment = factory.createFragment();
         fragment.append(index.getCode(factory));

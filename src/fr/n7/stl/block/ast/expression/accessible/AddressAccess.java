@@ -42,7 +42,8 @@ public class AddressAccess implements AccessibleExpression {
 	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-	    int offset = ((VariableAssignment) assignable).getDeclaration().getOffset();
+	    //int offset = ((VariableAssignment) assignable).getDeclaration().getOffset();
+        int offset = 0;
 
 	    Fragment fragment = factory.createFragment();
         fragment.add(factory.createLoadL(offset));

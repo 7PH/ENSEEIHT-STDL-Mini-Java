@@ -27,7 +27,8 @@ public class PointerAssignment extends AbstractPointer implements AssignableExpr
 	 */
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-        int offset = ((VariableAssignment)pointer).declaration.getOffset();
+        //int offset = ((VariableAssignment)pointer).declaration.getOffset();
+        int offset = 0;
         int size = ((PointerType)pointer.getType()).getPointedType().length();
 
 	    Fragment fragment = factory.createFragment();
