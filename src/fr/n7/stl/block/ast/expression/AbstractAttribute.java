@@ -27,6 +27,12 @@ public abstract class AbstractAttribute extends DefinitionAccess {
         super(object, name);
     }
 
+
+    @Override
+    protected Declaration getDeclaration() {
+        return attributeDefinition;
+    }
+
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
 

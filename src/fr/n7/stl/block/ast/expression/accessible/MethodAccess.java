@@ -57,8 +57,8 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             	Logger.error("Could not access method " + this.name + " of class " + tmp.getParent().getName() + ". The method does not exist or is private.");
             	return false;
             }        
-            
-                
+
+
         } else {
             // TODO
             this.methodDefinition = null;
@@ -77,6 +77,11 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
         }
 
         return true;
+    }
+
+    @Override
+    protected Declaration getDeclaration() {
+        return methodDefinition;
     }
 
     @Override
