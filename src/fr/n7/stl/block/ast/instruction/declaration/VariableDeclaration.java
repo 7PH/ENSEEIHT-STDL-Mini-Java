@@ -92,10 +92,14 @@ public class VariableDeclaration implements Declaration, Instruction {
 			Logger.error("The variable " + this.name + " is already declared in this block.");
 			return false;
 		}
-		if (! type.resolve(scope))
+		if (! type.resolve(scope)) {
+			Logger.error("Could not resolve the type " + type + " of the declared variable " + name);
 			return false;
-		if (! value.resolve(scope))
+		}
+		if (! value.resolve(scope)) {
+			Logger.error("Could not resolve the value of the declared variable " + name);
 			return false;
+		}
 	    scope.register(this);
 	    return true;
 	}

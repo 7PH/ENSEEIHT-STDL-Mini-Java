@@ -187,8 +187,10 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
         for (InstanceType tp: this.implementsList) {
-            if (! tp.resolve(scope))
+            if (! tp.resolve(scope)) {
+            	Logger.error("Could not resolve the instance type " + tp.toString() + " in class " + this.className.getName());
                 return false;
+            }
         }
 
         // Verify if every superclass abstract methods are implemented if the class is not abstract

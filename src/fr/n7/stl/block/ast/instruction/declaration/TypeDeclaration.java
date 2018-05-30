@@ -48,8 +48,10 @@ public class TypeDeclaration implements Declaration, Instruction {
 			Logger.error("The type " + this.name + " is already declared in this block.");
 			return false;
 		}
-		if (! type.resolve(scope))
+		if (! type.resolve(scope)) {
+			Logger.error("Could not resolve the type " + type);
 			return false;
+		}
 		scope.register(this);
 		return true;
 	}

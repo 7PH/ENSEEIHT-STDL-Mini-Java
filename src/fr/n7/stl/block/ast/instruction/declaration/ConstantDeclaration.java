@@ -75,10 +75,14 @@ public class ConstantDeclaration implements Instruction, Declaration {
 			Logger.error("The constant " + this.name + " is already declared in this block.");
 			return false;
 		}
-		if (! type.resolve(scope))
+		if (! type.resolve(scope)) {
+			Logger.error("Could not resolve type " + type + " of constant " + name);
 			return false;
-		if (! value.resolve(scope))
+		}
+		if (! value.resolve(scope)) {
+			Logger.error("Could not resolve the value of constant " + name);
 			return false;
+		}
 		scope.register(this);
 		return true;
 	}
