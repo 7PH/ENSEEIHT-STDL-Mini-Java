@@ -99,8 +99,10 @@ public class Block {
 	 */	
 	public boolean checkType() {
 	    for (Instruction instruction: instructions) {
-	        if (! instruction.checkType())
-	            return false;
+	        if (! instruction.checkType()) {
+	            Logger.error("Type error for instruction " + instruction);
+                return false;
+            }
         }
         return true;
 	}

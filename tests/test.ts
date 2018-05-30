@@ -1564,8 +1564,6 @@ describe('# Resolve / CheckType impossible tests', function () {
                     Integer a = new Integer(1);
                     Integer b = new Integer(2);
                     Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
-            
-                    System.out.println(box.getT());
                 }
             }`,
             {
@@ -1608,7 +1606,6 @@ describe('# Resolve / CheckType impossible tests', function () {
                     Integer b = new Integer(2);
                     Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
                     box.setT(new Integer(3));
-                    System.out.println(box.getT());
                 }
             }`,
             {

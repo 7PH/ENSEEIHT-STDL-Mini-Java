@@ -317,7 +317,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 		for (Definition d : this.definitions) {
 			if (! d.checkType()) {
-				Logger.error(d.getName() + " definition raised false checktype");
+				Logger.error("ClassDeclaration: checkType error in " + d.getName());
 				b = false;
 			}
 		}
