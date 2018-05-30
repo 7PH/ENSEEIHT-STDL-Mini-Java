@@ -32,9 +32,10 @@ public abstract class ProgramDeclaration implements Declaration {
         scope.register(this);
 
         SymbolTable subScope = new SymbolTable(scope);
-        
+
         // register generic types in scope
         for (GenericType g : className.getGenerics()) {
+            g.resolve(scope);
         	subScope.register(g);
         }
 

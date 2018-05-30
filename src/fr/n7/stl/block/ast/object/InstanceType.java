@@ -9,6 +9,7 @@ import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.util.Logger;
 
+
 public class InstanceType implements Type {
 
     public static final int OBJECT_ADDR_LENGTH = 1;
@@ -78,17 +79,38 @@ public class InstanceType implements Type {
                 if (instanceType.getGenericDeclaration().getExtendedTypes().size() == 0)
                     return true;
 
-                // @TODO here
-
                 // if a superclass is compatible with the other, it's OK
                 for (InstanceType superClassT: declaration.getExtendsList())
                     if (superClassT.compatibleWith(other))
                         return true;
+
                 // idem for an interface
                 for (InstanceType implemented: declaration.getImplementsList())
                     if (implemented.compatibleWith(other))
                         return true;
+
+                // @TODO here
+                /*
+                for (InstanceType constraint: instanceType.getGenericDeclaration().getExtendedTypes()) {
+                    boolean ok = false;
+
+                    // if a superclass is compatible with the other, it's OK
+                    for (InstanceType superClassT: declaration.getExtendsList())
+                        if (superClassT.compatibleWith(constraint))
+                            ok = true;
+
+                    // idem for an interface
+                    for (InstanceType implemented: declaration.getImplementsList())
+                        if (implemented.compatibleWith(constraint))
+                            ok = true;
+
+                    // we could not satisfy this constraint
+                    if (! ok) return false;
+                }*/
+
+                return true;
             }
+
         } else {
             // other is a class/interface
 
@@ -118,6 +140,7 @@ public class InstanceType implements Type {
                     if (superClassT.compatibleWith(other))
                         return true;
             }
+
         }
 
         return false;
