@@ -14,6 +14,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class MethodAccess extends DefinitionAccess implements Instruction, Expression {
@@ -51,7 +52,7 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
         if (programDeclaration instanceof ClassDeclaration) {
             MethodDefinition tmp  = ((ClassDeclaration) programDeclaration).getMethodDefinitionsByMethodName(name, true).get(0);
             
-            if(tmp.getAccessModifier() == AccessModifier.PUBLIC || tmp.getParent() == ((AbstractThisUse) scope.get("this")).programDeclaration ) {
+            if (tmp.getAccessModifier() == AccessModifier.PUBLIC || tmp.getParent() == ((AbstractThisUse) scope.get("this")).programDeclaration ) {
             	this.methodDefinition = tmp;
             	return true;
             } else {
@@ -60,17 +61,25 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
             }        
 
 
+        } else if (programDeclaration instanceof InterfaceDeclaration) {
+            // method exists on the interface?
+            Signature search = new Signature(AtomicType.Wildcard, name, new LinkedList<>());
+            Signature match = null;
+            List<Signature> signatures = ((InterfaceDeclaration) programDeclaration).getSignatures();
+            for (Signature signature: signatures) {
+                if (signature.getName().equals(search.getName())) {
+                    match = signature;
+                    break;
+                }
+            }
+            this.signatureDeclaration = match;
         } else {
-            // TODO
-            this.methodDefinition = null;
-        }
-        if (this.methodDefinition == null) {
             Logger.error("Method " + name + " does not exist in " + programDeclaration.getName() + ".");
             return false;
         }
 
         // Verify number of parameters
-    	List<ParameterDeclaration> declaredParameters = methodDefinition.getSignature().getParameters();
+    	List<ParameterDeclaration> declaredParameters = getSignature().getParameters();
     	int numOfPar = parameters.size();
         if (numOfPar != declaredParameters.size()) {
             Logger.error("Call of " + object + " but found " + numOfPar + " and expected " + declaredParameters.size() + ".");
@@ -80,14 +89,18 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
         return true;
     }
 
+    public Signature getSignature() {
+        return methodDefinition != null ? methodDefinition.getSignature() : signatureDeclaration;
+    }
+
     @Override
     protected Declaration getDeclaration() {
-        return methodDefinition;
+        return methodDefinition != null ? methodDefinition : signatureDeclaration;
     }
 
     @Override
     public Type getType() {
-        return methodDefinition.getType();
+        return getDeclaration().getType();
     }
 
     @Override
