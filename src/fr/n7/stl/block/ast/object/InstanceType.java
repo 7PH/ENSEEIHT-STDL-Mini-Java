@@ -237,17 +237,4 @@ public class InstanceType implements Type {
 		}
 		return false;
 	}
-
-	/** Get an attribute of the object.
-	 * @param attributeIdentificateur the attribute we ask.
-	 * @return the attribute
-	 */
-	public AttributeDefinition get(String attributeIdentificateur) {
-		// TODO :
-		// Get the objet : ClassDeclaration
-		//	Get the attribute list of it
-		//	  Get the correct attribute thanks to his name field
-		return null;
-	}
-
 }
