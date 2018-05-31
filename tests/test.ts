@@ -1932,10 +1932,8 @@ describe('# TAM code', function() {
                 });
             done();
         });
-    });
-    /*
-    it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
-        TAM.ensureResult(`
+        it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
+            TAM.ensureResult(`
             class SecretNumber {
                 private int number;
             
@@ -1947,61 +1945,24 @@ describe('# TAM code', function() {
                     return this.number;
                 }
             
-                public static void main (String args[]) {
+                public static void main () {
                     SecretNumber secretNumber = new SecretNumber();
                     int number = secretNumber.get();
                     System.out.println(number);
                 }
             }`,
-            {
-                resolve: true,
-                checkType: true,
-                output: ["6"]
-            });
-        done();
-    }); */ /*
-    it('-> extends w/ overloading', function(done: () => any) {
-        TAM.ensureResult(`
-            class Point {
-                public int x;
-                public int getX() {
-                    return this.x;
-                }
-                public void setX() {
-                    this.x = 5;
-                }
-            }
-            class Point2 extends Point {
-                public void setX() {
-                    this.x = 10;
-                }
-                public Point2() {}
-                public static void main (String args[]) {
-                    Point2 p2 = new Point2();
-                    p2.setX();
-                    System.out.println(p2.getX());
-                }
-            }`,
-            {
-                resolve: true,
-                checkType : true,
-                output: ["10"]
-            });
-        done();
-    }); */
-});
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["6"]
+                });
+            done();
+        });
+    });
 
-
-/* ###############################################
- * ##                 REAL TESTS                ##
- * ###############################################
- */
-describe('# Real tests', function () {
-    this.slow(SLOW_TEST_MS);
-
-    /* ********************* */
-    it('-> first real test', function(done: () => any) {
-        TAM.ensureResult(`
+    describe('-> final complex test', function() {
+        it('-> complex test', function(done: () => any) {
+            TAM.ensureResult(`
             interface Point {
                 int getAbscisse();
                 int getOrdonnee();
@@ -2034,47 +1995,35 @@ describe('# Real tests', function () {
             }
             class PointNommeImpl extends PointImpl implements PointNomme {
                 private String nom;
+            
                 public String getNom() {
                     return this.nom;
                 }
+            
                 public void setNom(String nom) {
                     this.nom = nom;
                 }
             }
             class Test {
-                public int calculDiffX(Point p1, Point p2) {
-                    return (p2.getAbscisse() - p1.getAbscisse());
-                }
-                public int calculDiffY(Point p1, Point p2) {
-                    return (p2.getOrdonnee() - p1.getOrdonnee());
-                }
+            
                 public static void main () {
-
-                    PointNomme pn = new PointNommeImpl();
+                    PointNommeImpl pn = new PointNommeImpl();
                     pn.setNom("Point 1");
+                    pn.setNom("Point 2");
                     pn.setAbscisse(10);
                     System.out.println(pn.getNom());
-
-                    Point p1 = new PointImpl(5, 10);
+            
+                    PointImpl p1 = new PointImpl(5, 10);
                     System.out.println(p1.getAbscisse());
                     System.out.println(p1.getOrdonnee());
-
-                    Point p2 = (Point) pn;
-                    p2.setOrdonnee(15);
-                    System.out.println(p2.getAbscisse());
-                    System.out.println(p2.getOrdonnee());
-
-                    int diffX = calculDiffX(p1, p2);
-                    System.out.println(diffX);
-                    int diffY = calculDiffY(p1, p2);
-                    System.out.println(diffY);
                 }
             }`,
-            {
-                resolve: true,
-                checkType : true
-                //output: ["Point 1", "5", "10", "10", "15", "75", "25"]
-            });
-        done();
+                {
+                    resolve: true,
+                    checkType : true,
+                    output: ["\"Point 2\"", "5", "10"]
+                });
+            done();
+        });
     });
 });

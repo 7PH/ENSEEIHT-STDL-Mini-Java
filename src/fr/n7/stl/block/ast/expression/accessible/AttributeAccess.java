@@ -28,7 +28,7 @@ public class AttributeAccess extends AbstractAttribute implements Expression {
         // add code of the object
         if (object == null) {
             // address is on target
-            fragment.add(factory.createLoad(Register.SB, declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
+            fragment.add(factory.createLoad(declaration.getRegister(), declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
         } else {
             fragment.append(object.getCode(factory));
         }
