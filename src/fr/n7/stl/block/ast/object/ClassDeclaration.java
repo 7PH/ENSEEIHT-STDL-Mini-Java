@@ -271,10 +271,10 @@ public class ClassDeclaration extends ProgramDeclaration {
 	public boolean checkType() {
 		boolean b = true;
 
-        // Verify that implementedClass contains only interfaces
+        // Verify that extendsClass contains only class
         for (InstanceType tp: extendsList) {
             if (! (tp.getDeclaration() instanceof ClassDeclaration)) {
-                Logger.error("The class " + this.getName() + " implements " + tp.getDeclaration().getName() + " which is not a interface.");
+                Logger.error("The class " + this.getName() + " extends " + tp.getDeclaration().getName() + " which is not a class.");
                 b = false;
             }
         }
@@ -282,7 +282,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         // Verify that each interface method is implemented
         for (InstanceType tp: implementsList) {
             if (! (tp.getDeclaration() instanceof InterfaceDeclaration)) {
-                Logger.error("Class " + getName() + " cannot implements " + tp + ". This is not an interface.");
+                Logger.error("The class " + getName() + " implements " + tp.getDeclaration().getName() + " which is not an interface.");
                 return false;
             }
 
