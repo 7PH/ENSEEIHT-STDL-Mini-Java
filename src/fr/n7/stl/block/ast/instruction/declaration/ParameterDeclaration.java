@@ -3,9 +3,10 @@ package fr.n7.stl.block.ast.instruction.declaration;
 import fr.n7.stl.block.ast.object.MethodDefinition;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.type.Type;
+import fr.n7.stl.tam.ast.Register;
 
 /** ABSTRACT Syntax Tree node for a formal parameter in a function declaration. */
-public class ParameterDeclaration implements Declaration {
+public class ParameterDeclaration implements DeclarationWithOffset {
 	
 	/** Name of the formal parameter */
 	protected String name;
@@ -55,7 +56,12 @@ public class ParameterDeclaration implements Declaration {
 		return this.type;
 	}
 
-	/**
+    @Override
+    public Register getRegister() {
+        return Register.LB;
+    }
+
+    /**
 	 * Provide the offset of the formal parameter in the list of formal parameters for the function
 	 * @return Offset of the formal parameter
 	 */

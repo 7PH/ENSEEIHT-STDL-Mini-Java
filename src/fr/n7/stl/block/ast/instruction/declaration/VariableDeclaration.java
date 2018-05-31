@@ -12,7 +12,7 @@ import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
 /** ABSTRACT Syntax Tree node for a variable declaration instruction. */
-public class VariableDeclaration implements Declaration, Instruction {
+public class VariableDeclaration implements DeclarationWithOffset, Instruction {
 
 	/** Name of the declared variable. */
 	protected String name;

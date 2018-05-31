@@ -21,21 +21,10 @@ POP (0) 1
 RETURN (0) 0
 method_end_2:
 JUMP method_end_3
-method_start_4:
-LOAD (1) -1[LB]
-POP (0) 0
-RETURN (0) 0
-method_end_3:
-JUMP method_end_4
 method_start_3:
 LOAD (0) 0[LB]
 LOADL 1
 SUBR MAlloc
-LOAD (1) 3[SB]
-LOADL 21
-PUSH 0
-CALL (SB) method_start_1
-POP (0) 1
 LOAD (1) 3[SB]
 PUSH 1
 CALL (SB) method_start_2
@@ -45,13 +34,13 @@ LOADL "\n"
 SUBR SOut
 POP (0) 1
 RETURN (0) 0
-method_end_4:
-JUMP method_end_5
-method_start_5:
+method_end_3:
+JUMP method_end_4
+method_start_4:
 LOAD (1) -1[LB]
 POP (0) 0
 RETURN (0) 0
-method_end_5:
+method_end_4:
 CALL (SB) method_start_3
 HALT
 

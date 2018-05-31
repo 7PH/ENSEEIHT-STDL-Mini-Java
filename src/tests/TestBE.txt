@@ -44,25 +44,4 @@ class Test {
     public int calculDiffY(Point p1, Point p2) {
         return (p2.getOrdonnee() - p1.getOrdonnee());
     }
-    public static void main () {
-
-        PointNomme pn = new PointNommeImpl();
-        pn.setNom("Point 1");
-        pn.setAbscisse(10);
-        System.out.println(pn.getNom());
-
-        Point p1 = new PointImpl(5, 10);
-        System.out.println(p1.getAbscisse());
-        System.out.println(p1.getOrdonnee());
-
-        Point p2 = (Point) pn;
-        p2.setOrdonnee(15);
-        System.out.println(p2.getAbscisse());
-        System.out.println(p2.getOrdonnee());
-
-        /*int diffX = calculDiffX(p1, p2);
-        System.out.println(diffX);
-        int diffY = calculDiffY(p1, p2);
-        System.out.println(diffY);*/
-    }
 }

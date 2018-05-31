@@ -1,5 +1,7 @@
 package fr.n7.stl.block.ast.expression;
 
+import fr.n7.stl.block.ast.instruction.declaration.DeclarationWithOffset;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AbstractThisUse;
 import fr.n7.stl.block.ast.object.ClassDeclaration;
@@ -15,7 +17,7 @@ public abstract class DefinitionAccess extends AbstractUse implements Instructio
 
     protected String target;
 
-    protected VariableDeclaration declaration;
+    protected DeclarationWithOffset declaration;
 
     protected String name;
 
@@ -52,14 +54,14 @@ public abstract class DefinitionAccess extends AbstractUse implements Instructio
             if (decl instanceof AbstractThisUse) {
                 this.declaration = (VariableDeclaration) decl;
                 this.programDeclaration = ((AbstractThisUse)decl).programDeclaration;
-            } else if (decl instanceof VariableDeclaration) {
+            } else if (decl instanceof VariableDeclaration || decl instanceof ParameterDeclaration) {
                 if (!(decl.getType() instanceof InstanceType)) {
                     // appel de méthode sur une variable non objet
                     Logger.error("Calling a method on a non-object " + target);
                     return false;
                 }
                 InstanceType type = (InstanceType) decl.getType();
-                this.declaration = (VariableDeclaration) decl;
+                this.declaration = (DeclarationWithOffset) decl;
                 this.programDeclaration = type.getDeclaration();
             } else if (decl instanceof ClassDeclaration) {
                 // static access
