@@ -168,7 +168,7 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     public List<MethodDefinition> getConstructors() {
 	    // @TODO get also the parent constructors??
-        return getMethodDefinitionsByMethodName("", true);
+        return getMethodDefinitionsByMethodName("", false);
     }
 
     public boolean definesMethod(String name, boolean recursive) {

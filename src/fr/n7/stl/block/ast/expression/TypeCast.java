@@ -1,5 +1,6 @@
 package fr.n7.stl.block.ast.expression;
 
+import fr.n7.stl.block.ast.object.InstanceType;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
@@ -44,7 +45,7 @@ public class TypeCast implements Expression {
      */
     @Override
     public boolean resolve(HierarchicalScope<Declaration> scope) {
-        targetType = new NamedType(type);
+        targetType = new InstanceType(type);
         targetType.resolve(scope);
         return target.resolve(scope);
     }

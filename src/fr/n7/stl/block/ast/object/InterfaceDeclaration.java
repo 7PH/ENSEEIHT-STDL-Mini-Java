@@ -1,6 +1,8 @@
 package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
+import fr.n7.stl.block.ast.expression.Expression;
+import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.scope.SymbolTable;
@@ -31,6 +33,25 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	public List<Signature> getSignatures() {
 		return signatures;
+	}
+
+	public List<Signature> findSignature(String name, List<Expression> parameters) {
+	    List<Signature> signatures = new LinkedList<>();
+	    for (Signature signature: this.signatures) {
+            if (!signature.getMethodName().equals(name)) continue;
+            List<ParameterDeclaration> declarations = signature.getParameters();
+            if (parameters.size() != declarations.size()) continue;
+            boolean ok = true;
+            for (int i = 0; i < parameters.size(); ++i) {
+                if (!parameters.get(i).getType().compatibleWith(declarations.get(i).getType()))
+                    ok = false;
+            }
+            if (!ok) continue;
+            signatures.add(signature);
+        }
+        for (InstanceType type: extendsList)
+            signatures.addAll(((InterfaceDeclaration) type.getDeclaration()).findSignature(name, parameters));
+        return signatures;
 	}
 
 	@Override
@@ -70,13 +91,12 @@ public class InterfaceDeclaration extends ProgramDeclaration {
 
 	@Override
 	public int allocateMemory(Register register, int offset) {
-		throw new SemanticsUndefinedException("allocateMemory method not implemented yet in InterfaceDeclaration");
+        return 0;
 	}
 
 	@Override
 	public Fragment getCode(TAMFactory factory) {
-		// TODO
-		throw new SemanticsUndefinedException("getCode method not implemented yet in InterfaceDeclaration");
+        return factory.createFragment();
 	}
 
 	@Override

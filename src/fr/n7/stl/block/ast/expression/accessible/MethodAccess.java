@@ -20,12 +20,12 @@ import java.util.List;
 public class MethodAccess extends DefinitionAccess implements Instruction, Expression {
 
     /* If a class */
-    private MethodDefinition methodDefinition;
+    protected MethodDefinition methodDefinition;
 
     /* If an interface */
-    private Signature signatureDeclaration;
+    protected Signature signatureDeclaration;
 
-    private List<Expression> parameters;
+    protected List<Expression> parameters;
 
     public MethodAccess(Expression object, String name, List<Expression> parameters) {
         super(object, name);
@@ -63,16 +63,12 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
         } else if (programDeclaration instanceof InterfaceDeclaration) {
             // method exists on the interface?
-            Signature search = new Signature(AtomicType.Wildcard, name, new LinkedList<>());
-            Signature match = null;
-            List<Signature> signatures = ((InterfaceDeclaration) programDeclaration).getSignatures();
-            for (Signature signature: signatures) {
-                if (signature.getName().equals(search.getName())) {
-                    match = signature;
-                    break;
-                }
+            List<Signature> signatures = ((InterfaceDeclaration) programDeclaration).findSignature(name, parameters);
+            if (signatures.size() == 0) {
+                Logger.error("No such method: " + name);
+                return false;
             }
-            this.signatureDeclaration = match;
+            this.signatureDeclaration = signatures.get(0);
         } else {
             Logger.error("Method " + name + " does not exist in " + programDeclaration.getName() + ".");
             return false;
@@ -106,9 +102,9 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
     @Override
     public boolean checkType() {
     	boolean b = true;
-    	List<ParameterDeclaration> declaredParameters = this.methodDefinition.getSignature().getParameters();
+    	List<ParameterDeclaration> declaredParameters = getSignature().getParameters();
         int numOfPar = this.parameters.size();
-        
+
     	// Verify if each parameters is of the well type
         for (int i = 0; i < numOfPar; i++) {
             Type parameterType = this.parameters.get(i).getType();
@@ -147,14 +143,18 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
 
         fragment.add(factory.createPush(methodDefinition.getType().length()));
         fragment.add(factory.createCall(methodDefinition.getStartLabel(), Register.SB));
-        fragment.add(factory.createPop(methodDefinition.getType().length(), methodDefinition.getParametersLength()));
+
+        int pop = methodDefinition.getParametersLength();
+        if (! methodDefinition.isStatic())
+            pop += 1;
+        fragment.add(factory.createPop(methodDefinition.getType().length(), pop));
 
         return fragment;
     }
 
     @Override
     public Type getReturnType() {
-        return methodDefinition.getReturnType();
+        return getSignature().getType();
     }
 
     @Override

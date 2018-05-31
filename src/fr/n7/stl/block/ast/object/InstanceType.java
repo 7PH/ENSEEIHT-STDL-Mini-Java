@@ -51,7 +51,9 @@ public class InstanceType implements Type {
         Logger.warning("@TODO InstanceType: double check");
         return name.equals(instanceType.name);
 	}
-	
+
+	public String getName() { return name; }
+
 	@Override
 	public boolean compatibleWith(Type other) {
         if (other == AtomicType.Wildcard)
