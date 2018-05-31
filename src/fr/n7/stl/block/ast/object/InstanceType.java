@@ -159,7 +159,7 @@ public class InstanceType implements Type {
 
 	@Override
 	public int length() {
-	    return 1; // @TODO
+	    return OBJECT_ADDR_LENGTH;
     }
 
 	@Override
