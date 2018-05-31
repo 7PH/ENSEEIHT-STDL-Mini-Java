@@ -5,6 +5,7 @@ import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.Type;
+import fr.n7.stl.tam.ast.Register;
 
 public class AbstractThisUse extends VariableDeclaration implements Expression {
 
@@ -31,5 +32,15 @@ public class AbstractThisUse extends VariableDeclaration implements Expression {
     @Override
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public Register getRegister() {
+        return Register.LB;
+    }
+
+    @Override
+    public int getOffset() {
+        return 3;
     }
 }
