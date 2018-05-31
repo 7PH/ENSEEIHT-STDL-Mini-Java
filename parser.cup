@@ -144,8 +144,6 @@ precedence left UL_Extends;
 
 
 /* Règles de grammaire attribuée pour la construction de l'arbre abstrait */
-// Program
-//  - ($InterfaceDeclaration|$ClassDeclaration)+
 Driver ::= Program:program
     {:
         this.parser.program = program;
@@ -201,15 +199,6 @@ ClassExtension ::=
         {:
 			RESULT = ext;
 		:}
-  /*  | UL_Extends InstanceType:ext UL_Implements InstanceTypes:impl
-        {:
-			impl.add(ext);
-			RESULT = impl;
-		:}
-    | UL_Implements InstanceTypes:impl
-        {:
-			RESULT = impl;
-		:}*/
     |
         {:
 			RESULT = new LinkedList<InstanceType>();
@@ -381,19 +370,10 @@ Type ::= Atomique:atomique
 			{:
 				RESULT = atomique;
 			:}
-/*		| ClassName:className  // MyClass<T>  MyClass<Integer>
-			{:
-				RESULT = new InstanceType(className.getName(), className.getGenerics());
-			:}*/
 		| InstanceType:InstanceType
 			{:
 				RESULT = InstanceType;
 			:}
-/*		| UL_Identificateur:nom
-			{:
-				RESULT = new NamedType( nom );
-			:}
-*/
 		;
 
 Instructions ::= Instructions:instructions Instruction:instruction
@@ -538,11 +518,7 @@ Affectable ::= UL_Identificateur:name
 				:}
 			;
 
-Expression ::= /* Affectable:affectable UL_Egal Expression:expression
-				{:
-					RESULT = new Assignment( affectable, expression);
-				:}
-			| */ Expression:gauche UL_Double_Egal Expression:droite
+Expression ::= Expression:gauche UL_Double_Egal Expression:droite
 				{:
 					RESULT = new BinaryExpression( gauche, BinaryOperator.Equals, droite);
 				:}
