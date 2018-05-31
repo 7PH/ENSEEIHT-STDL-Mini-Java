@@ -48,9 +48,8 @@ public abstract class AbstractAttribute extends DefinitionAccess {
         }
         
         AttributeDefinition tmp = classDeclaration.getAttributeDeclaration(name);
-     
-        
-        if(tmp.getAccessModifier() == AccessModifier.PUBLIC || tmp.getParent() == ((AbstractThisUse) scope.get("this")).programDeclaration ) {
+
+        if (tmp.getAccessModifier() == AccessModifier.PUBLIC || (scope.knows("this") && ((AbstractThisUse) scope.get("this")).programDeclaration == tmp.getParent())) {
         	this.attributeDefinition = tmp;
         	return true;
         } else {
