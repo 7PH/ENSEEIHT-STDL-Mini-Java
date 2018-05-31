@@ -19,7 +19,6 @@
             <children xsi:type="basic:PartSashContainer" xmi:id="_Enco9kIxEeiZYNYIwxF1VA" containerData="6985" selectedElement="_Enco90IxEeiZYNYIwxF1VA" horizontal="true">
               <children xsi:type="basic:PartStack" xmi:id="_Enco90IxEeiZYNYIwxF1VA" elementId="Asm" containerData="4500" selectedElement="_Enco-UIxEeiZYNYIwxF1VA">
                 <tags>active</tags>
-                <tags>noFocus</tags>
                 <children xsi:type="advanced:Placeholder" xmi:id="_Enco-EIxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.asmView:*" toBeRendered="false" ref="_EncpNEIxEeiZYNYIwxF1VA"/>
                 <children xsi:type="advanced:Placeholder" xmi:id="_Enco-UIxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.asmView" ref="_EncpNUIxEeiZYNYIwxF1VA"/>
               </children>
@@ -166,6 +165,7 @@
       <tags>View</tags>
       <tags>categoryTag:Other</tags>
       <tags>active</tags>
+      <tags>activeOnClose</tags>
       <menus xmi:id="_EncpNkIxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.asmView">
         <tags>ViewMenu</tags>
         <tags>menuContribution:menu</tags>
@@ -189,15 +189,6 @@
     <trimBars xmi:id="_EncpREIxEeiZYNYIwxF1VA" elementId="org.eclipse.ui.main.toolbar" contributorURI="platform:/plugin/org.eclipse.ui.workbench" visible="false">
       <children xsi:type="menu:ToolBar" xmi:id="_EncpRUIxEeiZYNYIwxF1VA" elementId="main">
         <tags>Draggable</tags>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_EncpRkIxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.open">
-          <tags>Opaque</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_EncpR0IxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.open">
-          <tags>Opaque</tags>
-        </children>
-        <children xsi:type="menu:DirectToolItem" xmi:id="_EncpSEIxEeiZYNYIwxF1VA" elementId="mg.itam.rcp.open">
-          <tags>Opaque</tags>
-        </children>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_EncpSUIxEeiZYNYIwxF1VA" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
