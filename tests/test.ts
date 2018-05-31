@@ -92,7 +92,7 @@ describe('# Resolve/Checktype simple tests', function () {
     describe('# About class', function() {
         it('-> one class', function(done: () => any) {
             TAM.ensureResult(
-                `class abc {} class foo {}`,
+                `class abc {}`,
             {
                 resolve: true,
                 checkType: true
@@ -1958,4 +1958,97 @@ describe('# TAM code', function() {
             });
         done();
     }); */
+});
+
+
+/* ###############################################
+ * ##                 REAL TESTS                ##
+ * ###############################################
+ */
+describe('# Real tests', function () {
+    this.slow(SLOW_TEST_MS);
+
+    /* ********************* */
+    it('-> first real test', function(done: () => any) {
+        TAM.ensureResult(`
+            interface Point {
+                int getAbscisse();
+                int getOrdonnee();
+                void setAbscisse(int x);
+                void setOrdonnee(int y);
+                String toString();
+            }
+            class PointImpl implements Point {
+                private int x;
+                private int y;
+                public void setAbscisse(int x) {
+                    this.x = x;
+                }
+                public int getAbscisse() {
+                    return this.x;
+                }
+                public void setOrdonnee(int y) {
+                    this.y = y;
+                }
+                public int getOrdonnee() {
+                    return this.y;
+                }
+                public PointImpl (int x, int y) {
+                    this.x = x;
+                    this.y = y;
+                }
+                public void toString() {
+                    return "(" + this.x + ", " + this.y + ")";
+                }
+            }
+            interface PointNomme extends Point {
+                String getNom();
+                void setNom(String nom);
+            }
+            class PointNommeImpl extends Point implements PointNomme {
+                private String nom;
+                public String getNom() {
+                    return this.nom;
+                }
+                public void setNom(String nom) {
+                    this.nom = nom;
+                }
+            }
+            class Test {
+                public int calculDiffX(Point p1, Point p2) {
+                    return (p2.getX() - p1.getX());
+                }
+                public int calculDiffY(Point p1, Point p2) {
+                    return (p2.getY() - p1.getY());
+                }
+                public static void main(String args[]) {
+
+                    PointNomme pn = new PointNommeImpl();
+                    pn.setNom("Point 1");
+                    pn.setAbscisse(10);
+                    System.out.println(pn.getNom());
+
+                    Point p1 = new PointImpl(5, 10);
+                    System.out.println(p1.getAbscisse());
+                    System.out.println(p1.getOrdonnee());
+
+                    Point p2 = (Point) pn;
+                    p2.setOrdonnee(15);
+                    System.out.println(p2.getAbscisse());
+                    System.out.println(p2.getOrdonnee());
+
+                    int diffX = calculDiffX(p1, p2);
+                    System.out.println(diffX);
+                    int diffX = calculDiffY(p1, p2);
+                    System.out.println(diffY);
+                    System.out.println("Distance entre " + p1.toString() + " et " + p2.toString() + " est de (" + diffX + ", " + diffY + ").");
+                }
+            }`,
+            {
+                resolve: true,
+                checkType : true,
+                output: ["Point 1", "5", "10", "10", "15", "75", "25", "Distance entre (5, 10) et (10, 15) est de (5, 5)."]
+            });
+        done();
+    });
 });
