@@ -175,7 +175,7 @@ public class MethodDefinition extends Definition {
     public int allocateMemory(Register register, int offset) {
         body.allocateMemory(
                 Register.SB,
-                offset + 3 + getParametersLength() + getType().length());
+                offset + 3 + 1 + getParametersLength() + getType().length());
         return 0;
     }
 
@@ -195,7 +195,9 @@ public class MethodDefinition extends Definition {
         fragment1.add(factory.createJump(endLabel));
 
         Fragment fragment2 = factory.createFragment();
-        fragment2.add(factory.createLoad(Register.LB,  - getReturnType().length() - getParametersLength(), getParametersLength()));
+        int l = getParametersLength();
+        if (! isStatic()) l += 1;
+        fragment2.add(factory.createLoad(Register.LB,  - getReturnType().length() - l, l));
         fragment2.append(body.getCode(factory));
         fragment2.addPrefix(startLabel + ":");
         fragment2.add(factory.createReturn(0, 0));
