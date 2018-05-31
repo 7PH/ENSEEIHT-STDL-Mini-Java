@@ -23,10 +23,6 @@ public class Program implements ASTNode {
         this.declarations.add(declaration);
     }
 
-    /**
-     *
-     * @param declaration
-     */
     public void add(ProgramDeclaration declaration) {
     	this.declarations.add(declaration);
     }

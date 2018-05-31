@@ -4,7 +4,6 @@ import fr.n7.stl.block.ast.expression.Expression;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
-import fr.n7.stl.block.ast.scope.SymbolTable;
 import fr.n7.stl.block.ast.type.Type;
 import fr.n7.stl.block.ast.type.AtomicType;
 import fr.n7.stl.tam.ast.Fragment;
@@ -144,8 +143,8 @@ public class ObjectAllocation implements Expression {
         int classSize = cd.getAllAttributesSizes();
 
         // Allocate memory
-        fragment.add(factory.createLoadL(classSize)); // Push the value of the size required by attributes on the pile
-        fragment.add(Library.MAlloc); // Pop this value which is on the top to allocate size in the heap
+        fragment.add(factory.createLoadL(classSize));   // Push the value of the size required by attributes on the pile
+        fragment.add(Library.MAlloc);                   // Pop this value which is on the top to allocate size in the heap
         // Adress of allocation is on the top of the pile
         // @TODO Load the good class constructor
 
