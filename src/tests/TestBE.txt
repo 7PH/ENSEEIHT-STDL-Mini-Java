@@ -1,35 +1,68 @@
-class Box <T, H> {
-    private T t;
-    private H h;
-
-    public Box(T _t, H _h) {
-        t = _t;
-        h = _h;
+interface Point {
+    int getAbscisse();
+    int getOrdonnee();
+    void setAbscisse(int x);
+    void setOrdonnee(int y);
+}
+class PointImpl implements Point {
+    private int x;
+    private int y;
+    public void setAbscisse(int x) {
+        this.x = x;
     }
-
-    public void setT(T _t) {
-        t = _t;
+    public int getAbscisse() {
+        return this.x;
     }
-
-    public T getT() {
-        return t;
+    public void setOrdonnee(int y) {
+        this.y = y;
+    }
+    public int getOrdonnee() {
+        return this.y;
+    }
+    public PointImpl (int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }
-
-class Integer {
-    public int value;
-
-    public Integer(int value) {
-        this.value = value;
+interface PointNomme extends Point {
+    String getNom();
+    void setNom(String nom);
+}
+class PointNommeImpl extends PointImpl implements PointNomme {
+    private String nom;
+    public String getNom() {
+        return this.nom;
+    }
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 }
+class Test {
+    public int calculDiffX(Point p1, Point p2) {
+        return (p2.getAbscisse() - p1.getAbscisse());
+    }
+    public int calculDiffY(Point p1, Point p2) {
+        return (p2.getOrdonnee() - p1.getOrdonnee());
+    }
+    public static void main () {
 
-class Test_genericite_00 {
-    public static void main (String args[]) {
-        Integer a = new Integer(1);
-        Integer b = new Integer(2);
-        Box<Integer, Integer> box = new Box<Integer, Integer>(a, b);
+        PointNomme pn = new PointNommeImpl();
+        pn.setNom("Point 1");
+        pn.setAbscisse(10);
+        System.out.println(pn.getNom());
 
-        System.out.println(box.getT());
+        Point p1 = new PointImpl(5, 10);
+        System.out.println(p1.getAbscisse());
+        System.out.println(p1.getOrdonnee());
+
+        Point p2 = (Point) pn;
+        p2.setOrdonnee(15);
+        System.out.println(p2.getAbscisse());
+        System.out.println(p2.getOrdonnee());
+
+        /*int diffX = calculDiffX(p1, p2);
+        System.out.println(diffX);
+        int diffY = calculDiffY(p1, p2);
+        System.out.println(diffY);*/
     }
 }
