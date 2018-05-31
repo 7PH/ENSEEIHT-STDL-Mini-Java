@@ -52,12 +52,6 @@ public class ObjectAllocation implements Expression {
             return false;
         }
 
-    	HierarchicalScope<Declaration> newScope = new SymbolTable(scope);
-    	for (Expression expression : parameters) {
-    		if(! expression.resolve(newScope))
-    			return false;
-    	}
-
         declaration = (ClassDeclaration) ((InstanceType) type).getDeclaration();
     	
     	return true;
