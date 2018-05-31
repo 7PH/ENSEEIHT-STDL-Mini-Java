@@ -24,7 +24,7 @@ public class ObjectAllocation extends MethodAccess {
     private ClassDeclaration classDeclaration;
 
     public ObjectAllocation(Type type, List<Expression> parameters) {
-        super(type.toString(), "", parameters);
+        super((type instanceof InstanceType) ? ((InstanceType) type).getName() : type.toString(), "", parameters);
         this.type = type;
         this.parameters = parameters;
     }

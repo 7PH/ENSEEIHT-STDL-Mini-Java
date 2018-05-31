@@ -1901,15 +1901,6 @@ describe('# TAM code', function() {
                 });
             done();
         });
-        it('-> nested method calls', function (done: () => any) {
-            TAM.ensureResult(`// @TODO`,
-                {
-                    resolve: true,
-                    checkType: true,
-                    output: ["33"]
-                });
-            done();
-        });
         it('-> \'this\' access in methods calls', function (done: () => any) {
             TAM.ensureResult(`
                 class Point {
@@ -1963,61 +1954,61 @@ describe('# TAM code', function() {
     describe('-> final complex test', function() {
         it('-> complex test', function(done: () => any) {
             TAM.ensureResult(`
-            interface Point {
-                int getAbscisse();
-                int getOrdonnee();
-                void setAbscisse(int x);
-                void setOrdonnee(int y);
-            }
-            class PointImpl implements Point {
-                private int x;
-                private int y;
-                public void setAbscisse(int x) {
-                    this.x = x;
+                interface Point {
+                    int getAbscisse();
+                    int getOrdonnee();
+                    void setAbscisse(int x);
+                    void setOrdonnee(int y);
                 }
-                public int getAbscisse() {
-                    return this.x;
+                class PointImpl implements Point {
+                    private int x;
+                    private int y;
+                    public void setAbscisse(int x) {
+                        this.x = x;
+                    }
+                    public int getAbscisse() {
+                        return this.x;
+                    }
+                    public void setOrdonnee(int y) {
+                        this.y = y;
+                    }
+                    public int getOrdonnee() {
+                        return this.y;
+                    }
+                    public PointImpl (int x, int y) {
+                        this.x = x;
+                        this.y = y;
+                    }
                 }
-                public void setOrdonnee(int y) {
-                    this.y = y;
+                interface PointNomme extends Point {
+                    String getNom();
+                    void setNom(String nom);
                 }
-                public int getOrdonnee() {
-                    return this.y;
+                class PointNommeImpl extends PointImpl implements PointNomme {
+                    private String nom;
+                
+                    public String getNom() {
+                        return this.nom;
+                    }
+                
+                    public void setNom(String nom) {
+                        this.nom = nom;
+                    }
                 }
-                public PointImpl (int x, int y) {
-                    this.x = x;
-                    this.y = y;
-                }
-            }
-            interface PointNomme extends Point {
-                String getNom();
-                void setNom(String nom);
-            }
-            class PointNommeImpl extends PointImpl implements PointNomme {
-                private String nom;
-            
-                public String getNom() {
-                    return this.nom;
-                }
-            
-                public void setNom(String nom) {
-                    this.nom = nom;
-                }
-            }
-            class Test {
-            
-                public static void main () {
-                    PointNommeImpl pn = new PointNommeImpl();
-                    pn.setNom("Point 1");
-                    pn.setNom("Point 2");
-                    pn.setAbscisse(10);
-                    System.out.println(pn.getNom());
-            
-                    PointImpl p1 = new PointImpl(5, 10);
-                    System.out.println(p1.getAbscisse());
-                    System.out.println(p1.getOrdonnee());
-                }
-            }`,
+                class Test {
+                
+                    public static void main () {
+                        PointNommeImpl pn = new PointNommeImpl();
+                        pn.setNom("Point 1");
+                        pn.setNom("Point 2");
+                        pn.setAbscisse(10);
+                        System.out.println(pn.getNom());
+                
+                        PointImpl p1 = new PointImpl(5, 10);
+                        System.out.println(p1.getAbscisse());
+                        System.out.println(p1.getOrdonnee());
+                    }
+                }`,
                 {
                     resolve: true,
                     checkType : true,
