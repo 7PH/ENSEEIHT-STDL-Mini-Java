@@ -32,10 +32,11 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
         ClassDeclaration cd = attributeDefinition.getParent();
 
         // add code of the object
-        if (object == null)
-            fragment.add(factory.createLoad(Register.SB, declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
-        else
+        if (object == null) {
+            fragment.add(factory.createLoad(declaration.getRegister(), declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
+        } else {
             fragment.append(object.getCode(factory));
+        }
 
         // at this point we have the object addr?
         // we know the relative offset of the object

@@ -138,8 +138,9 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
     public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
 
-        if (! methodDefinition.isStatic())
-            fragment.append(declaration.getCode(factory));
+        if (! methodDefinition.isStatic()) {
+            fragment.add(factory.createLoad(Register.SB, declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
+        }
 
         for (Expression argument: parameters)
             fragment.append(argument.getCode(factory));

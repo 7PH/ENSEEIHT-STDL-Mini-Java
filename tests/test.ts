@@ -1901,6 +1901,37 @@ describe('# TAM code', function() {
                 });
             done();
         });
+        it('-> nested method calls', function (done: () => any) {
+            TAM.ensureResult(`// @TODO`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["33"]
+                });
+            done();
+        });
+        it('-> \'this\' access in methods calls', function (done: () => any) {
+            TAM.ensureResult(`
+                class Point {
+                    private int x;
+                    public void setX(int x) { this.x = x; }
+                    public int getX() { return x; }
+                }
+                
+                class Main {
+                    public static void main () {
+                        Point point = new Point();
+                        point.setX(21);
+                        System.out.println(point.getX());
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["21"]
+                });
+            done();
+        });
     });
     /*
     it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {

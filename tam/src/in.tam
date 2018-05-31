@@ -2,7 +2,7 @@ JUMP method_end_1
 method_start_1:
 LOAD (2) -2[LB]
 LOAD (1) 4[LB]
-LOAD (1) 0[SB]
+LOAD (1) 3[LB]
 LOADL 0
 SUBR IAdd
 STOREI (1)
@@ -10,37 +10,48 @@ POP (0) 0
 RETURN (0) 0
 method_end_1:
 JUMP method_end_2
-method_start_3:
-LOAD (1) -1[LB]
-POP (0) 0
+method_start_2:
+LOAD (1) -2[LB]
+LOAD (1) 3[SB]
+LOADL 0
+SUBR IAdd
+LOADI (1)
+RETURN (1) 1
+POP (0) 1
 RETURN (0) 0
 method_end_2:
 JUMP method_end_3
-method_start_2:
+method_start_4:
+LOAD (1) -1[LB]
+POP (0) 0
+RETURN (0) 0
+method_end_3:
+JUMP method_end_4
+method_start_3:
 LOAD (0) 0[LB]
 LOADL 1
 SUBR MAlloc
-LOADL 1
-SUBR MAlloc
+LOAD (1) 3[SB]
 LOADL 21
 PUSH 0
 CALL (SB) method_start_1
 POP (0) 1
-LOAD (1) 4[SB]
-LOADL 0
-SUBR IAdd
-LOADI (1)
+LOAD (1) 3[SB]
+PUSH 1
+CALL (SB) method_start_2
+POP (1) 0
 SUBR IOut
 LOADL "\n"
 SUBR SOut
 POP (0) 1
 RETURN (0) 0
-method_end_3:
-JUMP method_end_4
-method_start_4:
+method_end_4:
+JUMP method_end_5
+method_start_5:
 LOAD (1) -1[LB]
 POP (0) 0
 RETURN (0) 0
-method_end_4:
-CALL (SB) method_start_2
+method_end_5:
+CALL (SB) method_start_3
 HALT
+

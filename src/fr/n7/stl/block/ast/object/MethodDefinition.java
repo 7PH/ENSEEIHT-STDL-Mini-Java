@@ -173,9 +173,11 @@ public class MethodDefinition extends Definition {
 
 	@Override
     public int allocateMemory(Register register, int offset) {
+        int off = offset + 3 + getParametersLength() + getType().length();
+        if (! isStatic()) off += 1;
         body.allocateMemory(
                 Register.SB,
-                offset + 3 + 1 + getParametersLength() + getType().length());
+                off);
         return 0;
     }
 
