@@ -135,7 +135,12 @@ public class MethodAccess extends DefinitionAccess implements Instruction, Expre
         Fragment fragment = factory.createFragment();
 
         if (! methodDefinition.isStatic()) {
-            fragment.add(factory.createLoad(Register.SB, declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
+
+            if (declaration != null) {
+                fragment.add(factory.createLoad(Register.SB, declaration.getOffset(), InstanceType.OBJECT_ADDR_LENGTH));
+            } else {
+                fragment.append(object.getCode(factory));
+            }
         }
 
         for (Expression argument: parameters)

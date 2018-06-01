@@ -1949,6 +1949,54 @@ describe('# TAM code', function() {
                 });
             done();
         });
+        it('-> chained methods returning objects', function(done: () => any) {
+            TAM.ensureResult(`
+            class Integer {
+                private int value;
+            
+                public Integer(int value) {
+                    this.value = value;
+                }
+            
+                public void set(int value) {
+                    this.value = value;
+                }
+            
+                public int get() {
+                    return value;
+                }
+            }
+            
+            class Point {
+                private Integer x;
+            
+                private Integer y;
+            
+                public Point(int x, int y) {
+                    this.x = new Integer(x);
+                    this.y = new Integer(y);
+                }
+            
+                public Integer getX() { return x; }
+                public Integer getY() { return y; }
+            }
+            
+            class Main {
+                public static void main() {
+                    Point point = new Point(11, 22);
+                    int x = point.getX().get();
+                    int y = point.getY().get();
+                    System.out.println(x);
+                    System.out.println(y);
+                }
+            }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["11", "22"]
+                });
+            done();
+        });
     });
 
     describe('-> final complex test', function() {
