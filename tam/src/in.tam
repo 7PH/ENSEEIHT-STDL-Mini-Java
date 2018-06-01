@@ -90,17 +90,18 @@ LOADL 22
 CALL (SB) method_start_4
 POP (0) 3
 LOAD (1) 3[SB]
+LOAD (1) 4[SB]
 PUSH 1
-CALL (SB) method_start_5
+CALL (SB) method_start_6
 POP (1) 1
 PUSH 1
 CALL (SB) method_start_3
 POP (1) 1
-LOAD (1) 4[SB]
+LOAD (1) 5[SB]
 SUBR IOut
 LOADL "\n"
 SUBR SOut
-POP (0) 2
+POP (0) 3
 RETURN (0) 0
 method_end_7:
 JUMP method_end_8
