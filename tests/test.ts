@@ -2077,6 +2077,45 @@ describe('# TAM code', function() {
                 });
             done();
         });
+        it('-> static attribute access', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static int SECRET = 4;
+                }
+                
+                class Main {
+                    public static void main() {
+                        int r = Random.SECRET;
+                        System.out.println(r);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["4"]
+                });
+            done();
+        });
+        it('-> static attribute assignment', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static int SECRET = 4;
+                }
+                
+                class Main {
+                    public static void main() {
+                        System.out.println(Random.SECRET);
+                        Random.SECRET = 6;
+                        System.out.println(Random.SECRET);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["4", "6"]
+                });
+            done();
+        });
     });
 
     describe('-> final complex test', function() {

@@ -2,6 +2,7 @@ package fr.n7.stl.block.ast.object;
 
 import fr.n7.stl.block.ast.SemanticsUndefinedException;
 import fr.n7.stl.block.ast.expression.Expression;
+import fr.n7.stl.block.ast.instruction.declaration.DeclarationWithOffset;
 import fr.n7.stl.block.ast.scope.Declaration;
 import fr.n7.stl.block.ast.scope.HierarchicalScope;
 import fr.n7.stl.block.ast.type.AtomicType;
@@ -11,7 +12,7 @@ import fr.n7.stl.tam.ast.Register;
 import fr.n7.stl.tam.ast.TAMFactory;
 import fr.n7.stl.util.Logger;
 
-public class AttributeDefinition extends Definition {
+public class AttributeDefinition extends Definition implements DeclarationWithOffset {
 
 	private Type type;
 	
@@ -20,6 +21,7 @@ public class AttributeDefinition extends Definition {
 	private Expression value;
 
     private Register register;
+    private int offset;
 
     public AttributeDefinition(Type type, String name) {
 		this.type = type;
@@ -53,8 +55,14 @@ public class AttributeDefinition extends Definition {
     }
 
     @Override
+    public int getOffset() {
+        return offset;
+    }
+
+    @Override
     public int allocateMemory(Register register, int offset) {
         this.register = register;
+        this.offset = offset;
 
 	    if (isStatic()) {
 	        // a static attribute takes place directly on stack
@@ -62,14 +70,17 @@ public class AttributeDefinition extends Definition {
         } else {
             // a non-static attribute will be stored among the object itself
             return 0;
-        }
+	    }
     }
 
 	@Override
     public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
         if (isStatic()) {
-            factory.createPush(type.length());
+            if (value != null)
+                fragment.append(value.getCode(factory));
+            else
+                factory.createPush(type.length());
         }
         return fragment;
     }

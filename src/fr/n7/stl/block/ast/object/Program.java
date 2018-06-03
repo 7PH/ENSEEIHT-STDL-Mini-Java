@@ -55,9 +55,11 @@ public class Program implements ASTNode {
     }
 
     public int allocateMemory(Register register, int offset) {
-        for (ProgramDeclaration declaration: declarations)
-            offset = declaration.allocateMemory(register, offset);
-        return offset;
+        int oldOffset = offset;
+        for (ProgramDeclaration declaration: declarations) {
+            offset += declaration.allocateMemory(register, offset);
+        }
+        return offset - oldOffset;
     }
 	
 	/** Provide the generated TAM code.
@@ -73,9 +75,12 @@ public class Program implements ASTNode {
 
         // get code of the public static void main if found
         MethodDefinition main = findFirstPublicStaticVoidMain();
-        if (main == null) return fragment;
+        if (main == null) {
+            fragment.add(factory.createHalt());
+            return fragment;
+        }
 
-        // @TODO String args[] ???
+        // @TODO String args[]
         // for (Expression argument : arguments)
         //     fragment.append(argument.getCode(factory));
         //fragment.add(factory.createPush(main.getType().length()));

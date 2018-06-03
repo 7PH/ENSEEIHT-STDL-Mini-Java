@@ -13,10 +13,6 @@ import fr.n7.stl.tam.ast.TAMFactory;
 
 public class AttributeAssignment extends AbstractAttribute implements AssignableExpression {
 	
-	private InstanceType objectType;
-	
-	private AttributeDefinition attribute;
-
     public AttributeAssignment(String target, String name) {
         super(target, name);
     }
@@ -25,11 +21,15 @@ public class AttributeAssignment extends AbstractAttribute implements Assignable
         super(object, name);
     }
 
-    // @TODO this only works if the attribute is not an object
     @Override
     public Fragment getCode(TAMFactory factory) {
         Fragment fragment = factory.createFragment();
         ClassDeclaration cd = attributeDefinition.getParent();
+
+        if (attributeDefinition.isStatic()) {
+            fragment.add(factory.createStore(attributeDefinition.getRegister(), attributeDefinition.getOffset(), attributeDefinition.getType().length()));
+            return fragment;
+        }
 
         // add code of the object
         if (object == null) {

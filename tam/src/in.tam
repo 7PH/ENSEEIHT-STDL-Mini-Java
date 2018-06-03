@@ -1,36 +1,32 @@
+LOADL 4
 JUMP method_end_1
-method_start_1:
-LOAD (0) -1[LB]
-LOADL 6
-RETURN (1) 1
-POP (0) 1
+method_start_2:
+LOAD (1) -1[LB]
+POP (0) 0
 RETURN (0) 0
 method_end_1:
 JUMP method_end_2
-method_start_3:
-LOAD (1) -1[LB]
+method_start_1:
+LOAD (0) 0[LB]
+LOAD (1) 0[SB]
+SUBR IOut
+LOADL "\n"
+SUBR SOut
+LOADL 6
+STORE (1) 0[SB]
+LOAD (1) 0[SB]
+SUBR IOut
+LOADL "\n"
+SUBR SOut
 POP (0) 0
 RETURN (0) 0
 method_end_2:
 JUMP method_end_3
-method_start_2:
-LOAD (0) 0[LB]
-PUSH 1
-CALL (SB) method_start_1
-POP (1) 0
-LOAD (1) 3[SB]
-SUBR IOut
-LOADL "\n"
-SUBR SOut
-POP (0) 1
-RETURN (0) 0
-method_end_3:
-JUMP method_end_4
-method_start_4:
+method_start_3:
 LOAD (1) -1[LB]
 POP (0) 0
 RETURN (0) 0
-method_end_4:
-CALL (SB) method_start_2
+method_end_3:
+CALL (SB) method_start_1
 HALT
 

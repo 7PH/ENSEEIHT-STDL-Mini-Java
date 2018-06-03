@@ -338,9 +338,10 @@ public class ClassDeclaration extends ProgramDeclaration {
 
 	@Override
 	public int allocateMemory(Register register, int offset) {
+        int oldOffset = offset;
         for (Definition definition: definitions)
-            offset = definition.allocateMemory(register, offset);
-        return offset;
+            offset += definition.allocateMemory(register, offset);
+        return offset - oldOffset;
 	}
 
 	@Override

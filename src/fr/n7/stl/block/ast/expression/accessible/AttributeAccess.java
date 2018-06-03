@@ -25,6 +25,11 @@ public class AttributeAccess extends AbstractAttribute implements Expression {
         Fragment fragment = factory.createFragment();
         ClassDeclaration cd = attributeDefinition.getParent();
 
+        if (attributeDefinition.isStatic()) {
+            fragment.add(factory.createLoad(attributeDefinition.getRegister(), attributeDefinition.getOffset(), attributeDefinition.getType().length()));
+            return fragment;
+        }
+
         // add code of the object
         if (object == null) {
             // address is on target
