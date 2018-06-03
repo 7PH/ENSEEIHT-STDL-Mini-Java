@@ -11,77 +11,77 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ABSTRACT class that gathers the common attributes for all TAM instructions.
+ * ABSTRACT class that gathers the common attributes for all MiniJava instructions.
  * @author Marc Pantel
  *
  */
 class TAMInstructionImpl implements TAMInstruction {
 
 	/**
-	 * Each TAM instruction has a unique kind, i.e. the name of the instruction.
+	 * Each MiniJava instruction has a unique kind, i.e. the name of the instruction.
 	 */
 	private TAMInstructionKind kind;
 	
 	/**
-	 * Each TAM instruction can have prefix comments used for relating this instruction 
+	 * Each MiniJava instruction can have prefix comments used for relating this instruction
 	 * to the block source code.
 	 */
 	protected List<String> comments;
 	
 	/**
-	 * Each TAM instruction can have prefix labels used for computing locations to that instruction 
+	 * Each MiniJava instruction can have prefix labels used for computing locations to that instruction
 	 * for JUMP and CALL instructions.
 	 */
 	protected List<String> prefixes;
 	
 	/**
-	 * Each TAM instruction can have suffix labels used for computing locations following that instruction 
+	 * Each MiniJava instruction can have suffix labels used for computing locations following that instruction
 	 * for JUMP and CALL instructions.
 	 */
 	protected List<String> suffixes;
 	
 	/**
-	 * Some TAM instructions manipulate explicitly the memory (LOAD and STORE instructions).
+	 * Some MiniJava instructions manipulate explicitly the memory (LOAD and STORE instructions).
 	 * This is the register of the manipulated memory.
 	 */
 	protected Optional<Register> register;
 
 	/**
-	 * Some TAM instructions manipulate explicitly the memory (LOAD and STORE instructions).
+	 * Some MiniJava instructions manipulate explicitly the memory (LOAD and STORE instructions).
 	 * This is the offset of the register of the manipulated memory.
 	 */
 	protected Optional<Integer> offset;
 
 	/**
-	 * Some TAM instructions use labels that are resolved by the TAM assembler tool (JUMP,
+	 * Some MiniJava instructions use labels that are resolved by the MiniJava assembler tool (JUMP,
 	 * JUMPIF, CALL).
 	 * This is the target label for these instructions.
 	 */	
 	protected Optional<String> target;
 
 	/**
-	 * Some TAM instructions manipulate explicitly the memory (LOAD and STORE instructions).
+	 * Some MiniJava instructions manipulate explicitly the memory (LOAD and STORE instructions).
 	 * This is the size the manipulated memory chunk.
 	 * It is also used by other instructions like PUSH and POP that manipulates the stack.
 	 */
 	protected Optional<Integer> size;
 
 	/**
-	 * Some TAM instructions manipulate explicitly the call stack and the current frame (CALL, CALLI instructions).
+	 * Some MiniJava instructions manipulate explicitly the call stack and the current frame (CALL, CALLI instructions).
 	 * This is the frame of the caller function.
 	 * It is stored in the size bitfield in the instructions.
 	 */
 	private Optional<Register> frame;
 	
 	/**
-	 * Construction for a full TAM instruction with kind, label, location and size.
-	 * @param _kind Kind for the TAM instruction.
-	 * @param _label Optional Label for the TAM instruction.
-	 * @param _register Optional Register for the TAM instruction.
-	 * @param _offset Optional Integer offset for the TAM instruction.
-	 * @param _target Optional Label target for the TAM instruction.
-	 * @param _size Optional Integer size for the TAM instruction.
-	 * @param _frame Optional Register frame for the TAM instruction.
+	 * Construction for a full MiniJava instruction with kind, label, location and size.
+	 * @param _kind Kind for the MiniJava instruction.
+	 * @param _label Optional Label for the MiniJava instruction.
+	 * @param _register Optional Register for the MiniJava instruction.
+	 * @param _offset Optional Integer offset for the MiniJava instruction.
+	 * @param _target Optional Label target for the MiniJava instruction.
+	 * @param _size Optional Integer size for the MiniJava instruction.
+	 * @param _frame Optional Register frame for the MiniJava instruction.
 	 */
 	public TAMInstructionImpl(TAMInstructionKind _kind, Optional<String> _label, 
 			Optional<Register> _register, Optional<Integer> _offset, 

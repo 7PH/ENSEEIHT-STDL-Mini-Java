@@ -4,7 +4,7 @@
 package fr.n7.stl.tam.ast;
 
 /**
- * Registers available in the TAM virtual machine.
+ * Registers available in the MiniJava virtual machine.
  * @author Marc Pantel
  *
  */

@@ -10,14 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Implementation of a TAM fragment using a linked list of TAM Instruction.
+ * Implementation of a MiniJava fragment using a linked list of MiniJava Instruction.
  * @author Marc Pantel
  *
  */
 public class FragmentImpl implements Fragment {
 
 	/**
-	 * The sequence of TAM Instruction in the Fragment.
+	 * The sequence of MiniJava Instruction in the Fragment.
 	 */
 	private List<TAMInstruction> instructions;
 	

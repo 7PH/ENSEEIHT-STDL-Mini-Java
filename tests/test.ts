@@ -1,4 +1,4 @@
-import {TAM} from "./TAM";
+import {MiniJava} from "./TAM";
 
 const SLOW_TEST_MS: number = 2000;
 
@@ -24,7 +24,7 @@ describe('# Grammar tests', function () {
             interface abc4 extends abc3<F<D<P>>> { }
             interface abc<T1 extends abc1 & abc2, T2> extends abc2<T2> { }
             `;
-            if (! TAM.parse(TAM.storeCodeInTmp(s)).grammarCheck)
+            if (! MiniJava.parse(MiniJava.storeCodeInTmp(s)).grammarCheck)
                 throw new Error("Grammar check should have passed");
             done();
         });
@@ -47,7 +47,7 @@ describe('# Grammar tests', function () {
                 private final int foo() { }
                 private final Integer foo() { }
             }`;
-            if (! TAM.parse(TAM.storeCodeInTmp(s)).grammarCheck)
+            if (! MiniJava.parse(MiniJava.storeCodeInTmp(s)).grammarCheck)
                 throw new Error("Grammar check should have passed");
             done();
         });
@@ -60,7 +60,7 @@ describe('# Grammar tests', function () {
                 public Circle foo(Circle a, Point b) { }
                 public Circle foo(Circle<T> a, Point b) { }
             }`;
-            if (! TAM.parse(TAM.storeCodeInTmp(s)).grammarCheck)
+            if (! MiniJava.parse(MiniJava.storeCodeInTmp(s)).grammarCheck)
                 throw new Error("Grammar check should have passed");
             done();
         });
@@ -74,7 +74,7 @@ describe('# Grammar tests', function () {
                 TV get(TK key);
                 void add(TK key, TV value);
             }`;
-            if (! TAM.parse(TAM.storeCodeInTmp(s)).grammarCheck)
+            if (! MiniJava.parse(MiniJava.storeCodeInTmp(s)).grammarCheck)
                 throw new Error("Grammar check should have passed");
             done();
         });
@@ -91,7 +91,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About class', function() {
         it('-> one class', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class abc {}`,
             {
                 resolve: true,
@@ -100,7 +100,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> two classes', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class abc {} class foo {}`,
             {
                 resolve: true,
@@ -109,7 +109,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> duplicate class', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class abc {} class abc {}`,
             {
                 resolve: false,
@@ -118,7 +118,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> class declaration with inner attributes', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class Point {
                     private int x;
                     private int y;
@@ -130,7 +130,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> class declaration with inner methods', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x() {}
                     private int y() {}
@@ -146,7 +146,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About interface', function() {
         it('-> one interface', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `interface abc {}`,
             {
                 resolve: true,
@@ -155,7 +155,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> two interfaces', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `interface abc {} interface foo {}`,
             {
                 resolve: true,
@@ -164,7 +164,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> duplicate interface', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `interface abc {} interface abc {}`,
             {
                 resolve: false,
@@ -173,7 +173,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> interface declaration with inner methods', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface abc {
                     int fun();
                 }`,
@@ -188,7 +188,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About implementation', function() {
         it('-> interface implementation', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface abc {}
                 class issou implements abc {}
                 `,{
@@ -198,7 +198,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> unexisting interface implementation', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class issou implements abc {}`,
                 {
                     resolve: false,
@@ -207,7 +207,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> self reference', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class abc implements abc {}`,
                 {
                     resolve: true,
@@ -216,7 +216,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> class implementing a class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class foo {}
                 class bar implements foo {}
                 `,{
@@ -230,7 +230,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About extension', function() {
         it('-> class extension', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class abc {}
                 class issou extends abc {}
                 `,{
@@ -240,7 +240,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> unexisting class extension', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `class issou extends abc {}`,
                 {
                     resolve: false,
@@ -249,7 +249,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> self reference', function(done: () => any) {
-        TAM.ensureResult(
+        MiniJava.ensureResult(
             `class abc extends abc {}`,
             {
                 resolve: false,
@@ -258,7 +258,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> class extending an interface', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface foo {}
                 class bar extends foo {}
                 `,{
@@ -268,7 +268,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> interface extending an interface', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface foo {}
                 interface bar extends foo {}
                 `,{
@@ -278,13 +278,23 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> interface extending a class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class foo {}
                 interface bar extends foo {}
                 `,{
-                    resolve: true,
-                    checkType: false
-                });
+                resolve: true,
+                checkType: false
+            });
+            done();
+        });
+        it('-> extending final class', function(done: () => any) {
+            MiniJava.ensureResult(`
+                final class foo {}
+                class bar extends foo {}
+                `,{
+                resolve: true,
+                checkType: false
+            });
             done();
         });
     });
@@ -292,7 +302,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About overloading', function() {
         it('-> method overloading in class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class abc {
                     public void fun() {}
                     public void fun(String param) {}
@@ -306,7 +316,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> method overloading in interfaces', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface abc {
                     int fun();
                     int fun(String param);
@@ -320,7 +330,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> bad overloading', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class abc {
                     public void fun() {}
                     public void fun() {}
@@ -332,7 +342,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> bad overloading II', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class abc {
                     public void fun(String foo) {}
                     public void fun(String bar) {}
@@ -344,7 +354,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> bad overloading III', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface abc {
                     int fun(String foo);
                     String fun(String bar);
@@ -356,7 +366,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> bad overloading IV', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class abc {
                     public void fun(String foo) {}
                     private void fun(String bar) {}
@@ -372,7 +382,7 @@ describe('# Resolve/Checktype simple tests', function () {
     /* ********************* */
     describe('# About abstraction', function() {
         it('-> abstract class ', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `abstract class foo { } `,
                 {
                     resolve: true,
@@ -381,7 +391,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> abstract class w/ abstract method', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class foo { 
                     public abstract void issou();
                 }`,
@@ -392,7 +402,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> abstract class w/ extented one', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class foo {} 
                 class foo2 extends foo {}
                 `,{
@@ -402,7 +412,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> abstract class w/ extented one w/ unimplemented method', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class foo { 
                     public abstract void issou();
                 } 
@@ -415,7 +425,7 @@ describe('# Resolve/Checktype simple tests', function () {
             done();
         });
         it('-> abstract class w/ extented one w/ implemented method', function(done: () => any) {
-            TAM.ensureResult(
+            MiniJava.ensureResult(
                 `abstract class foo { 
                     public abstract void issou();
                 } 
@@ -442,7 +452,7 @@ describe('# Resolve / CheckType medium tests', function () {
     /* ********************* */
     describe('# About object', function() {  
         it('-> class w/ attribute assignment', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -459,7 +469,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ attribute assignment w/ parameter use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -476,7 +486,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ bad named constructor', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -499,7 +509,7 @@ describe('# Resolve / CheckType medium tests', function () {
     /* ********************* */
     describe('# About method', function() {  
         it('-> correct typed method body', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     public int getRandom() {
                         return 5;
@@ -512,7 +522,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> correct void method body', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     public void getRandom() {}
                 }`,
@@ -523,7 +533,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> uncorrect typed method body', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     public int getRandom() {
                         return "d";
@@ -536,7 +546,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> uncorrect void method body', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     public void getRandom() {
                         return "d";
@@ -549,7 +559,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> public static void main', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     public static void main(String args[]) {}
                 }`,
@@ -560,7 +570,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> correct method body w/ attribute use ', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private int x;
                     public int getRandom() {
@@ -574,7 +584,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> uncorrect method body w/ attribute use ', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private String x;
                     public int getRandom() {
@@ -588,7 +598,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> method call in inner class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private int fooBar;
 
@@ -607,7 +617,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> method call in a different class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private int x;
                 
@@ -633,7 +643,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> method call in a different class w/ use of result', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private int x;
                     public Random(int y) {
@@ -656,7 +666,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> method call in a different class w/ bad use of result', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Random {
                     private int x;
                     public Random(int y) {
@@ -683,7 +693,7 @@ describe('# Resolve / CheckType medium tests', function () {
     /* ********************* */
     describe('# About using instantiation', function() {    
         it('-> class w/ custom attribute types', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {}
                 class Segment {
                     private Point p1;
@@ -696,7 +706,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ attribute assignment w/ parameter use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {}
                 class Segment {
                     private Point p1;
@@ -714,7 +724,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ instantiation of existing object', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -736,7 +746,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ instantiation of unexisting object', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -758,7 +768,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ object instantiation w/out constructor', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -778,7 +788,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ real constructor', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -804,7 +814,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> class w/ instantiation of our type w/ bad type parameter', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -834,7 +844,7 @@ describe('# Resolve / CheckType medium tests', function () {
     /* ********************* */
     describe('# About extension', function() {
         it('-> class w/ superclass attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -859,7 +869,7 @@ describe('# Resolve / CheckType medium tests', function () {
     /* ********************* */
     describe('# About implementation', function() {
         it('-> simple implementation', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {}
                 interface Cercle {
                     Point getCenter();	
@@ -877,7 +887,7 @@ describe('# Resolve / CheckType medium tests', function () {
             done();
         });
         it('-> simple implementation w/ missing methods', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {}
                 interface Cercle {
                     Point getCenter();	
@@ -904,7 +914,7 @@ describe('# Resolve / CheckType hard tests', function () {
     /* ********************* */
     describe('# About modifier', function() { 
         it('-> class w/ constant', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Color {
                     public static final String ROUGE = "rouge";
                 }`,
@@ -915,7 +925,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> this reference in static context', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Color {
                     public String color;
                     public static void main(String args[]) {
@@ -929,7 +939,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> call of static method from another class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class ColorRed {
                     public static final String ROUGE = "rouge";
                     public static String getColor() {
@@ -948,7 +958,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ private method use in inner class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -967,7 +977,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ public method use in inner class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -986,7 +996,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ superclass public attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -1006,7 +1016,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ superclass private attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -1026,7 +1036,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ superclass public method use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -1052,7 +1062,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ superclass private method use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -1078,7 +1088,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> class w/ superclass attribute use w/ global constant use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Color {
                     public static final String ROUGE = "rouge";
                 }
@@ -1104,7 +1114,7 @@ describe('# Resolve / CheckType hard tests', function () {
     /* ********************* */
     describe('# About generics', function() {
         it('-> basic tests', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class A<T> { }
                 class B<T1, T2> extends A<T1> { }
                 class C { }
@@ -1117,7 +1127,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> generic attribute', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Box<T> {
                     private T t;
                 }`,
@@ -1128,7 +1138,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> generic methods', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Box<T> {
                     private T t;
                     public void set(T t) { this.t = t; }
@@ -1141,7 +1151,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> generic with wrong checktype affectation', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Box<T, X> {
                     private T t;
 
@@ -1154,7 +1164,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> generic type extending a class', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Thing { }
 
                 class Box<T extends Thing> {
@@ -1175,7 +1185,7 @@ describe('# Resolve / CheckType hard tests', function () {
     /* ********************* */
     describe('# About chains', function() {
         it('-> chained abstract method w/ implemented method', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                 }
@@ -1194,7 +1204,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ implemented method II', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                 }
@@ -1211,7 +1221,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ implemented method III', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                 }
@@ -1234,7 +1244,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ unimplemented method', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                 }
@@ -1251,7 +1261,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ unimplemented method II', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                 }
@@ -1269,7 +1279,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ unimplemented method III', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point { 
                     public abstract void compute();
                     public abstract int getX();
@@ -1291,7 +1301,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained abstract method w/ far attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 abstract class Point {
                     public int x;
                     public abstract void compute();
@@ -1314,7 +1324,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method ', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -1350,7 +1360,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method w/ private one', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -1386,7 +1396,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method w/ public attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -1408,7 +1418,7 @@ describe('# Resolve / CheckType hard tests', function () {
             done();
         });
         it('-> chained method w/ private attribute use', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     private int y;
@@ -1441,7 +1451,7 @@ describe('# Resolve / CheckType final tests', function () {
 
     /* ********************* */
     it('-> use method interface', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             interface I1 {
                 int getI1();
             }
@@ -1469,7 +1479,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> arrays', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Test {
                 public static void main(String args[]) {
                     int t[] = new int[5];
@@ -1487,7 +1497,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> attribute use w/out "this"', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Integer {
                 private int in;
                 public Integer(int _i) {
@@ -1510,7 +1520,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> attribute and parameter with same names', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Integer {
                 private int in;
                 public Integer(int in) {
@@ -1533,7 +1543,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> method use w/out "this"', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Integer {
                 private int in;
                 public int get() {
@@ -1550,7 +1560,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> double generic example', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Box <T, H> {
                 private T t;
                 private H h;
@@ -1591,7 +1601,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> double generic example w/ generic method use', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Box <T, H> {
                 private T t;
                 private H h;
@@ -1627,7 +1637,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> difficult generic', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             interface Integer {
                 int getInteger();
             }
@@ -1662,7 +1672,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> generic w/ extends', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Carton { public int i; }
             class Box <T extends Carton> {
                 private T t;
@@ -1681,7 +1691,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> generic w/ missing extends', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             class Carton { public int i; }
             class Box <T extends Carton> {
                 private T t;
@@ -1700,7 +1710,7 @@ describe('# Resolve / CheckType final tests', function () {
         done();
     });
     it('-> big generic', function(done: () => any) {
-        TAM.ensureResult(`
+        MiniJava.ensureResult(`
             interface I1 { int getI1(); }
             interface I2 { int getI2(); }
             interface I3 extends I2, I1 { int getI3(); }
@@ -1728,15 +1738,15 @@ describe('# Resolve / CheckType final tests', function () {
 
 
 /* ###############################################
- * ##               TAM CODE TESTS              ##
+ * ##               MiniJava CODE TESTS              ##
  * ###############################################
  */
-describe('# TAM code', function() {
+describe('# MiniJava code', function() {
     this.slow(4000);
 
     describe('# public static void main()', function() {
         it('-> System.out.println(-)', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Main {
                     public static void main () {
                         int a = 1;
@@ -1755,7 +1765,7 @@ describe('# TAM code', function() {
 
     describe('# attributes', function() {
         it('-> object instantiation, attribute access and assignment', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Integer {
                     public int value;
                     public Integer() { }
@@ -1776,7 +1786,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> idem with multiple attributes', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     public int x;
                     public int y;
@@ -1800,7 +1810,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> attributes in superclass', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class SemiPoint1 {
                     public int x;
                 }
@@ -1827,7 +1837,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> attributes of type Object', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Integer {
                     public int value;
                     public Integer() { }
@@ -1860,7 +1870,7 @@ describe('# TAM code', function() {
     });
     describe('# methods', function() {
         it('-> method call without parameter', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Person {
                     public void sayHello() {
                         System.out.println("Hello");
@@ -1881,7 +1891,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> method call with multiple atomic type parameters', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Person {
                     public void addForMe(int a, int b) {
                         System.out.println(a + b);
@@ -1902,7 +1912,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> \'this\' access in methods calls', function (done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 class Point {
                     private int x;
                     public void setX(int x) { this.x = x; }
@@ -1924,7 +1934,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> class instantiation and usage (methods+attributes) in a public static void main', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
             class SecretNumber {
                 private int number;
             
@@ -1950,7 +1960,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> chained methods returning objects', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
             class Integer {
                 private int value;
             
@@ -1998,7 +2008,7 @@ describe('# TAM code', function() {
             done();
         });
         it('-> shared object pointer', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
             class Integer {
                 private int value;
             
@@ -2050,7 +2060,7 @@ describe('# TAM code', function() {
 
     describe('-> final complex test', function() {
         it('-> complex test', function(done: () => any) {
-            TAM.ensureResult(`
+            MiniJava.ensureResult(`
                 interface Point {
                     int getAbscisse();
                     int getOrdonnee();

@@ -60,9 +60,9 @@ public class Program implements ASTNode {
         return offset;
     }
 	
-	/** Provide the generated TAM code.
-	 * @param factory factory to build AST nodes for TAM code.
-	 * @return the generated TAM code.
+	/** Provide the generated MiniJava code.
+	 * @param factory factory to build AST nodes for MiniJava code.
+	 * @return the generated MiniJava code.
 	 */
     public Fragment getCode(TAMFactory factory){
         Fragment fragment = factory.createFragment();

@@ -11,26 +11,26 @@ package fr.n7.stl.tam.ast;
 public interface Fragment {
 	
 	/**
-	 * Adds a TAM instruction at the end of the fragment.
-	 * @param _instruction TAM instruction added at the end of the fragment.
+	 * Adds a MiniJava instruction at the end of the fragment.
+	 * @param _instruction MiniJava instruction added at the end of the fragment.
 	 */
 	public void add(TAMInstruction _instruction);
 	
 	/**
-	 * Adds a prefix comment to the first TAM instruction of the fragment.
-	 * @param _comment Comment that is added to the first TAM instruction of the fragment.
+	 * Adds a prefix comment to the first MiniJava instruction of the fragment.
+	 * @param _comment Comment that is added to the first MiniJava instruction of the fragment.
 	 */
 	public void addComment(String _comment);
 	
 	/**
-	 * Adds a prefix label to the first TAM instruction of the fragment.
-	 * @param _label Label that is added to the first TAM instruction of the fragment.
+	 * Adds a prefix label to the first MiniJava instruction of the fragment.
+	 * @param _label Label that is added to the first MiniJava instruction of the fragment.
 	 */
 	public void addPrefix(String _label);
 	
 	/**
-	 * Adds a suffix label to the last TAM instruction of the fragment.
-	 * @param _label Label that is added to the last TAM instruction of the fragment.
+	 * Adds a suffix label to the last MiniJava instruction of the fragment.
+	 * @param _label Label that is added to the last MiniJava instruction of the fragment.
 	 */
 	public void addSuffix(String _label);
 	

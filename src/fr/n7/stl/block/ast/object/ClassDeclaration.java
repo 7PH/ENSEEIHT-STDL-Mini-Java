@@ -181,9 +181,12 @@ public class ClassDeclaration extends ProgramDeclaration {
 
     @Override
     public boolean subResolve(HierarchicalScope<Declaration> scope) {
-        if (extendsList.size() > 0 && extendsList.get(0).getDeclaration().getName().equals(this.getName())) {
-            Logger.error(this.getName() + " cannot extend self");
-            return false;
+        if (extendsList.size() > 0) {
+            InstanceType superClass = extendsList.get(0);
+            if (superClass.getDeclaration().getName().equals(this.getName())) {
+                Logger.error(this.getName() + " cannot extend self");
+                return false;
+            }
         }
 
         for (InstanceType tp: this.implementsList) {
@@ -194,7 +197,7 @@ public class ClassDeclaration extends ProgramDeclaration {
         }
 
         // Verify if every superclass abstract methods are implemented if the class is not abstract
-        if ((this.extendsList.size() > 0) && !this.isAbstract()) {
+        if ((this.extendsList.size() > 0) && ! isAbstract()) {
             InstanceType tp = this.extendsList.get(0);
             // Check if the superclass is well a simple class
             if (tp.getDeclaration() instanceof InterfaceDeclaration) {
@@ -275,6 +278,12 @@ public class ClassDeclaration extends ProgramDeclaration {
         for (InstanceType tp: extendsList) {
             if (! (tp.getDeclaration() instanceof ClassDeclaration)) {
                 Logger.error("The class " + this.getName() + " extends " + tp.getDeclaration().getName() + " which is not a class.");
+                b = false;
+            }
+
+            ClassDeclaration superClass = (ClassDeclaration) tp.getDeclaration();
+            if (superClass.isFinal()) {
+                Logger.error("Cannot extend final class");
                 b = false;
             }
         }

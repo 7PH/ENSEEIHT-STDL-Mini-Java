@@ -36,8 +36,8 @@ public interface Type extends ASTNode {
 	public Type merge(Type other);
 	
 	/**
-	 * Compute the size in TAM words needed to store a value of the _self type.
-	 * @return Number of TAM words needed to store a value of the _self type.
+	 * Compute the size in MiniJava words needed to store a value of the _self type.
+	 * @return Number of MiniJava words needed to store a value of the _self type.
 	 */
 	public int length();
 	

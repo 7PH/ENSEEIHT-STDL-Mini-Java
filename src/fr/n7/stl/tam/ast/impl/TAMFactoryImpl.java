@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementation of the factory to build a TAM program AST.
+ * Implementation of the factory to build a MiniJava program AST.
  * It relies on a single implementation class TAMInstructionImpl.
  * @author Marc Pantel
  *
