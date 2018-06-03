@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Atomic operators provided by the MiniJava virtual machine for basic types : Boolean, Character, Integer, Memory and String.
+ * Atomic operators provided by the TAM virtual machine for basic types : Boolean, Character, Integer, Memory and String.
  * @author Marc Pantel
  *
  */
@@ -169,17 +169,17 @@ public enum Library implements TAMInstruction {
 	 */
 	MCopy,
 	/**
-	 * Allocation a String slot in the MiniJava virtual machine and pushes the slot number on the stack.
+	 * Allocation a String slot in the TAM virtual machine and pushes the slot number on the stack.
 	 */
 	SAlloc, 
 	/**
-	 * Pops two Integer values from the stack that are String slots of the same size in the MiniJava virtual machine
+	 * Pops two Integer values from the stack that are String slots of the same size in the TAM virtual machine
 	 * then it copies the content of the first String in the second one.
 	 */
 	SCopy, 
 	/**
-	 * Pops two Integer values from the stack that are String slots in the MiniJava virtual machine, then it allocates
-	 * a new String slot in the MiniJava virtual machine, copies the content of the two Strings in the new one and
+	 * Pops two Integer values from the stack that are String slots in the TAM virtual machine, then it allocates
+	 * a new String slot in the TAM virtual machine, copies the content of the two Strings in the new one and
 	 * pushes the slot number of the new one on the stack.
 	 */
 	SConcat, 
@@ -192,35 +192,35 @@ public enum Library implements TAMInstruction {
 	 */
 	SIn, 
 	/**
-	 * Pops an Integer value from the stack which is a String slot in the MiniJava virtual machine, converts the
+	 * Pops an Integer value from the stack which is a String slot in the TAM virtual machine, converts the
 	 * content of that String to a Boolean and pushes that one on the stack.
 	 */
 	S2B, 
 	/**
-	 * Pops an Integer value from the stack which is a String slot in the MiniJava virtual machine, converts the
+	 * Pops an Integer value from the stack which is a String slot in the TAM virtual machine, converts the
 	 * content of that String to a Character and pushes that one on the stack.
 	 */
 	S2C, 
 	/**
-	 * Pops an Integer value from the stack which is a String slot in the MiniJava virtual machine, converts the
+	 * Pops an Integer value from the stack which is a String slot in the TAM virtual machine, converts the
 	 * content of that String to an Integer and pushes that one on the stack.
 	 */
 	S2I;
 	
 	/**
-	 * Each MiniJava instruction can have prefix comments used for relating this instruction
+	 * Each TAM instruction can have prefix comments used for relating this instruction
 	 * to the block source code.
 	 */
 	protected List<String> comments;
 	
 	/**
-	 * Each MiniJava instruction can have prefix labels used for computing locations to that instruction
+	 * Each TAM instruction can have prefix labels used for computing locations to that instruction
 	 * for JUMP and CALL instructions.
 	 */
 	protected List<String> prefixes;
 	
 	/**
-	 * Each MiniJava instruction can have suffix labels used for computing locations following that instruction
+	 * Each TAM instruction can have suffix labels used for computing locations following that instruction
 	 * for JUMP and CALL instructions.
 	 */
 	protected List<String> suffixes;

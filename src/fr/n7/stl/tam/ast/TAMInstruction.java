@@ -4,8 +4,8 @@
 package fr.n7.stl.tam.ast;
 
 /**
- * A MiniJava instruction than can be prefixed by a label used to resolve the address of the instruction
- * in the code part of the memory in the MiniJava virtual machine.
+ * A TAM instruction than can be prefixed by a label used to resolve the address of the instruction
+ * in the code part of the memory in the TAM virtual machine.
  * @author Marc Pantel
  *
  */

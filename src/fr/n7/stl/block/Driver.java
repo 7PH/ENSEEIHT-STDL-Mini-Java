@@ -14,8 +14,8 @@ class Driver {
         System.out.println("Usage       : java fr.n7.stl.block.Driver <file> <mode>");
         System.out.println(" <file>     : Input file");
         System.out.println(" <mode>     : 0 -> verbose mode");
-        System.out.println("            : 1 -> only MiniJava code");
-        System.out.println("            : 2 -> JSON: {MiniJava: string, code: string, resolve: boolean, checkType: boolean}");
+        System.out.println("            : 1 -> only TAM code");
+        System.out.println("            : 2 -> JSON: {TAM: string, code: string, resolve: boolean, checkType: boolean}");
     }
 
     public static void main(String[] args) throws Exception {
@@ -74,7 +74,7 @@ class Driver {
         System.out.println("checkType   : " + (parser.checkType ? "OK   " : "ERROR") + " (" + parser.checkTypeTimeMs + "ms)");
         System.out.println("Logger: " + Logger.getAll());
         System.out.println("===============================================");
-        System.out.println("MiniJava         : ");
+        System.out.println("TAM         : ");
         if (parser.resolve && parser.checkType)
             System.out.println(parser.fragment == null ? "ERROR" : parser.fragment);
         System.out.println("===============================================");
@@ -93,7 +93,7 @@ class Driver {
         jsonObject.put("resolve", parser.resolve);
         jsonObject.put("checkType", parser.checkType);
         jsonObject.put("logger", Logger.getAll());
-        jsonObject.put("MiniJava", "" + parser.fragment);
+        jsonObject.put("TAM", "" + parser.fragment);
         System.out.print(jsonObject);
     }
 

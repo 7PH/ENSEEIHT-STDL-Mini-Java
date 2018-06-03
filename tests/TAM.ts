@@ -3,18 +3,18 @@ import * as fs from "fs";
 
 
 /**
- * Expected result of a MiniJava execution
+ * Expected result of a TAM execution
  */
-export interface MiniJavaExpectedResult {
+export interface TAMExpectedResult {
     resolve: boolean;
     checkType?: boolean;
     output?: string[];
 }
 
 /**
- * Actual result of a MiniJava execution
+ * Actual result of a TAM execution
  */
-export interface MiniJavaResult {
+export interface TAMResult {
     grammarCheck: boolean;
     resolve: boolean;
     checkType: boolean;
@@ -27,10 +27,10 @@ export interface MiniJavaResult {
 /**
  * Utility class for executing Mini Java
  */
-export class MiniJava {
+export class TAM {
 
-    public static parse(fileName: string): MiniJavaResult {
-        let d: MiniJavaResult;
+    public static parse(fileName: string): TAMResult {
+        let d: TAMResult;
         try {
             const shellResult: Buffer = child_process.execSync("sh launch.sh " + fileName + " 2");
             d = JSON.parse(shellResult.toString());
@@ -58,18 +58,18 @@ export class MiniJava {
         return r.split("\n");
     }
 
-    public static parseAndExecute(fileName: string): MiniJavaResult {
-        let parsed: MiniJavaResult = MiniJava.parse(fileName);
+    public static parseAndExecute(fileName: string): TAMResult {
+        let parsed: TAMResult = TAM.parse(fileName);
         if (parsed.resolve && parsed.checkType)
-            parsed.output = MiniJava.executeTam(parsed.TAM);
+            parsed.output = TAM.executeTam(parsed.TAM);
         return parsed;
     }
 
-    public static ensureResult(code: string, expected: MiniJavaExpectedResult): void {
-        const fileName: string = MiniJava.storeCodeInTmp(code);
-        const result: MiniJavaResult = MiniJava.parse(fileName);
+    public static ensureResult(code: string, expected: TAMExpectedResult): void {
+        const fileName: string = TAM.storeCodeInTmp(code);
+        const result: TAMResult = TAM.parse(fileName);
         if (typeof expected.output != "undefined")
-            result.output = MiniJava.executeTam(result.TAM);
+            result.output = TAM.executeTam(result.TAM);
         const logger: string = result.logger.trim();
 
         //if (logger.length > 0)

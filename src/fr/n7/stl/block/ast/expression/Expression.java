@@ -17,10 +17,10 @@ public interface Expression extends ASTNode {
 	public Type getType();
 	
 	/**
-	 * Inherited Semantics attribute to build the nodes of the abstract syntax tree for the generated MiniJava code.
-	 * Synthesized Semantics attribute that provide the generated MiniJava code.
-	 * @param factory Inherited Factory to build AST nodes for MiniJava code.
-	 * @return Synthesized AST for the generated MiniJava code.
+	 * Inherited Semantics attribute to build the nodes of the abstract syntax tree for the generated TAM code.
+	 * Synthesized Semantics attribute that provide the generated TAM code.
+	 * @param factory Inherited Factory to build AST nodes for TAM code.
+	 * @return Synthesized AST for the generated TAM code.
 	 */
 	public Fragment getCode(TAMFactory factory);
 
