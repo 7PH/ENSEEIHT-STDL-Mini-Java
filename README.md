@@ -2,7 +2,7 @@
 
 ## Tests
 
-### Résultat des tests (tests/test.ts)
+### Tests automatiques (tests/test.ts)
 
 ```text
 Building..               [OK]
@@ -40,3 +40,38 @@ Plus d'infos sur mocha: https://mochajs.org/
 Liste des reporters: https://mochajs.org/#reporters
 
 Par exemple: `npm test spec` ou `npm test nyan`
+
+## Manuel d'utilisation
+
+### Compiler
+Pour compiler le projet, tapez
+```bash
+ant build
+```
+
+### Verbose mode
+Pour passer un fichier dans Mini Java:
+```text
+Usage       : sh launch.sh <file> <mode>
+ <file>     : Input file
+ <mode>     : 0 -> verbose mode
+            : 1 -> only TAM code
+            : 2 -> JSON: {resolve: boolean, checkType: boolean, TAM: string, ..}
+```
+
+### Executer
+
+Pour compiler un fichier Mini Java
+
+```bash
+sh launch.sh {filepath} 1 > tmp.tam
+java -jar tools/aspartam.jar tmp.tam
+java -jar tools/tammachine.jar tmp.tamo
+cat tmp.res
+```
+
+ou
+
+```bash
+sh run.sh {filepath}
+```
