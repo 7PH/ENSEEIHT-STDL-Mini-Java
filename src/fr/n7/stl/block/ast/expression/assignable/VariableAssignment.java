@@ -1,6 +1,7 @@
 package fr.n7.stl.block.ast.expression.assignable;
 
 import fr.n7.stl.block.ast.expression.AbstractIdentifier;
+import fr.n7.stl.block.ast.instruction.declaration.DeclarationWithOffset;
 import fr.n7.stl.block.ast.instruction.declaration.ParameterDeclaration;
 import fr.n7.stl.block.ast.instruction.declaration.VariableDeclaration;
 import fr.n7.stl.block.ast.object.AttributeDefinition;
@@ -15,11 +16,7 @@ import fr.n7.stl.util.Logger;
 /** ABSTRACT Syntax Tree node for an expression whose computation assigns a variable. */
 public class VariableAssignment extends AbstractIdentifier implements AssignableExpression {
 	
-	protected Declaration declaration;
-
-	private Register register;
-
-	private int offset;
+	protected DeclarationWithOffset declaration;
 
 	/**
 	 * Creates a variable assignment expression ABSTRACT Syntax Tree node.
@@ -46,24 +43,15 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
         Declaration declaration = scope.get(name);
 
         if (declaration instanceof VariableDeclaration) {
-            VariableDeclaration vr = ((VariableDeclaration) declaration);
-            this.register = vr.getRegister();
-            this.offset = vr.getOffset();
-            this.declaration = declaration;
+            this.declaration = (VariableDeclaration) declaration;
             return true;
         } else if (declaration instanceof AttributeDefinition) {
             // we can assign to an attribute so it's ok
-            AttributeDefinition ad = ((AttributeDefinition) declaration);
-            this.register = ad.getRegister();
-            this.offset = ad.getRelativeOffset();
-            this.declaration = declaration;
+            this.declaration = (AttributeDefinition) declaration;
             return true;
         } else if (declaration instanceof ParameterDeclaration) {
             // we can assign to an attribute so it's ok
-            ParameterDeclaration pd = ((ParameterDeclaration) declaration);
-            this.register = Register.LB;
-            this.offset = pd.getOffset();
-            this.declaration = declaration;
+            this.declaration = (ParameterDeclaration) declaration;
             return true;
         } else {
             Logger.error("Assignment to non variable declaration " + name + ": " + declaration.getClass());
@@ -87,7 +75,7 @@ public class VariableAssignment extends AbstractIdentifier implements Assignable
 	@Override
 	public Fragment getCode(TAMFactory factory) {
 		Fragment fragment = factory.createFragment();
-		fragment.add(factory.createStore(register, offset, getType().length()));
+		fragment.add(factory.createStore(declaration.getRegister(), declaration.getOffset(), getType().length()));
 		return fragment;
 	}
 

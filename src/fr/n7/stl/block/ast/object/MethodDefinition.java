@@ -175,9 +175,7 @@ public class MethodDefinition extends Definition {
     public int allocateMemory(Register register, int offset) {
         int off = offset + 3 + getParametersLength() + getType().length();
         if (! isStatic()) off += 1;
-        body.allocateMemory(
-                Register.SB,
-                off);
+        body.allocateMemory(Register.SB, off);
         return 0;
     }
 

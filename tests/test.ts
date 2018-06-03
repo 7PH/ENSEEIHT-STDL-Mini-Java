@@ -1911,6 +1911,66 @@ describe('# TAM code', function() {
                 });
             done();
         });
+        it('-> static methods', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static int get() {
+                        return 6;
+                    }
+                }
+                
+                class Main {
+                    public static void main() {
+                        int r = Random.get();
+                        System.out.println(r);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["6"]
+                });
+            done();
+        });
+        it('-> static attribute access', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static int SECRET = 4;
+                }
+                
+                class Main {
+                    public static void main() {
+                        int r = Random.SECRET;
+                        System.out.println(r);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["4"]
+                });
+            done();
+        });
+        it('-> static attribute assignment', function(done: () => any) {
+            TAM.ensureResult(`
+                class Random {
+                    public static int SECRET = 4;
+                }
+                
+                class Main {
+                    public static void main() {
+                        System.out.println(Random.SECRET);
+                        Random.SECRET = 6;
+                        System.out.println(Random.SECRET);
+                    }
+                }`,
+                {
+                    resolve: true,
+                    checkType: true,
+                    output: ["4", "6"]
+                });
+            done();
+        });
         it('-> \'this\' access in methods calls', function (done: () => any) {
             TAM.ensureResult(`
                 class Point {
@@ -2053,66 +2113,6 @@ describe('# TAM code', function() {
                     resolve: true,
                     checkType: true,
                     output: ["11", "22"]
-                });
-            done();
-        });
-        it('-> static methods', function(done: () => any) {
-            TAM.ensureResult(`
-                class Random {
-                    public static int get() {
-                        return 6;
-                    }
-                }
-                
-                class Main {
-                    public static void main() {
-                        int r = Random.get();
-                        System.out.println(r);
-                    }
-                }`,
-                {
-                    resolve: true,
-                    checkType: true,
-                    output: ["6"]
-                });
-            done();
-        });
-        it('-> static attribute access', function(done: () => any) {
-            TAM.ensureResult(`
-                class Random {
-                    public static int SECRET = 4;
-                }
-                
-                class Main {
-                    public static void main() {
-                        int r = Random.SECRET;
-                        System.out.println(r);
-                    }
-                }`,
-                {
-                    resolve: true,
-                    checkType: true,
-                    output: ["4"]
-                });
-            done();
-        });
-        it('-> static attribute assignment', function(done: () => any) {
-            TAM.ensureResult(`
-                class Random {
-                    public static int SECRET = 4;
-                }
-                
-                class Main {
-                    public static void main() {
-                        System.out.println(Random.SECRET);
-                        Random.SECRET = 6;
-                        System.out.println(Random.SECRET);
-                    }
-                }`,
-                {
-                    resolve: true,
-                    checkType: true,
-                    output: ["4", "6"]
                 });
             done();
         });
